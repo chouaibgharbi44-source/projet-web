@@ -1,0 +1,51 @@
+:root {
+  --violet-fonce: #1A0129;
+  --violet: #6E00FF;
+  --rose: #E33CFB;
+  --degrade: linear-gradient(90deg, #6E00FF, #E33CFB);
+}
+
+body {
+  background-color: var(--violet-fonce);
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2 {
+  text-align: center;
+  background: var(--degrade);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+button {
+  background: var(--degrade);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+.suggestions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.card {
+  background-color: #2D0648;
+  border-radius: 15px;
+  padding: 20px;
+  width: 220px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(227, 60, 251, 0.4);
+}
+
