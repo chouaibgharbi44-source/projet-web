@@ -1,0 +1,113 @@
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #340257;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  padding: 30px 20px;
+}
+
+.materiel-section {
+  width: 70%;
+  margin: 40px auto;
+  background: #d85beb;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.materiel-section h2 {
+  color: #340257;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.intro {
+  text-align: center;
+  color: #555;
+  margin-bottom: 25px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+form label {
+  font-weight: bold;
+  color: #333;
+}
+
+form input, form textarea, form button {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
+
+form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+form button {
+  background:#340257;
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+form button:hover {
+  transform: scale(1.02);
+  opacity: 0.9;
+}
+
+.liste-materiel {
+  margin-top: 30px;
+  border-top: 2px solid #eee;
+  padding-top: 15px;
+}
+
+.liste-materiel .fichier {
+  background: #fafafa;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-left: 4px solid #6a0dad;
+  border-radius: 6px;
+}
+
+.liste-materiel .fichier h4 {
+  margin: 0 0 5px 0;
+  color: #6a0dad;
+}
+
+.section {
+  background-color: #d85beb;
+  padding: 40px 60px;
+  border-radius: 10px;
+  margin: 30px 60px;
+}
+
+.btn-blue {
+  background-color: #340257;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 34px; 
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.18s ease, background-color 0.18s ease;
+  margin-left: auto;    
+}
+
+.btn-blue:hover {
+  transform: translateY(-3px);
+  background-color: #6a0dad;
+}
+
