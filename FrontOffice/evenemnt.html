@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Connect - Événements</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">🎓 Campus Connect</div>
+            <ul class="nav-links">
+                <li><a href="#events" class="active">Tous les événements</a></li>
+                <li><a href="#my-events">Mes événements</a></li>
+                <li><span class="user-info">Étudiant</span></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Section Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Découvrez les événements du campus</h1>
+            <p>Rejoignez des événements et connectez-vous avec d'autres étudiants</p>
+        </div>
+    </section>
+
+    <!-- Barre de recherche et filtres -->
+    <section class="filters-section">
+        <div class="container">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Rechercher un événement...">
+                <button id="searchBtn" class="btn-primary">Rechercher</button>
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Tous</button>
+                <button class="filter-btn" data-filter="upcoming">À venir</button>
+                <button class="filter-btn" data-filter="past">Passés</button>
+            </div>
+            <a href="#createForm" class="btn-primary create-btn">+ Créer un événement</a>
+        </div>
+    </section>
+    <!-- Formulaire Créer événement (no-JS) -->
+    <section id="createForm" class="create-form-section">
+        <div class="container">
+            <h2>Créer un événement</h2>
+            <form method="post" action="../Controller/core_evenement.php">
+                <input type="hidden" name="action" value="create">
+                <input type="hidden" name="redirect" value="/BasmaEvent/FrontOffice/evenemnt.php">
+
+                <div class="form-group">
+                    <label for="title">Titre de l'événement</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="4" required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date">Date et heure</label>
+                        <input type="datetime-local" id="date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="capacity">Capacité (optionnel)</label>
+                        <input type="number" id="capacity" name="capacity" min="1">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Lieu</label>
+                    <input type="text" id="location" name="location" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Image (URL)</label>
+                    <input type="url" id="image" name="image">
+                </div>
+
+                <div class="form-buttons">
+                    <button type="submit" class="btn-primary">Créer</button>
+                    <button type="reset" class="btn-secondary">Réinitialiser</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Modal Détail événement -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content detail-modal">
+            <span class="close">&times;</span>
+            <div id="detailContent">
+                <!-- Contenu dynamique -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Grille d'événements -->
+    <section class="events-section">
+        <div class="container">
+            <div id="eventsList" class="events-grid">
+                <!-- Les événements seront chargés dynamiquement -->
+            </div>
+            <div id="loadingSpinner" class="spinner" style="display:none;"></div>
+            <div id="noEvents" class="no-events" style="display:none;">
+                <p>Aucun événement trouvé. Créez le premier ! 🎉</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Mes événements -->
+    <section id="my-events" class="my-events-section" style="display:none;">
+        <div class="container">
+            <h2>Mes événements</h2>
+            <div id="myEventsList" class="events-grid">
+                <!-- Les événements de l'utilisateur -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Campus Connect - Votre université, unie 🎓</p>
+        </div>
+    </footer>
+
+    <!-- No JavaScript version: use server-side rendering via Controller -->
+</body>
+</html>
+</body>
+</html>

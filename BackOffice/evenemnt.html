@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Connect - Admin - Gestion des événements</title>
+    <link rel="stylesheet" href="assets/css/admin-style.css">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h1>🎓 Campus Connect Admin</h1>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="active"><a href="#dashboard">📊 Tableau de bord</a></li>
+            <li><a href="#events">📅 Événements</a></li>
+            <li><a href="#moderation">⚙️ Modération</a></li>
+            <li><a href="#users">👥 Utilisateurs</a></li>
+            <li><a href="#reports">📈 Rapports</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <p>Admin Mode</p>
+            <button id="logoutBtn" class="btn-danger">Déconnexion</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="admin-header">
+            <h2 id="pageTitle">Tableau de bord</h2>
+            <div class="header-actions">
+                <span class="admin-info">Administrateur</span>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="dashboardSection" class="content-section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-info">
+                        <h3 id="totalEvents">0</h3>
+                        <p>Événements totaux</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏰</div>
+                    <div class="stat-info">
+                        <h3 id="upcomingEvents">0</h3>
+                        <p>À venir</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <h3 id="totalParticipants">0</h3>
+                        <p>Participants</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚠️</div>
+                    <div class="stat-info">
+                        <h3 id="flaggedContent">0</h3>
+                        <p>Contenu signalé</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Events Management Section -->
+        <section id="eventsSection" class="content-section">
+            <div class="section-header">
+                <h2>Gestion des événements</h2>
+                <button id="addEventBtn" class="btn-primary">+ Ajouter événement</button>
+            </div>
+
+            <div class="table-controls">
+                <input type="text" id="eventSearchInput" placeholder="Rechercher un événement...">
+                <select id="eventStatusFilter">
+                    <option value="">Tous les statuts</option>
+                    <option value="upcoming">À venir</option>
+                    <option value="ongoing">En cours</option>
+                    <option value="finished">Terminé</option>
+                </select>
+            </div>
+
+            <div class="table-responsive">
+                <table id="eventsTable" class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Titre</th>
+                            <th>Date</th>
+                            <th>Lieu</th>
+                            <th>Participants</th>
+                            <th>Créateur</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="eventsTableBody">
+                        <!-- Les événements seront chargés dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Moderation Section -->
+        <section id="moderationSection" class="content-section">
+            <div class="section-header">
+                <h2>Modération</h2>
+            </div>
+
+            <div class="moderation-panels">
+                <div class="moderation-panel">
+                    <h3>Événements en attente d'approbation</h3>
+                    <div id="pendingEventsList" class="pending-list">
+                        <!-- Événements en attente -->
+                    </div>
+                </div>
+
+                <div class="moderation-panel">
+                    <h3>Contenus signalés</h3>
+                    <div id="flaggedContentList" class="flagged-list">
+                        <!-- Contenus signalés -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Users Section -->
+        <section id="usersSection" class="content-section">
+            <div class="section-header">
+                <h2>Gestion des utilisateurs</h2>
+            </div>
+
+            <div class="table-controls">
+                <input type="text" id="userSearchInput" placeholder="Rechercher un utilisateur...">
+            </div>
+
+            <div class="table-responsive">
+                <table id="usersTable" class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Rôle</th>
+                            <th>Événements créés</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Les utilisateurs seront chargés dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reportsSection" class="content-section">
+            <div class="section-header">
+                <h2>Rapports</h2>
+            </div>
+
+            <div class="reports-grid">
+                <div class="report-card">
+                    <h3>Événements par mois</h3>
+                    <canvas id="eventsChart"></canvas>
+                </div>
+                <div class="report-card">
+                    <h3>Taux de participation</h3>
+                    <div id="participationStats">
+                        <p>Moyenne: <strong id="avgParticipation">0%</strong></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal Créer/Modifier événement (Admin) -->
+    <div id="adminEventModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="adminModalTitle">Créer un événement</h2>
+            <form id="adminEventForm">
+                <div class="form-group">
+                    <label for="adminEventTitle">Titre</label>
+                    <input type="text" id="adminEventTitle" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="adminEventDescription">Description</label>
+                    <textarea id="adminEventDescription" rows="4" required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="adminEventDate">Date et heure</label>
+                        <input type="datetime-local" id="adminEventDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminEventCapacity">Capacité</label>
+                        <input type="number" id="adminEventCapacity" min="1">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="adminEventLocation">Lieu</label>
+                    <input type="text" id="adminEventLocation" required>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="submit" class="btn-primary">Sauvegarder</button>
+                    <button type="reset" class="btn-secondary">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- BackOffice will be server-side PHP. See evenemnt.php -->
+</body>
+</html>
+</body>
+</html>
