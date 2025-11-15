@@ -72,6 +72,21 @@ body {
     text-decoration: underline;
 }
 
+/* Bouton Admin dans la nav */
+.btn-admin {
+    background: rgba(255,255,255,0.12);
+    color: white;
+    padding: 0.5rem 0.9rem;
+    border-radius: 6px;
+    font-weight: 700;
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+.btn-admin:hover {
+    background: rgba(255,255,255,0.18);
+    text-decoration: none;
+}
+
 .user-info {
     color: white;
     font-weight: 600;

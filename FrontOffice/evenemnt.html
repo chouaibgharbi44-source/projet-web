@@ -1,37 +1,37 @@
-<!DOCTYPE html>
-<html lang="fr">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Campus Connect - Événements</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
+    <div class="navbar">
         <div class="container">
             <div class="logo">🎓 Campus Connect</div>
             <ul class="nav-links">
                 <li><a href="#events" class="active">Tous les événements</a></li>
                 <li><a href="#my-events">Mes événements</a></li>
                 <li><span class="user-info">Étudiant</span></li>
+                <li><a href="../View/BackOffice/listEvent.php" class="btn-admin">Admin</a></li>
             </ul>
         </div>
-    </nav>
+    </div>
 
     <!-- Section Hero -->
-    <section class="hero">
+    <div class="hero">
         <div class="hero-content">
             <h1>Découvrez les événements du campus</h1>
             <p>Rejoignez des événements et connectez-vous avec d'autres étudiants</p>
         </div>
-    </section>
+    </div>
 
     <!-- Barre de recherche et filtres -->
-    <section class="filters-section">
+    <div class="filters-section">
         <div class="container">
             <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Rechercher un événement...">
+                <input type="text" id="searchInput">
                 <button id="searchBtn" class="btn-primary">Rechercher</button>
             </div>
             <div class="filter-buttons">
@@ -41,44 +41,62 @@
             </div>
             <a href="#createForm" class="btn-primary create-btn">+ Créer un événement</a>
         </div>
-    </section>
+    </div>
     <!-- Formulaire Créer événement (no-JS) -->
-    <section id="createForm" class="create-form-section">
+    <div id="createForm" class="create-form-section">
         <div class="container">
             <h2>Créer un événement</h2>
-            <form method="post" action="../Controller/core_evenement.php">
+            <form id="createEventForm" method="post" action="../Controller/core_evenement.php">
                 <input type="hidden" name="action" value="create">
-                <input type="hidden" name="redirect" value="/BasmaEvent/FrontOffice/evenemnt.php">
+                <input type="hidden" name="redirect" value="evenemnt.html">
 
                 <div class="form-group">
                     <label for="title">Titre de l'événement</label>
-                    <input type="text" id="title" name="title" required>
+                    <input type="text" id="title" name="title">
                 </div>
 
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea id="description" name="description" rows="4" required></textarea>
+                    <textarea id="description" name="description" rows="4"></textarea>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="date">Date et heure</label>
-                        <input type="datetime-local" id="date" name="date" required>
+                        <label for="date">Date (YYYY-MM-DD)</label>
+                        <input type="text" id="date" name="date" placeholder="2025-12-31">
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Heure (HH:MM) — optionnel</label>
+                        <input type="text" id="time" name="time" placeholder="18:30">
                     </div>
                     <div class="form-group">
                         <label for="capacity">Capacité (optionnel)</label>
-                        <input type="number" id="capacity" name="capacity" min="1">
+                        <input type="text" id="capacity" name="capacity">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="location">Lieu</label>
-                    <input type="text" id="location" name="location" required>
+                    <input type="text" id="location" name="location">
                 </div>
 
                 <div class="form-group">
                     <label for="image">Image (URL)</label>
-                    <input type="url" id="image" name="image">
+                    <input type="text" id="image" name="image">
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Catégorie</label>
+                    <select id="category" name="category">
+                        <option value="">-- Sélectionner --</option>
+                        <option value="Conférence">Conférence</option>
+                        <option value="Atelier">Atelier</option>
+                        <option value="Festival">Festival</option>
+                        <option value="Réunion">Réunion</option>
+                        <option value="Sport">Sport</option>
+                        <option value="Culturel">Culturel</option>
+                        <option value="Autre">Autre</option>
+                    </select>
                 </div>
 
                 <div class="form-buttons">
@@ -87,7 +105,7 @@
                 </div>
             </form>
         </div>
-    </section>
+    </div>
 
     <!-- Modal Détail événement -->
     <div id="detailModal" class="modal">
@@ -100,7 +118,7 @@
     </div>
 
     <!-- Grille d'événements -->
-    <section class="events-section">
+    <div class="events-section">
         <div class="container">
             <div id="eventsList" class="events-grid">
                 <!-- Les événements seront chargés dynamiquement -->
@@ -110,27 +128,30 @@
                 <p>Aucun événement trouvé. Créez le premier ! 🎉</p>
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- Section Mes événements -->
-    <section id="my-events" class="my-events-section" style="display:none;">
+    <div id="my-events" class="my-events-section" style="display:none;">
         <div class="container">
             <h2>Mes événements</h2>
             <div id="myEventsList" class="events-grid">
                 <!-- Les événements de l'utilisateur -->
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- Footer -->
-    <footer class="footer">
+    <div class="footer">
         <div class="container">
             <p>&copy; 2025 Campus Connect - Votre université, unie 🎓</p>
         </div>
-    </footer>
+    </div>
 
     <!-- No JavaScript version: use server-side rendering via Controller -->
-</body>
-</html>
+    <div id="flashMessage" style="display:none; position: fixed; top: 16px; right: 16px; z-index:2000;">
+        <div id="flashContent" style="background:#e8f5e9; color:#2e7d32; padding:12px 18px; border-left:4px solid #4CAF50; border-radius:6px; box-shadow:0 4px 12px rgba(0,0,0,0.08);">Succès ! Événement créé.</div>
+    </div>
+
+    <script src="assets/js/form-validation.js"></script>
 </body>
 </html>

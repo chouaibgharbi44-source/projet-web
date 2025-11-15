@@ -4,30 +4,29 @@ require_once __DIR__ . '/../Controller/core_evenement.php';
 
 $events = listEvents();
 ?>
-<!DOCTYPE html>
-<html lang="fr">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Campus Connect - Événements</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <nav class="navbar">
+    <div class="navbar">
         <div class="container">
             <div class="logo">🎓 Campus Connect</div>
         </div>
-    </nav>
+    </div>
 
-    <section class="hero">
+    <div class="hero">
         <div class="hero-content">
             <h1>Événements</h1>
         </div>
-    </section>
+    </div>
 
-    <section class="events-section">
+    <div class="events-section">
         <div class="container">
-            <a href="../BackOffice/evenemnt.php" class="btn-primary">Admin</a>
+            <a href="../View/BackOffice/listEvent.php" class="btn-primary">Admin</a>
             <h2>Tous les événements</h2>
             <?php if (empty($events)): ?>
                 <p>Aucun événement pour le moment.</p>
@@ -52,10 +51,10 @@ $events = listEvents();
                 </ul>
             <?php endif; ?>
         </div>
-    </section>
+    </div>
 
-    <footer class="footer">
+    <div class="footer">
         <div class="container">&copy; Campus Connect</div>
-    </footer>
+    </div>
 </body>
 </html>

@@ -4,11 +4,10 @@ require_once __DIR__ . '/../Controller/core_evenement.php';
 
 $events = listEvents();
 ?>
-<!DOCTYPE html>
-<html lang="fr">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Campus Connect - Admin - Événements</title>
     <link rel="stylesheet" href="assets/css/admin-style.css">
 </head>
@@ -23,22 +22,22 @@ $events = listEvents();
                 <input type="hidden" name="id" value="<?php echo intval($editing['id']); ?>">
                 <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                 <div>
-                    <label>Titre<br><input type="text" name="title" value="<?php echo htmlspecialchars($editing['title']); ?>" required></label>
+                    <label>Titre<br><input type="text" name="title" value="<?php echo htmlspecialchars($editing['title']); ?>"></label>
                 </div>
                 <div>
-                    <label>Description<br><textarea name="description" required><?php echo htmlspecialchars($editing['description']); ?></textarea></label>
+                    <label>Description<br><textarea name="description"><?php echo htmlspecialchars($editing['description']); ?></textarea></label>
                 </div>
                 <div>
-                    <label>Date et heure<br><input type="datetime-local" name="date" value="<?php echo htmlspecialchars(date('Y-m-d\TH:i', strtotime($editing['date']))); ?>" required></label>
+                    <label>Date et heure<br><input type="text" name="date" value="<?php echo htmlspecialchars(date('Y-m-d H:i', strtotime($editing['date']))); ?>"></label>
                 </div>
                 <div>
-                    <label>Lieu<br><input type="text" name="location" value="<?php echo htmlspecialchars($editing['location']); ?>" required></label>
+                    <label>Lieu<br><input type="text" name="location" value="<?php echo htmlspecialchars($editing['location']); ?>"></label>
                 </div>
                 <div>
-                    <label>Capacité<br><input type="number" name="capacity" min="1" value="<?php echo intval($editing['capacity']); ?>"></label>
+                    <label>Capacité<br><input type="text" name="capacity" value="<?php echo intval($editing['capacity']); ?>"></label>
                 </div>
                 <div>
-                    <label>Image URL<br><input type="url" name="image" value="<?php echo htmlspecialchars($editing['image']); ?>"></label>
+                    <label>Image URL<br><input type="text" name="image" value="<?php echo htmlspecialchars($editing['image']); ?>"></label>
                 </div>
                 <div>
                     <button type="submit" class="btn-primary">Sauvegarder</button>
@@ -51,22 +50,22 @@ $events = listEvents();
                 <input type="hidden" name="action" value="create">
                 <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
                 <div>
-                    <label>Titre<br><input type="text" name="title" required></label>
+                    <label>Titre<br><input type="text" name="title"></label>
                 </div>
                 <div>
-                    <label>Description<br><textarea name="description" required></textarea></label>
+                    <label>Description<br><textarea name="description"></textarea></label>
                 </div>
                 <div>
-                    <label>Date et heure<br><input type="datetime-local" name="date" required></label>
+                    <label>Date et heure<br><input type="text" name="date"></label>
                 </div>
                 <div>
-                    <label>Lieu<br><input type="text" name="location" required></label>
+                    <label>Lieu<br><input type="text" name="location"></label>
                 </div>
                 <div>
-                    <label>Capacité<br><input type="number" name="capacity" min="1"></label>
+                    <label>Capacité<br><input type="text" name="capacity"></label>
                 </div>
                 <div>
-                    <label>Image URL<br><input type="url" name="image"></label>
+                    <label>Image URL<br><input type="text" name="image"></label>
                 </div>
                 <div>
                     <button type="submit" class="btn-primary">Créer</button>
