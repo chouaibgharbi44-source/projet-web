@@ -1,0 +1,136 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    min-height: 100vh;
+    overflow-y: auto !important;
+    background: #121212;
+    color: #e0e0e0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+}
+
+.auth-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+    height: auto;
+}
+
+.auth-left {
+    background: linear-gradient(135deg, #6a1b9a 0%, #4a148c 100%);
+    color: white;
+    padding: 80px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+    overflow-y: auto;
+    min-height: 100vh;
+}
+
+.auth-left::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.branding, .features {
+    position: relative;
+    z-index: 1;
+}
+
+.branding h1 { font-size: 3.5em; margin-bottom: 20px; font-weight: 700; }
+.tagline { font-size: 1.5em; margin-bottom: 15px; font-weight: 600; }
+.subtitle { font-size: 1.1em; opacity: 0.9; line-height: 1.6; max-width: 500px; }
+
+.features {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateX(10px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.auth-right {
+    background: #1a1a1a;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 60px 40px;
+    overflow-y: auto;
+    min-height: 100vh;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 500px;
+    background: #1e1e1e;
+    padding: 50px;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    border: 1px solid #2d2d2d;
+    max-height: 95vh;
+    overflow-y: auto;
+}
+
+/* Form styles (keep all your beautiful styling) */
+.form-wrapper h2 { font-size: 2.2em; color: #bb86fc; margin-bottom: 10px; font-weight: 700; }
+.form-description { color: #aaaaaa; margin-bottom: 30px; }
+
+/* ... keep ALL your existing form styles below this line ... */
+/* (I’m not repeating them to save space — just keep everything from .form-group down to the end) */
+
+/* Your existing form styles — DO NOT DELETE */
+.form-group { margin-bottom: 25px; }
+.form-group label { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; color: #e0e0e0; font-weight: 600; }
+.form-group input, .form-group select { width: 100%; padding: 14px 16px; background: #121212; border: 1px solid #333; border-radius: 12px; color: #e0e0e0; }
+.form-group input:focus { outline: none; border-color: #bb86fc; box-shadow: 0 0 0 3px rgba(187, 134, 252, 0.2); }
+
+.password-wrapper { position: relative; }
+.password-wrapper input { padding-right: 50px; }
+.toggle-password { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.2em; opacity: 0.6; }
+.toggle-password:hover { opacity: 1; }
+
+.btn-submit {
+    width: 100%; padding: 16px; background: #bb86fc; color: #121212; border: none; border-radius: 12px;
+    font-size: 1.1em; font-weight: 600; cursor: pointer; margin-bottom: 20px;
+}
+.btn-submit:hover { background: #9f57eb; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(187, 134, 252, 0.3); }
+
+/* Responsive */
+@media (max-width: 968px) {
+    .auth-container { grid-template-columns: 1fr; }
+    .auth-left { display: none; }
+    .auth-right { padding: 40px 20px; align-items: flex-start; }
+    .form-container { padding: 40px 30px; }
+}

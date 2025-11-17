@@ -189,7 +189,7 @@ body {
     border-color: #bb86fc;
 }
 
-.file-input {
+.upload-box input[type="file"] {
     position: absolute;
     inset: 0;
     opacity: 0;
