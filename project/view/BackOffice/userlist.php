@@ -1,6 +1,5 @@
 <?php
-// view/BackOffice/userlist.php
-// $users, $totalUsers, $totalStudents, $totalTeachers are sent from public/index.php
+ 
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -13,7 +12,7 @@
 <body>
     <div class="app-container">
 
-        <!-- SIDEBAR -->
+         
         <aside class="sidebar">
             <div class="logo">
                 <img src="../public/images/logo.png" alt="Logo" class="logo-img">
@@ -30,21 +29,21 @@
             </ul>
         </aside>
 
-        <!-- MAIN CONTENT -->
+         
         <main class="main-content">
             <header class="page-header">
                 <h2 class="page-title">Gestion des Utilisateurs</h2>
-                <p class="page-subtitle">Plateforme Sociale Universitaire - Par Youssef</p>
+                <p class="page-subtitle">Plateforme Sociale Universitaire </p>
             </header>
 
-            <!-- STATS -->
+             
             <section class="stats-grid">
                 <div class="stat-card"><h3 class="stat-number"><?= $totalUsers ?></h3><p>Total Utilisateurs</p></div>
                 <div class="stat-card"><h3 class="stat-number"><?= $totalStudents ?></h3><p>Étudiants</p></div>
                 <div class="stat-card"><h3 class="stat-number"><?= $totalTeachers ?></h3><p>Professeurs</p></div>
             </section>
 
-            <!-- TABLE -->
+             
             <section class="table-section">
                 <h3 class="section-heading">Liste des Utilisateurs</h3>
                 <div class="search-bar">
@@ -72,8 +71,8 @@
                                     <td><?= htmlspecialchars($u['interests'] ?? '-') ?></td>
                                     <td><?= htmlspecialchars($u['department'] ?? '-') ?></td>
                                     <td class="actions">
-                                        <a href="updateuser.php?id=<?= $u['id'] ?>">Éditer</a> |
-                                        <a href="deleteuser.php?id=<?= $u['id'] ?>" onclick="return confirm('Supprimer ?')">Supprimer</a>
+                                        <a href="../public/edit_user.php?id=<?= $u['id'] ?>">Éditer</a>|
+                                        <a href="../public/delete.php?id=<?= $u['id'] ?>" onclick="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?')">Supprimer</a>
                                     </td>
                                 </tr>
                             <?php endforeach; endif; ?>

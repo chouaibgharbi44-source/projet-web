@@ -1,6 +1,5 @@
 <?php
-// view/BackOffice/showuser.php
-// expects ?id=NN
+ 
 ?>
 <!doctype html>
 <html lang="fr">

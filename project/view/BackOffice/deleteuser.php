@@ -1,6 +1,5 @@
 <?php
-// view/BackOffice/deleteUser.php
-// expects ?id=NN
+ 
 $id = $_GET['id'] ?? null;
 if (!$id) { header('Location: userlist.php'); exit; }
 ?>

@@ -9,10 +9,11 @@ if ($_POST) {
         'first_name' => $_POST['first_name'],
         'last_name'  => $_POST['last_name'],
         'email'      => $_POST['email'],
+        'phone'      => $_POST['phone'],
         'password'   => password_hash($_POST['password'], PASSWORD_DEFAULT),
         'user_type'  => $_POST['user_type'] ?? 'student'
     ];
-    $user->create($data);           // you need this method (2 lines below)
+    $user->create($data);            
     header("Location: userlist.php");
     exit;
 }

@@ -1,5 +1,5 @@
 <?php
-// config.php
+ 
 $host = 'localhost';
 $dbname = 'campusconnect';
 $user = 'root';
@@ -13,5 +13,5 @@ try {
     die("Connection failed: " . $e->getMessage());
 }
 
-// This line is CRUCIAL
+ 
 global $pdo;

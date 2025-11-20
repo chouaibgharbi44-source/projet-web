@@ -1,6 +1,5 @@
 <?php
-// view/BackOffice/updateuser.php
-// expects ?id=NN in querystring and will fetch user via AJAX to prefill
+ 
 ?>
 <!doctype html>
 <html lang="fr">
@@ -48,7 +47,7 @@
   </div>
 
   <script>
-    // simple client-side: fetch user data and fill fields, optionally submit as normal form.
+     
     (async function(){
       const params = new URLSearchParams(location.search);
       const id = params.get('id');

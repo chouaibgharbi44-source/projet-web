@@ -10,26 +10,34 @@ if ($_POST['action'] ?? '' === 'login') {
     if ($user && password_verify($_POST['password'] ?? '', $user['password'])) {
         $_SESSION['logged_in'] = true;
         $_SESSION['user_id'] = $user['id'];
-        header('Location: index.php');
+        $_SESSION['user_name'] = $user['full_name']; 
+        header('Location: profile.php');
         exit;
-    } else $error = "Email ou mot de passe incorrect.";
+    } else {
+        $error = "Email ou mot de passe incorrect.";
+    }
 }
 
 if ($_POST['action'] ?? '' === 'signup') {
     if ($userModel->getByEmail($_POST['email'] ?? '')) {
         $error = "Email déjà utilisé.";
     } else {
+        
+        $fullName = trim($_POST['first_name']) . ' ' . trim($_POST['last_name']);
         $data = [
-            'first_name' => $_POST['first_name'],
-            'last_name'  => $_POST['last_name'],
+            'student_id' => 'STU' . time(),  
+            'full_name'  => $fullName,
             'email'      => $_POST['email'],
             'password'   => password_hash($_POST['password'], PASSWORD_DEFAULT),
-            'user_type'  => 'student'
+            'type'       => 'student',  
+            'year'       => null,
+            'department' => null
         ];
-        $userModel->create($data);
+        $userId = $userModel->create($data);
         $_SESSION['logged_in'] = true;
-        $_SESSION['user_id'] = $pdo->lastInsertId();
-        header('Location: index.php');
+        $_SESSION['user_id'] = $userId;
+        $_SESSION['user_name'] = $fullName;
+        header('Location: profile.php');
         exit;
     }
 }
@@ -67,27 +75,28 @@ if ($_POST['action'] ?? '' === 'signup') {
             <?php if($error) echo "<p style='color:#ff6b6b;text-align:center;margin:10px 0'>$error</p>"; ?>
 
             <div class="form-wrapper active" id="formWrapper">
-                <!-- LOGIN -->
+                 
                 <div id="loginForm" class="form-content">
                     <h2>Bon retour !</h2>
                     <form method="post">
                         <input type="hidden" name="action" value="login">
-                        <div class="form-group"><input type="email" name="email" placeholder="Email" required></div>
-                        <div class="form-group"><input type="password" name="password" placeholder="Mot de passe" required></div>
+                        <div class="form-group"><input type="email" name="email" placeholder="Email" ></div>
+                        <div class="form-group"><input type="password" name="password" placeholder="Mot de passe" ></div>
                         <button type="submit" class="btn-submit">Se connecter</button>
                         <p class="signup-link">Pas de compte ? <a href="signup.php">Créer un compte</a></p>
+                        <p class="signup-link"><a href="forgot-password.php">Mot de passe oublié ?</a></p>
                     </form>
                 </div>
 
-                <!-- SIGNUP -->
+                 
                 <div id="signupForm" class="form-content hidden">
                     <h2>Créer un compte</h2>
                     <form method="post">
                         <input type="hidden" name="action" value="signup">
-                        <div class="form-group"><input type="text" name="first_name" placeholder="Prénom" required></div>
-                        <div class="form-group"><input type="text" name="last_name" placeholder="Nom" required></div>
-                        <div class="form-group"><input type="email" name="email" placeholder="Email" required></div>
-                        <div class="form-group"><input type="password" name="password" placeholder="Mot de passe (8+)" minlength="8" required></div>
+                        <div class="form-group"><input type="text" name="first_name" placeholder="Prénom" ></div>
+                        <div class="form-group"><input type="text" name="last_name" placeholder="Nom" ></div>
+                        <div class="form-group"><input type="email" name="email" placeholder="Email" ></div>
+                        <div class="form-group"><input type="password" name="password" placeholder="Mot de passe (8+)" minlength="8" ></div>
                         <button type="submit" class="btn-submit">S'inscrire</button>
                         <p class="signup-link">Déjà un compte ? <a href="#" onclick="switchToLogin()">Se connecter</a></p>
                     </form>
