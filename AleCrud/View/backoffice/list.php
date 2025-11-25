@@ -8,10 +8,7 @@
 <body>
 <div class="topbar admin">
     <h1>Backoffice - Matières</h1>
-    <div class="admin-button">
-        <a href="index.php">Frontoffice</a>
-        <a href="index.php?entity=ressource&area=admin">Gérer Ressources</a>
-    </div>
+    <div class="admin-button"><a href="index.php">Frontoffice</a></div>
 </div>
 
 <div class="container">

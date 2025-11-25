@@ -11,12 +11,6 @@ class MatiereController {
     }
 
     public function handleRequest() {
-        // Si on demande l'admin sans action, afficher le dashboard
-        if ($this->area === 'admin' && !isset($_GET['action'])) {
-            include __DIR__ . '/../View/backoffice/admin_dashboard.php';
-            return;
-        }
-
         $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 
         switch ($action) {
@@ -71,8 +65,8 @@ class MatiereController {
         ];
 
         $this->model->create($data);
-        $redirect = 'index.php?action=list';
-        if ($this->area === 'admin') $redirect .= '&area=admin';
+        $redirect = 'index.php';
+        if ($this->area === 'admin') $redirect .= '?area=admin';
         header('Location: ' . $redirect);
         exit;
     }
@@ -111,8 +105,8 @@ class MatiereController {
         ];
 
         $this->model->update($id, $data);
-        $redirect = 'index.php?action=list';
-        if ($this->area === 'admin') $redirect .= '&area=admin';
+        $redirect = 'index.php';
+        if ($this->area === 'admin') $redirect .= '?area=admin';
         header('Location: ' . $redirect);
         exit;
     }
@@ -122,8 +116,8 @@ class MatiereController {
         if ($id) {
             $this->model->delete($id);
         }
-        $redirect = 'index.php?action=list';
-        if ($this->area === 'admin') $redirect .= '&area=admin';
+        $redirect = 'index.php';
+        if ($this->area === 'admin') $redirect .= '?area=admin';
         header('Location: ' . $redirect);
         exit;
     }

@@ -14,16 +14,13 @@
     <div class="header-inner">
         <div class="logo">CAMPUS CONNECT</div>
         <nav class="navbar">
-            <a href="index.php" class="nav-link">Accueil</a>
-            <a href="index.php?entity=ressource" class="nav-link">Ressources</a>
+            <a href="#" class="nav-link">Accueil</a>
+            <a href="#" class="nav-link active">Ressources</a>
             <a href="#" class="nav-link">Evenements</a>
             <a href="#" class="nav-link">Messages</a>
             <a href="#" class="nav-link">Groupes</a>
             <a href="#" class="nav-link">Profil</a>
         </nav>
-        <div class="admin-button">
-            <a href="index.php?area=admin" class="pulse">Admin</a>
-        </div>
     </div>
 </header>
 
@@ -54,9 +51,7 @@
             <label>Description:<br /><textarea name="description" rows="4" placeholder="Décrivez la matière..."></textarea></label><br />
             <label>Date d'ajout:<br /><input type="text" name="date_ajout" value="<?php echo date('Y-m-d H:i:s'); ?>" /></label><br />
             <label>Niveau difficulté:<br /><input type="text" name="niveau_difficulte" placeholder="Ex: Facile, Moyen, Difficile" /></label><br />
-            <div class="modal-actions">
-                <button class="btn" type="submit">➕ Ajouter</button>
-            </div>
+            <input class="btn" type="submit" value="Enregistrer" />
         </form>
     </div>
 </div>

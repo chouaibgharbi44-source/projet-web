@@ -1,22 +1,16 @@
 <?php
-require_once __DIR__ . '/../Model/Matiere.php';
+require_once __DIR__ . '/../Model/Ressource.php';
 
-class MatiereController {
+class RessourceController {
     private $model;
     private $area;
 
     public function __construct() {
-        $this->model = new Matiere();
+        $this->model = new Ressource();
         $this->area = isset($_REQUEST['area']) && $_REQUEST['area'] === 'admin' ? 'admin' : 'front';
     }
 
     public function handleRequest() {
-        // Si on demande l'admin sans action, afficher le dashboard
-        if ($this->area === 'admin' && !isset($_GET['action'])) {
-            include __DIR__ . '/../View/backoffice/admin_dashboard.php';
-            return;
-        }
-
         $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 
         switch ($action) {
@@ -45,33 +39,34 @@ class MatiereController {
     }
 
     public function list() {
-        $matieres = $this->model->getAll();
+        $ressources = $this->model->getAll();
         if ($this->area === 'admin') {
-            include __DIR__ . '/../View/backoffice/list.php';
+            include __DIR__ . '/../View/backoffice/ressource_list.php';
         } else {
-            include __DIR__ . '/../View/frontoffice/index.php';
+            include __DIR__ . '/../View/frontoffice/ressource_index.php';
         }
     }
 
     public function addForm() {
         if ($this->area === 'admin') {
-            include __DIR__ . '/../View/backoffice/add.php';
+            include __DIR__ . '/../View/backoffice/ressource_add.php';
         } else {
-            include __DIR__ . '/../View/frontoffice/index.php';
+            include __DIR__ . '/../View/frontoffice/ressource_index.php';
         }
     }
 
     public function store() {
         $data = [
-            'nom_matiere' => $_POST['nom_matiere'] ?? '',
             'titre' => $_POST['titre'] ?? '',
             'description' => $_POST['description'] ?? '',
-            'date_ajout' => $_POST['date_ajout'] ?? date('Y-m-d H:i:s'),
-            'niveau_difficulte' => $_POST['niveau_difficulte'] ?? ''
+            'type_ressource' => $_POST['type_ressource'] ?? '',
+            'url' => $_POST['url'] ?? '',
+            'auteur' => $_POST['auteur'] ?? '',
+            'date_ajout' => $_POST['date_ajout'] ?? date('Y-m-d H:i:s')
         ];
 
         $this->model->create($data);
-        $redirect = 'index.php?action=list';
+        $redirect = 'index.php?entity=ressource';
         if ($this->area === 'admin') $redirect .= '&area=admin';
         header('Location: ' . $redirect);
         exit;
@@ -80,38 +75,39 @@ class MatiereController {
     public function editForm() {
         $id = $_GET['id'] ?? null;
         if (!$id) {
-            $redirect = 'index.php';
-            if ($this->area === 'admin') $redirect .= '?area=admin';
+            $redirect = 'index.php?entity=ressource';
+            if ($this->area === 'admin') $redirect .= '&area=admin';
             header('Location: ' . $redirect);
             exit;
         }
-        $matiere = $this->model->getById($id);
+        $ressource = $this->model->getById($id);
         if ($this->area === 'admin') {
-            include __DIR__ . '/../View/backoffice/edit.php';
+            include __DIR__ . '/../View/backoffice/ressource_edit.php';
         } else {
-            include __DIR__ . '/../View/frontoffice/index.php';
+            include __DIR__ . '/../View/frontoffice/ressource_index.php';
         }
     }
 
     public function update() {
         $id = $_POST['id'] ?? null;
         if (!$id) {
-            $redirect = 'index.php';
-            if ($this->area === 'admin') $redirect .= '?area=admin';
+            $redirect = 'index.php?entity=ressource';
+            if ($this->area === 'admin') $redirect .= '&area=admin';
             header('Location: ' . $redirect);
             exit;
         }
 
         $data = [
-            'nom_matiere' => $_POST['nom_matiere'] ?? '',
             'titre' => $_POST['titre'] ?? '',
             'description' => $_POST['description'] ?? '',
-            'date_ajout' => $_POST['date_ajout'] ?? date('Y-m-d H:i:s'),
-            'niveau_difficulte' => $_POST['niveau_difficulte'] ?? ''
+            'type_ressource' => $_POST['type_ressource'] ?? '',
+            'url' => $_POST['url'] ?? '',
+            'auteur' => $_POST['auteur'] ?? '',
+            'date_ajout' => $_POST['date_ajout'] ?? date('Y-m-d H:i:s')
         ];
 
         $this->model->update($id, $data);
-        $redirect = 'index.php?action=list';
+        $redirect = 'index.php?entity=ressource';
         if ($this->area === 'admin') $redirect .= '&area=admin';
         header('Location: ' . $redirect);
         exit;
@@ -122,7 +118,7 @@ class MatiereController {
         if ($id) {
             $this->model->delete($id);
         }
-        $redirect = 'index.php?action=list';
+        $redirect = 'index.php?entity=ressource';
         if ($this->area === 'admin') $redirect .= '&area=admin';
         header('Location: ' . $redirect);
         exit;
