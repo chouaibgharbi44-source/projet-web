@@ -11,30 +11,59 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!title.value.trim()) {
                 errors.title = "Le titre est requis.";
                 isValid = false;
-            } else if (title.value.trim().length < 3) {
-                errors.title = "Le titre doit faire au moins 3 caractères.";
+            } else if (title.value.trim().length < 10) {
+                errors.title = "Le titre doit faire au moins 10 caractères.";
                 isValid = false;
             }
 
             // Valider la bonne réponse
             const correctAnswer = form.querySelector('#correct_answer');
-            if (!correctAnswer.value.trim()) {
-                errors.correct_answer = "La bonne réponse est requise.";
-                isValid = false;
+            if (correctAnswer) {
+                const val = correctAnswer.value.trim();
+                if (!val){
+                    errors.correct_answer = "La bonne réponse est requise.";
+                    isValid = false;
+                }else if (val.length < 4) {
+                    errors.correct_answer = "La bonne réponse doit contenir au moins 4 caractères.";
+                    isValid = false;
+                } else {
+                    const forbiddenChars = ['"', "'", '@', '^', '\\', '#', '~', '&'];
+                    for (let char of forbiddenChars) {
+                        if (val.includes(char)) {
+                            errors.correct_answer = "La bonne réponse ne doit pas contenir les caractères suivants : \" ' @ ^ \\ # ~ &";
+                            isValid = false;
+                            break;
+                        }
+                    }
+                }        
+                
             }
 
             // Valider option A
             const optionA = form.querySelector('#option_a');
-            if (!optionA.value.trim()) {
-                errors.option_a = "L'option A est requise.";
-                isValid = false;
+            if (optionA) {
+                const val = optionA.value.trim();
+                if (!val) {
+                    errors.option_a = "L'option A est requise.";
+                    isValid = false;
+                } else if (val.length < 6) {
+                    errors.option_a = "L'option A doit contenir au moins 6 caractères.";
+                    isValid = false;
+                }    
             }
 
             // Valider option B
             const optionB = form.querySelector('#option_b');
-            if (!optionB.value.trim()) {
-                errors.option_b = "L'option B est requise.";
-                isValid = false;
+            if (optionB) {
+                const val = optionB.value.trim();
+                if (!val) {
+                    errors.option_b = "L'option B est requise.";
+                    isValid = false;
+                } else if (val.length < 6) {
+                    errors.option_b = "L'option B doit contenir au moins 6 caractères.";
+                    isValid = false;
+                }
+
             }
 
             // Valider la catégorie

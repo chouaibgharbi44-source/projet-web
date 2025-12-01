@@ -1,4 +1,9 @@
 <?php
+// Vérifier que ROOT est défini
+if (!defined('ROOT')) {
+    die('Erreur : la constante ROOT n\'est pas définie.');
+}
+
 require_once ROOT . '/config/database.php';
 require_once ROOT . '/models/Quiz.php';
 

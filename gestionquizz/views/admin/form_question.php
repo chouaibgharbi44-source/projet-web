@@ -64,5 +64,4 @@
     <button type="submit" class="btn btn-primary"><?= isset($question) ? 'Modifier' : 'Ajouter' ?></button>
 </form>
 <a href="<?= BASE_URL ?>/admin" class="btn btn-secondary">Annuler</a>
-</form>
 <?php include ROOT . '/views/layout/footer.php'; ?>
