@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <title>Backoffice - Ajouter Ressource</title>
+    <link rel="stylesheet" type="text/css" href="View/assets/style.css?v=3" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+
+<body>
+<div class="topbar admin">
+    <h1>Ajouter une ressource</h1>
+    <div class="admin-button"><a href="index.php?entity=ressource&amp;area=admin">Retour</a></div>
+</div>
+
+<div class="container">
+    <div class="form-card">
+        <form method="post" action="index.php?entity=ressource&amp;action=store&amp;area=admin" onsubmit="return validateRessourceForm(this);">
+            <label>Matière associée:<br />
+                <select name="matiere_id" required>
+                    <option value="">Sélectionnez une matière</option>
+                    <?php if (!empty($matieres)) foreach ($matieres as $m): ?>
+                        <option value="<?php echo (int)$m['id']; ?>"><?php echo htmlspecialchars($m['nom_matiere']); ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </label><br />
+            <label>Titre:<br /><input type="text" name="titre" required /></label><br />
+            <label>Description:<br /><textarea name="description" rows="6" cols="50" required></textarea></label><br />
+            <label>Type de ressource:<br /><input type="text" name="type_ressource" placeholder="Ex: PDF, Tutoriel, Document" /></label><br />
+            <label>URL:<br /><input type="text" name="url" placeholder="https://..." /></label><br />
+            <label>Auteur:<br /><input type="text" name="auteur" /></label><br />
+            <label>Date d'ajout:<br /><input type="text" name="date_ajout" value="<?php echo date('Y-m-d H:i:s'); ?>" /></label><br />
+            <input class="btn" type="submit" value="Enregistrer" />
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+function validateRessourceForm(form) {
+    const titre = form.titre.value.trim();
+    const description = form.description.value.trim();
+
+    let errors = [];
+
+    // Validation : titre doit contenir au moins une minuscule ET une majuscule
+    if (!/[a-z]/.test(titre) || !/[A-Z]/.test(titre)) {
+        errors.push("Le titre doit contenir au moins une lettre minuscule et une lettre majuscule.");
+    }
+
+    // Validation : description doit faire plus de 20 caractères
+    if (description.length <= 20) {
+        errors.push("La description doit contenir plus de 20 caractères.");
+    }
+
+    // Afficher les erreurs si nécessaire
+    if (errors.length > 0) {
+        alert("Erreurs de validation :\n\n• " + errors.join("\n• "));
+        return false;
+    }
+
+    return true;
+}
+</script>
+
+</body>
+</html>
+
+
+</body>
+</html>
