@@ -4,7 +4,6 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 require_once '../config.php';
 
-
 if (isset($_SESSION['user_id'])) {
     header('Location: profile.php');
     exit();
@@ -80,6 +79,7 @@ if (isset($_SESSION['user_id'])) {
                         <input type="password" id="password" name="password" placeholder="Minimum 8 caractères">
                         <button type="button" class="toggle-password" onclick="togglePassword('password')">Eye</button>
                     </div>
+                    <div id="password-strength" class="password-strength"></div>
                 </div>
 
                 <div class="input-group">
@@ -95,12 +95,33 @@ if (isset($_SESSION['user_id'])) {
                     <select id="userType" name="userType">
                         <option value="">Sélectionnez...</option>
                         <option value="student">Étudiant</option>
-                        <option value="teacher">Professeur</option>
-                        <option value="admin">Administrateur</option>
+                        <option value="professor">Professeur</option>
                     </select>
                 </div>
 
-                <div class="input-group" id="yearGroup" style="display:none;">
+                <!-- NEW: Department Field -->
+                <div class="input-group">
+                    <label for="department">Département</label>
+                    <select id="department" name="department">
+                        <option value="">Sélectionnez...</option>
+                        <option value="Informatique">Informatique</option>
+                        <option value="Mathématiques">Mathématiques</option>
+                        <option value="Physique">Physique</option>
+                        <option value="Chimie">Chimie</option>
+                        <option value="Biologie">Biologie</option>
+                        <option value="Économie">Économie</option>
+                        <option value="Gestion">Gestion</option>
+                        <option value="Lettres">Lettres</option>
+                        <option value="Sciences Humaines">Sciences Humaines</option>
+                        <option value="Ingénierie">Ingénierie</option>
+                        <option value="Médecine">Médecine</option>
+                        <option value="Droit">Droit</option>
+                        <option value="Architecture">Architecture</option>
+                        <option value="Arts">Arts</option>
+                    </select>
+                </div>
+
+                <div class="input-group" id="yearGroup" style="display: none;">
                     <label for="year">Année d'études</label>
                     <select id="year" name="year">
                         <option value="">Sélectionnez...</option>
@@ -112,6 +133,62 @@ if (isset($_SESSION['user_id'])) {
                     </select>
                 </div>
 
+                <!-- NEW: Interests Field -->
+                <div class="input-group">
+                    <label>Centres d'intérêt</label>
+                    <p style="font-size: 0.85rem; color: #999; margin: 4px 0 8px 0;">Sélectionnez vos domaines d'intérêt (optionnel)</p>
+                    <div class="interests-container">
+                        <label class="interest-tag">
+                            <input type="checkbox" name="interests[]" value="Programmation">
+                            <span>Programmation</span>
+                        </label>
+                        <label class="interest-tag">
+                            <input type="checkbox" name="interests[]" value="Intelligence Artificielle">
+                            <span>Intelligence Artificielle</span>
+                        </label>
+                        <label class="interest-tag">
+                            <input type="checkbox" name="interests[]" value="Cybersécurité">
+                            <span>Cybersécurité</span>
+                        </label>
+                        <label class="interest-tag">
+                            <input type="checkbox" name="interests[]" value="Data Science">
+                            <span>Data Science</span>
+                        </label>
+                        <label class="interest-tag">
+                            <input type="checkbox" name="interests[]" value="Développement Web">
+                            <span>Développement Web</span>
+                        </label>
+                        <label class="interest-tag">
+                            <input type="checkbox" name="interests[]" value="Mobile">
+                            <span>Mobile</span>
+                        </label>
+                        <label class="interest-tag">
+                            <input type="checkbox" name="interests[]" value="Design">
+                            <span>Design</span>
+                        </label>
+                        <label class="interest-tag">
+                            <input type="checkbox" name="interests[]" value="Robotique">
+                            <span>Robotique</span>
+                        </label>
+                        <label class="interest-tag">
+                            <input type="checkbox" name="interests[]" value="Réseaux">
+                            <span>Réseaux</span>
+                        </label>
+                        <label class="interest-tag">
+                            <input type="checkbox" name="interests[]" value="Cloud Computing">
+                            <span>Cloud Computing</span>
+                        </label>
+                        <label class="interest-tag">
+                            <input type="checkbox" name="interests[]" value="Blockchain">
+                            <span>Blockchain</span>
+                        </label>
+                        <label class="interest-tag">
+                            <input type="checkbox" name="interests[]" value="IoT">
+                            <span>IoT</span>
+                        </label>
+                    </div>
+                </div>
+
                 <button type="submit" class="btn-primary" name="signup">Créer mon compte</button>
             </form>
 
@@ -121,46 +198,13 @@ if (isset($_SESSION['user_id'])) {
         </div>
     </div>
 
+    <script src="js/signup.js"></script>
     <script>
-        
-        document.getElementById('userType').addEventListener('change', function() {
-            const yearGroup = document.getElementById('yearGroup');
-            if (this.value === 'student') {
-                yearGroup.style.display = 'block';
-            } else {
-                yearGroup.style.display = 'none';
-            }
-        });
-
-        
-        function togglePassword(fieldId) {
-            const field = document.getElementById(fieldId);
-            if (field.type === 'password') {
-                field.type = 'text';
-            } else {
-                field.type = 'password';
-            }
-        }
-
-        
-        document.getElementById('signupForm').addEventListener('submit', function(e) {
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const errorMessage = document.getElementById('errorMessage');
-            
-            if (password !== confirmPassword) {
-                e.preventDefault();
-                errorMessage.textContent = 'Les mots de passe ne correspondent pas';
-                errorMessage.classList.add('show');
-                return false;
-            }
-            
-            if (password.length < 8) {
-                e.preventDefault();
-                errorMessage.textContent = 'Le mot de passe doit contenir au moins 8 caractères';
-                errorMessage.classList.add('show');
-                return false;
-            }
+        // Toggle interest tag selection
+        document.querySelectorAll('.interest-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                this.classList.toggle('selected');
+            });
         });
     </script>
 </body>
@@ -181,6 +225,11 @@ if (isset($_POST['signup'])) {
     $userType   = $_POST['userType'] ?? '';
     $phone      = trim($_POST['phone'] ?? '');
     $year       = ($userType === 'student') ? ($_POST['year'] ?? null) : null;
+    
+    // NEW: Get department and interests
+    $department = trim($_POST['department'] ?? '');
+    $interests  = isset($_POST['interests']) ? $_POST['interests'] : [];
+    $interestsString = !empty($interests) ? implode(',', $interests) : '';
 
     $errorMsg = '';
     if (empty($firstName) || empty($lastName) || empty($email) || empty($studentId) || empty($password) || empty($userType)) {
@@ -197,13 +246,14 @@ if (isset($_POST['signup'])) {
             document.getElementById('errorMessage').classList.add('show');
         </script>";
     } else {
-        $result = $userController->register($firstName, $lastName, $email, $studentId, $password, $userType, $phone, $year);
+        // Pass department and interests to the register method
+        $result = $userController->register($firstName, $lastName, $email, $studentId, $password, $userType, $phone, $year, $department, $interestsString);
 
         if ($result['success']) {
             echo "<script>
                 document.getElementById('successMessage').textContent = 'Compte créé avec succès ! Redirection...';
                 document.getElementById('successMessage').classList.add('show');
-                setTimeout(() => window.location.href = 'index.php', 1800);
+                setTimeout(() => window.location.href = 'profile.php', 1800);
             </script>";
         } else {
             echo "<script>

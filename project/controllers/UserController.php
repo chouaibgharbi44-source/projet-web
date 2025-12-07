@@ -1,6 +1,5 @@
 <?php
 
-
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../model/User.php';
 
@@ -14,7 +13,8 @@ class UserController
     }
 
     
-    public function register($firstName, $lastName, $email, $studentId, $password, $userType, $phone = null, $year = null)
+    // UPDATED: Added $department and $interests parameters
+    public function register($firstName, $lastName, $email, $studentId, $password, $userType, $phone = null, $year = null, $department = null, $interests = null)
     {
         global $pdo;
 
@@ -40,9 +40,10 @@ class UserController
             $fullName = trim($firstName . ' ' . $lastName);
 
             
+            // UPDATED: Added department and interests to the INSERT
             $sql = "INSERT INTO users 
-                    (student_id, full_name, email, password, type, phone, year, created_at) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
+                    (student_id, full_name, email, password, type, phone, year, department, interests, created_at) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 
             $stmt = $pdo->prepare($sql);
             $success = $stmt->execute([
@@ -52,7 +53,9 @@ class UserController
                 $hashed,
                 $userType,    
                 $phone,
-                $year
+                $year,
+                $department,    // NEW
+                $interests      // NEW
             ]);
 
             if ($success) {
@@ -78,4 +81,25 @@ class UserController
     public function add() { /* ton code existant */ }
     public function update() { /* ton code existant */ }
     public function delete() { /* ton code existant */ }
+
+    public function getUserById($id) {
+        global $pdo;
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getAllUsers() {
+        global $pdo; // Ensure you have access to the PDO instance
+        $stmt = $pdo->prepare("SELECT * FROM users"); // Adjust the query as needed
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all users as an associative array
+    }
+
+    public function getUsersByType($type) {
+        global $pdo;
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE user_type = :type");
+        $stmt->execute(['type' => $type]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

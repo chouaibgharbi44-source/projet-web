@@ -1,5 +1,5 @@
 <?php
- 
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -45,43 +45,73 @@
 
              
             <section class="table-section">
-                <h3 class="section-heading">Liste des Utilisateurs</h3>
-                <div class="search-bar">
-                    <input type="text" placeholder="Rechercher par nom, email ou student ID..." class="search-input">
-                    <button class="search-btn">Rechercher</button>
-                </div>
-                <div class="table-wrapper">
-                    <table class="users-table">
-                        <thead>
-                            <tr>
-                                <th>Student ID</th><th>Nom Complet</th><th>Email</th><th>Type</th>
-                                <th>Année</th><th>Intérêts</th><th>Département</th><th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (empty($users)): ?>
-                                <tr class="empty-row"><td colspan="8"><p class="empty-message">Aucun utilisateur pour le moment. Créez le premier profil !</p></td></tr>
-                            <?php else: foreach ($users as $u): ?>
-                                <tr>
-                                    <td><?= htmlspecialchars($u['student_id'] ?? $u['id'] ?? '') ?></td>
-                                    <td><?= htmlspecialchars(($u['first_name']??'').' '.($u['last_name']??'')) ?></td>
-                                    <td><?= htmlspecialchars($u['email'] ?? '') ?></td>
-                                    <td><?= ($u['user_type']??$u['type']??'') === 'teacher' ? 'Professeur' : 'Étudiant' ?></td>
-                                    <td><?= htmlspecialchars($u['year'] ?? '-') ?></td>
-                                    <td><?= htmlspecialchars($u['interests'] ?? '-') ?></td>
-                                    <td><?= htmlspecialchars($u['department'] ?? '-') ?></td>
-                                    <td class="actions">
-                                        <a href="../public/edit_user.php?id=<?= $u['id'] ?>">Éditer</a>|
-                                        <a href="../public/delete.php?id=<?= $u['id'] ?>" onclick="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?')">Supprimer</a>
-                                    </td>
-                                </tr>
-                            <?php endforeach; endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        </main>
+    
+    
+    <section class="table-section">
+    <h3 class="section-heading">Liste des Utilisateurs</h3>
+    
+    <!-- ADD THIS: Filter and Sort Controls -->
+    <div style="display: flex; gap: 15px; margin-bottom: 15px; align-items: center;">
+        <div>
+            <label for="typeFilter" style="margin-right: 8px; font-weight: 500;">Filtrer par type:</label>
+            <select id="typeFilter" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                <option value="all">Tous</option>
+                <option value="student">Étudiants</option>
+                <option value="teacher">Professeurs</option>
+                <option value="admin">Administrateurs</option>
+            </select>
+        </div>
+        
+        <div>
+            <label for="sortSelect" style="margin-right: 8px; font-weight: 500;">Trier par:</label>
+            <select id="sortSelect" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                <option value="default">Par défaut</option>
+                <option value="name-asc">Nom (A-Z)</option>
+                <option value="name-desc">Nom (Z-A)</option>
+                <option value="date-newest">Plus récent</option>
+                <option value="date-oldest">Plus ancien</option>
+                <option value="id-asc">Student ID (↑)</option>
+                <option value="id-desc">Student ID (↓)</option>
+            </select>
+        </div>
     </div>
-    <script src="../public/js/gestion.js"></script>
+    
+    <!-- Existing search bar -->
+    <div class="search-bar">
+        <input type="text" placeholder="Rechercher par nom, email ou student ID..." class="search-input">
+        <button type="button" class="search-btn">Rechercher</button>
+    </div>
+    
+    <!-- Rest of your table... -->
+</section>
+
+    
+    
+    <div class="table-wrapper">
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Nom Complet</th>
+                    <th>Email</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Intérêts</th>
+                    <th>Département</th>
+                    <th>Téléphone</th>
+                    <th>Année</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Will be populated by JavaScript -->
+                <tr class="empty-row">
+                    <td colspan="10">Chargement...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+     <script src="js/gestion.js"></script>
 </body>
 </html>

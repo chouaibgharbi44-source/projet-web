@@ -1,32 +1,37 @@
-
-
-const API = '/controllers/UserController.php';
+const API = '/project/controllers/api_users.php';
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('=== Script loaded ===');
+    
     const tbody = document.querySelector('.users-table tbody');
-    const stats = document.querySelectorAll('.stat-number');
     const searchInput = document.querySelector('.search-input');
     const searchBtn = document.querySelector('.search-btn');
-    const openAddBtn = document.getElementById('openAddBtn');
-    const userModal = document.getElementById('userModal');
-    const userForm = document.getElementById('userForm');
-    const modalTitle = document.getElementById('modalTitle');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const closeModalBtn = document.querySelector('.close-modal');
+    const typeFilter = document.getElementById('typeFilter');
+    const sortSelect = document.getElementById('sortSelect');
+    
+    console.log('tbody:', tbody);
+    console.log('searchBtn:', searchBtn);
+    console.log('searchInput:', searchInput);
+    console.log('typeFilter:', typeFilter);
+    console.log('sortSelect:', sortSelect);
 
     let users = [];
+    let filteredUsers = [];
 
-    
+    // Fetch users from API
     async function fetchUsers() {
+        console.log('Fetching users from:', API);
         try {
             const res = await fetch(`${API}?action=getAll`);
             const json = await res.json();
+            console.log('API Response:', json);
 
             if (json.success && Array.isArray(json.data)) {
                 users = json.data;
-                renderUsers(users);
-                updateStats(users);
+                console.log('Users loaded:', users.length);
+                applyFiltersAndSort(); // Use filter function instead of direct render
             } else {
+                console.error('API returned no data');
                 alert('Impossible de charger les utilisateurs.');
             }
         } catch (err) {
@@ -35,37 +40,84 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    
-    function updateStats(list) {
-        const total = list.length;
-        const students = list.filter(u => u.user_type === 'student').length;
-        const professors = list.filter(u => u.user_type === 'professor').length;
-        const admins = list.filter(u => u.user_type === 'admin').length;
+    // Apply filters and sorting
+    function applyFiltersAndSort() {
+        let result = [...users];
 
-        
-        if (stats[0]) stats[0].textContent = total;
-        if (stats[1]) stats[1].textContent = students;
-        if (stats[2]) stats[2].textContent = professors;
-        if (stats[3]) stats[3].textContent = admins; 
+        // Apply type filter
+        if (typeFilter && typeFilter.value !== 'all') {
+            result = result.filter(u => (u.type || '') === typeFilter.value);
+        }
+
+        // Apply search filter
+        const searchTerm = searchInput.value.trim().toLowerCase();
+        if (searchTerm) {
+            result = result.filter(u => {
+                const fullName = (u.full_name || '').toLowerCase();
+                const email = (u.email || '').toLowerCase();
+                const studentId = (u.student_id || '').toLowerCase();
+                const phone = (u.phone || '').toLowerCase();
+
+                return fullName.includes(searchTerm) || 
+                       email.includes(searchTerm) || 
+                       studentId.includes(searchTerm) || 
+                       phone.includes(searchTerm);
+            });
+        }
+
+        // Apply sorting
+        if (sortSelect && sortSelect.value !== 'default') {
+            result.sort((a, b) => {
+                switch(sortSelect.value) {
+                    case 'name-asc':
+                        return (a.full_name || '').localeCompare(b.full_name || '');
+                    case 'name-desc':
+                        return (b.full_name || '').localeCompare(a.full_name || '');
+                    case 'date-newest':
+                        return new Date(b.created_at) - new Date(a.created_at);
+                    case 'date-oldest':
+                        return new Date(a.created_at) - new Date(b.created_at);
+                    case 'id-asc':
+                        return (a.student_id || '').localeCompare(b.student_id || '');
+                    case 'id-desc':
+                        return (b.student_id || '').localeCompare(a.student_id || '');
+                    default:
+                        return 0;
+                }
+            });
+        }
+
+        filteredUsers = result;
+        renderUsers(result);
     }
-
-    
     function renderUsers(list) {
+        console.log('Rendering', list.length, 'users');
         tbody.innerHTML = '';
+        
         if (!list || list.length === 0) {
-            tbody.innerHTML = `<tr class="empty-row"><td colspan="10">Aucun utilisateur pour le moment.</td></tr>`;
+            tbody.innerHTML = `<tr class="empty-row"><td colspan="10">Aucun utilisateur trouvé.</td></tr>`;
             return;
         }
 
         list.forEach(u => {
             const tr = document.createElement('tr');
+            
+            // Split full_name into first and last
+            const nameParts = (u.full_name || '').split(' ');
+            const firstName = nameParts[0] || '';
+            const lastName = nameParts.slice(1).join(' ') || '';
+            
             tr.innerHTML = `
                 <td>${escapeHtml(u.student_id || '-')}</td>
-                <td>${escapeHtml(u.first_name || '')} ${escapeHtml(u.last_name || '')}</td>
+                <td>
+                    <a href="show_user.php?id=${u.id}">
+                        ${escapeHtml(u.full_name || firstName + ' ' + lastName)}
+                    </a>
+                </td>
                 <td>${escapeHtml(u.email || '')}</td>
                 <td>
-                    <span class="badge badge-${u.user_type || 'unknown'}">
-                        ${formatUserType(u.user_type)}
+                    <span class="badge badge-${u.type || 'unknown'}">
+                        ${formatUserType(u.type)}
                     </span>
                 </td>
                 <td>${u.created_at ? new Date(u.created_at).toLocaleDateString('fr-FR') : '-'}</td>
@@ -74,10 +126,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${escapeHtml(u.phone || '-')}</td>
                 <td>${escapeHtml(u.year || '-')}</td>
                 <td class="actions">
-                    <button class="action-btn edit-btn" data-action="edit" data-id="${u.id}" title="Modifier">
+                    <button class="action-btn edit-btn" data-action="edit" data-id="${u.id}">
                         Modifier
                     </button>
-                    <button class="action-btn delete-btn" data-action="delete" data-id="${u.id}" title="Supprimer">
+                    <button class="action-btn delete-btn" data-action="delete" data-id="${u.id}">
                         Supprimer
                     </button>
                 </td>
@@ -86,116 +138,82 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    
+    // Escape HTML
     function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
 
+    // Format user type
     function formatUserType(type) {
-        switch (type)) {
+        switch (type) {  // FIXED: removed extra parenthesis
             case 'student': return 'Étudiant';
-            case 'professor': return 'Professeur';
+            case 'teacher': return 'Professeur';
             case 'admin': return 'Administrateur';
             default: return 'Inconnu';
         }
     }
 
-    
-    searchBtn.addEventListener('click', () => {
-        const term = searchInput.value.trim().toLowerCase();
-        const filtered = users.filter(u =>
-            (u.first_name + ' ' + u.last_name).toLowerCase().includes(term) ||
-            (u.email || '').toLowerCase().includes(term) ||
-            (u.student_id || '').toLowerCase().includes(term) ||
-            (u.phone || '').toLowerCase().includes(term)
-        );
-        renderUsers(filtered);
-        updateStats(filtered);
-    });
+    // SEARCH FUNCTIONALITY
+    if (searchBtn && searchInput) {
+        searchBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('=== SEARCH CLICKED ===');
+            
+            const term = searchInput.value.trim().toLowerCase();
+            console.log('Search term:', term);
 
-    
-    function openModal(user = null) {
-        userModal.classList.remove('hidden');
-        if (user) {
-            modalTitle.textContent = "Modifier l'utilisateur";
-            fillForm(user);
-            userForm.querySelector('[name="password"]').required = false;
-            userForm.querySelector('[name="password"]').placeholder = "Laisser vide pour conserver";
-        } else {
-            modalTitle.textContent = "Ajouter un utilisateur";
-            userForm.reset();
-            userForm.querySelector('[name="id"]').value = '';
-            userForm.querySelector('[name="password"]').required = true;
-            userForm.querySelector('[name="password"]').placeholder = "Mot de passe (min. 8 caractères)";
-        }
-    }
-
-    function closeModal() {
-        userModal.classList.add('hidden');
-        userForm.reset();
-    }
-
-    function fillForm(u) {
-        userForm.querySelector('[name="id"]').value = u.id || '';
-        userForm.querySelector('[name="student_id"]').value = u.student_id || '';
-        userForm.querySelector('[name="first_name"]').value = u.first_name || '';
-        userForm.querySelector('[name="last_name"]').value = u.last_name || '';
-        userForm.querySelector('[name="email"]').value = u.email || '';
-        userForm.querySelector('[name="user_type"]').value = u.user_type || 'student';
-        userForm.querySelector('[name="interests"]').value = u.interests || '';
-        userForm.querySelector('[name="department"]').value = u.department || '';
-        userForm.querySelector('[name="phone"]').value = u.phone || '';
-        userForm.querySelector('[name="year"]').value = u.year || '';
-    }
-
-    
-    cancelBtn.addEventListener('click', closeModal);
-    if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-    userModal.addEventListener('click', (e) => {
-        if (e.target === userModal) closeModal();
-    });
-
-    
-    userForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const id = userForm.querySelector('[name="id"]').value;
-        const password = userForm.querySelector('[name="password"]').value;
-
-        
-        if (!id && (!password || password.length < 8)) {
-            alert('Le mot de passe doit contenir au moins 8 caractères.');
-            return;
-        }
-
-        const formData = new FormData(userForm);
-        if (id) formData.append('id', id);
-        if (!password) formData.delete('password'); 
-
-        const action = id ? 'update' : 'create';
-
-        try {
-            const res = await fetch(`${API}?action=${action}`, {
-                method: 'POST',
-                body: formData
-            });
-            const json = await res.json();
-
-            if (json.success) {
-                await fetchUsers();
-                closeModal();
-            } else {
-                alert(json.message || 'Erreur lors de la sauvegarde.');
+            if (!term) {
+                console.log('Empty search, applying filters');
+                applyFiltersAndSort();
+                return;
             }
-        } catch (err) {
-            console.error(err);
-            alert('Erreur réseau.');
-        }
-    });
 
-    
+            // Check for exact match first (for redirect)
+            const exactMatches = users.filter(u => 
+                (u.student_id || '').toLowerCase() === term || 
+                (u.email || '').toLowerCase() === term
+            );
+
+            if (exactMatches.length === 1) {
+                console.log('Exact match! Redirecting to user:', exactMatches[0].id);
+                window.location.href = `show_user.php?id=${exactMatches[0].id}`;
+                return;
+            }
+
+            // Otherwise apply filters
+            applyFiltersAndSort();
+        });
+
+        // Enter key support
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchBtn.click();
+            }
+        });
+    } else {
+        console.error('Search elements not found!');
+    }
+
+    // Type filter change event
+    if (typeFilter) {
+        typeFilter.addEventListener('change', () => {
+            console.log('Type filter changed:', typeFilter.value);
+            applyFiltersAndSort();
+        });
+    }
+
+    // Sort change event
+    if (sortSelect) {
+        sortSelect.addEventListener('change', () => {
+            console.log('Sort changed:', sortSelect.value);
+            applyFiltersAndSort();
+        });
+    }
+
+    // Handle edit and delete buttons
     tbody.addEventListener('click', async (e) => {
         const btn = e.target.closest('button');
         if (!btn) return;
@@ -203,22 +221,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const action = btn.dataset.action;
         const id = btn.dataset.id;
 
+        console.log('Button clicked:', action, 'ID:', id);
+
         if (action === 'edit') {
-            try {
-                const res = await fetch(`${API}?action=get&id=${id}`);
-                const json = await res.json();
-                if (json.success && json.data) {
-                    openModal(json.data);
-                } else {
-                    alert('Impossible de récupérer les données.');
-                }
-            } catch (err) {
-                alert('Erreur réseau.');
-            }
+            // Redirect to edit page
+            window.location.href = `edit_user.php?id=${id}`;
         }
 
         if (action === 'delete') {
+            // OPTION 1: Use delete.php (uncomment to use)
+            // if (confirm('Supprimer définitivement cet utilisateur ?')) {
+            //     window.location.href = `delete.php?id=${id}`;
+            // }
+
+            // OPTION 2: Use API (current - no page reload, faster)
             if (!confirm('Supprimer définitivement cet utilisateur ?')) return;
+
+            console.log('Deleting user:', id);
 
             const formData = new FormData();
             formData.append('id', id);
@@ -229,19 +248,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: formData
                 });
                 const json = await res.json();
+                console.log('Delete response:', json);
 
                 if (json.success) {
-                    await fetchUsers();
+    alert('Utilisateur supprimé avec succès');
+                    await fetchUsers(); // Reload the table
                 } else {
                     alert(json.message || 'Erreur lors de la suppression.');
                 }
             } catch (err) {
-                alert('Erreur réseau.');
+                console.error('Error deleting user:', err);
+                alert('Erreur réseau lors de la suppression.');
             }
         }
     });
 
-    
-    openAddBtn.addEventListener('click', () => openModal());
-    fetchUsers(); 
+    // Initial load
+    console.log('Calling fetchUsers...');
+    fetchUsers();
 });

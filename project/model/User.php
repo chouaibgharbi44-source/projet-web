@@ -55,7 +55,7 @@ public function updateProfile($id, $data)
     foreach ($allowed as $field) {
         if (isset($data[$field])) {
             $fields[] = "$field = ?";
-            $values[] = $data[$field] === '' ? null : $data[$field];
+            $values[] = $data[$field];
         }
     }
 
