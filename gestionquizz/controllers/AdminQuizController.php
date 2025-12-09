@@ -46,6 +46,12 @@ class AdminQuizController {
             exit;
         }
 
+        // Charger les questions du quiz
+         require_once ROOT . '/models/Question.php';
+        $questionModel = new Question($GLOBALS['pdo']);
+        $questions = $questionModel->getByQuizId($id);
+        $questionCount = $questionModel->countByQuizId($id);
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors = $this->validateForm($_POST);
             if (empty($errors)) {
@@ -61,6 +67,8 @@ class AdminQuizController {
                 $_SESSION['form_data'] = $_POST;
             }
         }
+
+        // Passer les données à la vue
         require_once ROOT . '/views/admin/form_quiz.php';
     }
 

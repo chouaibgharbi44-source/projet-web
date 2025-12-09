@@ -1,18 +1,20 @@
 <?php include ROOT . '/views/layout/header.php'; ?>
-<?php $title = "Liste des Quiz"; ?>
+<?php $title = "Nos Quiz"; ?>
 
-<h2> Liste des Questions</h2>
+<h2>📚 Nos Quiz Disponibles</h2>
 
-<?php if (!empty($questions)): ?>
-    <?php foreach ($questions as $q): ?>
+<?php if (!empty($quizzes)): ?>
+    <?php foreach ($quizzes as $quiz): ?>
         <div class="card">
-            <h3><?= htmlspecialchars($q['title']) ?></h3>
-            <p><?= nl2br(htmlspecialchars($q['description'])) ?></p>
-            <p><strong>Catégorie :</strong> <?= htmlspecialchars($q['category']) ?></p>
-            <p><strong>Bonne réponse :</strong> <?= htmlspecialchars($q['correct_answer']) ?></p>
+            <h3><?= htmlspecialchars($quiz['title']) ?></h3>
+            <p><?= nl2br(htmlspecialchars($quiz['description'])) ?></p>
+            <p><strong>Durée :</strong> <?= (int)$quiz['duration'] ?> minutes</p>
+            <p><strong>Catégorie :</strong> <?= htmlspecialchars($quiz['category']) ?></p>
+            <a href="<?= BASE_URL ?>/play.php?id=<?= $quiz['id'] ?>" class="btn btn-primary">Jouer</a>
         </div>
     <?php endforeach; ?>
 <?php else: ?>
-    <div class="alert alert-info">Aucune question disponible pour le moment.</div>
+    <div class="alert alert-info">Aucun quiz disponible pour le moment.</div>
 <?php endif; ?>
+
 <?php include ROOT . '/views/layout/footer.php'; ?>

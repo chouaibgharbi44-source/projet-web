@@ -42,6 +42,32 @@
     </div>
 
     <button type="submit" class="btn btn-primary"><?= isset($quiz) ? 'Modifier' : 'Créer' ?></button>
+    <?php if (isset($quiz)): ?>
+    <hr>
+    <h3>Questions associées (<?= $questionCount ?>)</h3>
+    <a href="<?= BASE_URL ?>/admin/add_question.php?quiz_id=<?= $quiz['id'] ?>" class="btn btn-secondary">➕ Ajouter une question</a>
+
+    <?php if (!empty($questions)): ?>
+    <table class="table">
+        <thead><tr><th>Titre</th><th>Catégorie</th><th>Actions</th></tr></thead>
+        <tbody>
+            <?php foreach ($questions as $q): ?>
+            <tr>
+                <td><?= htmlspecialchars($q['title']) ?></td>
+                <td><?= htmlspecialchars($q['category']) ?></td>
+                <td>
+                    <a href="<?= BASE_URL ?>/admin/edit_question.php?id=<?= $q['id'] ?>&quiz_id=<?= $quiz['id'] ?>" class="btn btn-secondary">✏️</a>
+                    <a href="<?= BASE_URL ?>/admin/delete_question.php?id=<?= $q['id'] ?>&return=quiz" class="btn btn-danger">🗑️</a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <?php else: ?>
+    <p>Aucune question associée à ce quiz.</p>
+    <?php endif; ?>
+    <?php endif; ?>
+
     <a href="<?= BASE_URL ?>/admin" class="btn btn-secondary">Annuler</a>
 </form>
 

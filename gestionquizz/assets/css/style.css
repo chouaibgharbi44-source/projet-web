@@ -1,7 +1,7 @@
 :root {
     --primary-dark: #0f0c29;     /* Fond très foncé */
     --primary-purple: #24243e;   /* Violet profond */
-    --accent-pink: #bb2649;      /* Rose vif */
+    --accent-pink: #b223bf;      /* Rose vif */
     --accent-blue: #474787;      /* Bleu violet */
     --text-light: #ffffff;
     --text-dark: #1a1a1a;
@@ -105,7 +105,7 @@ nav a:hover {
 }
 
 .btn-primary:hover {
-    background: #d43b65;
+    background: #b223bf;
 }
 
 .btn-secondary {
@@ -118,12 +118,12 @@ nav a:hover {
 }
 
 .btn-danger {
-    background: #bb2649;
+    background: #b223bf;
     color: white;
 }
 
 .btn-danger:hover {
-    background: #d43b65;
+    background: #b223bf;
 }
 
 .alert {
@@ -139,7 +139,7 @@ nav a:hover {
 }
 
 .alert-error {
-    background: #f44336;
+    background: #b223bf;
     color: white;
 }
 

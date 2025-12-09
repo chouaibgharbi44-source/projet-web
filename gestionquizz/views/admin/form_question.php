@@ -60,6 +60,9 @@
             <option value="Général" <?= isset($_SESSION['form_data']['category']) && $_SESSION['form_data']['category'] == 'Général' ? 'selected' : (isset($question) && $question['category'] == 'Général' ? 'selected' : '') ?>>Général</option>
         </select>
     </div>
+    <?php if (isset($_GET['quiz_id'])): ?>
+    <input type="hidden" name="quiz_id" value="<?= (int)$_GET['quiz_id'] ?>">
+    <?php endif; ?>
 
     <button type="submit" class="btn btn-primary"><?= isset($question) ? 'Modifier' : 'Ajouter' ?></button>
 </form>
