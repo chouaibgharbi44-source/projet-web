@@ -65,6 +65,7 @@ function validateMatiereForm(form) {
 
 // Validator specific for ressource forms
 function validateRessourceForm(form) {
+    var matiereId = (form.matiere_id && form.matiere_id.value) ? form.matiere_id.value.trim() : '';
     var titre = (form.titre && form.titre.value) ? form.titre.value.trim() : '';
     var description = (form.description && form.description.value) ? form.description.value.trim() : '';
     var typeR = (form.type_ressource && form.type_ressource.value) ? form.type_ressource.value.trim() : '';
@@ -73,9 +74,14 @@ function validateRessourceForm(form) {
     var dateAj = (form.date_ajout && form.date_ajout.value) ? form.date_ajout.value.trim() : '';
 
     // clear previous invalid states
-    try { _clearInvalid(form.titre); _clearInvalid(form.description); _clearInvalid(form.type_ressource); _clearInvalid(form.url); _clearInvalid(form.auteur); } catch(e){}
+    try { _clearInvalid(form.matiere_id); _clearInvalid(form.titre); _clearInvalid(form.description); _clearInvalid(form.type_ressource); _clearInvalid(form.url); _clearInvalid(form.auteur); } catch(e){}
 
     var errors = [];
+
+    if (!matiereId) {
+        errors.push('Merci de sélectionner une matière.');
+        if (form.matiere_id) _markInvalid(form.matiere_id);
+    }
 
     var textPattern = /^[\p{L}\d\s\-_'.,:;()]{2,150}$/u;
     if (!textPattern.test(titre)) {

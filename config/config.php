@@ -9,4 +9,7 @@ define('DB_CHARSET', 'utf8mb4');
 // Base URL (adjust if app is in a subfolder)
 define('BASE_URL', '/AleCrud');
 
+// Simple admin access key (change this value in production)
+define('ADMIN_ACCESS_KEY', 'admin1234');
+
 ?>

@@ -1,10 +1,11 @@
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
     <title>Campus Connect - Ressources Pédagogiques</title>
-    <link rel="stylesheet" type="text/css" href="View/assets/style.css" />
-    <link rel="stylesheet" type="text/css" href="View/assets/frontoffice.css" />
-    <script type="text/javascript" src="View/assets/validation.js"></script>
+    <link rel="stylesheet" type="text/css" href="View/assets/style.css?v=3" />
+    <link rel="stylesheet" type="text/css" href="View/assets/frontoffice.css?v=3" />
+    <script type="text/javascript" src="View/assets/validation.js?v=3"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
@@ -14,16 +15,13 @@
     <div class="header-inner">
         <div class="logo">CAMPUS CONNECT</div>
         <nav class="navbar">
-            <a href="index.php" class="nav-link">Accueil</a>
+            <a href="index.php" class="nav-link active">Matières</a>
             <a href="index.php?entity=ressource" class="nav-link">Ressources</a>
-            <a href="#" class="nav-link">Evenements</a>
+            <a href="#" class="nav-link">Événements</a>
             <a href="#" class="nav-link">Messages</a>
             <a href="#" class="nav-link">Groupes</a>
             <a href="#" class="nav-link">Profil</a>
         </nav>
-        <div class="admin-button">
-            <a href="index.php?area=admin" class="pulse">Admin</a>
-        </div>
     </div>
 </header>
 
@@ -37,8 +35,8 @@
 <!-- Hero Section 2 & Add Form -->
 <section class="section-with-form">
     <div class="hero-text">
-        <h3>Tout Les Contenus Partagés</h3>
-        <p>Ressources pédagogiques partagées par la communauté</p>
+        <h3>Matières disponibles</h3>
+        <p>Ajoutez vos matières puis reliez des ressources pour chaque contenu.</p>
     </div>
     <button class="btn btn-add" onclick="document.getElementById('formModal').style.display='block';">➕ Ajouter une matière</button>
 </section>
@@ -63,39 +61,24 @@
 
 <!-- Shared Content Cards Section -->
 <section class="shared-content">
-    <h3>Tout Les Contenus Partagés</h3>
-    <p class="section-desc">Ressources pédagogiques partagées par la communauté</p>
+    <h3>Liste des matières</h3>
+    <p class="section-desc">Découvrez les matières disponibles et visualisez les ressources associées.</p>
     <div class="cards-container">
-        <!-- Card 1 -->
-        <div class="content-card">
-            <div class="card-user">👤 Utilisateur : Sarah B.</div>
-            <h4 class="card-title">Cours : Introduction à la Programmation</h4>
-            <p class="card-desc">Ce document présente les bases de la programmation en C avec des exemples simples.</p>
-            <div class="card-actions">
-                <a href="#" class="card-link">📄 Voir le document</a>
-                <button class="btn-comment">Commenter</button>
-            </div>
-        </div>
-        <!-- Card 2 -->
-        <div class="content-card">
-            <div class="card-user">👤 Utilisateur : Karim M.</div>
-            <h4 class="card-title">Cours : Mathématiques - Algèbre</h4>
-            <p class="card-desc">Résumé complet du chapitre sur les équations et inéquations du second degré.</p>
-            <div class="card-actions">
-                <a href="#" class="card-link">📄 Voir le document</a>
-                <button class="btn-comment">Commenter</button>
-            </div>
-        </div>
-        <!-- Card 3 -->
-        <div class="content-card">
-            <div class="card-user">👤 Utilisateur : Leila T.</div>
-            <h4 class="card-title">Cours : Web - HTML & CSS</h4>
-            <p class="card-desc">Un support clair et bien structuré pour apprendre à créer des pages web simples.</p>
-            <div class="card-actions">
-                <a href="#" class="card-link">📄 Voir le document</a>
-                <button class="btn-comment">Commenter</button>
-            </div>
-        </div>
+        <?php if (!empty($matieres)) : ?>
+            <?php foreach ($matieres as $matiere) : ?>
+                <div class="content-card">
+                    <div class="card-user">Matière #<?php echo htmlspecialchars($matiere['id']); ?></div>
+                    <h4 class="card-title"><?php echo htmlspecialchars($matiere['nom_matiere']); ?></h4>
+                    <p class="card-desc"><?php echo nl2br(htmlspecialchars($matiere['description'])); ?></p>
+                    <p class="card-meta"><strong>Niveau :</strong> <?php echo htmlspecialchars($matiere['niveau_difficulte'] ?: '—'); ?></p>
+                    <div class="card-actions">
+                        <a href="index.php?entity=ressource&amp;matiere_id=<?php echo $matiere['id']; ?>" class="card-link">Voir les ressources</a>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else : ?>
+            <p>Aucune matière pour l'instant. Ajoutez-en une via le bouton ci-dessus.</p>
+        <?php endif; ?>
     </div>
 </section>
 
@@ -129,15 +112,7 @@
     <div class="footer-copy">© 2025 - Campus Connect. Tous droits réservés.</div>
 </footer>
 
-<script type="text/javascript">
-// Close modal when clicking outside
-window.onclick = function(event) {
-    var modal = document.getElementById('formModal');
-    if (event.target == modal) {
-        modal.style.display = 'none';
-    }
-}
-</script>
+
 
 </body>
 </html>

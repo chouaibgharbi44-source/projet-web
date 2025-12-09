@@ -8,6 +8,11 @@ class Matiere {
         $this->db = DB::getConnection();
     }
 
+    // 👇 UNIQUE déclaration de getPdo()
+    public function getPdo() {
+        return $this->db;
+    }
+
     public function getAll() {
         $stmt = $this->db->query('SELECT * FROM matiere ORDER BY id DESC');
         return $stmt->fetchAll();
@@ -20,18 +25,30 @@ class Matiere {
     }
 
     public function create($data) {
-        $stmt = $this->db->prepare('INSERT INTO matiere (nom_matiere, titre, description, date_ajout, niveau_difficulte) VALUES (?, ?, ?, ?, ?)');
-        return $stmt->execute([
+        $stmt = $this->db->prepare('
+            INSERT INTO matiere (nom_matiere, titre, description, date_ajout, niveau_difficulte)
+            VALUES (?, ?, ?, ?, ?)
+        ');
+        $success = $stmt->execute([
             $data['nom_matiere'],
             $data['titre'],
             $data['description'],
             $data['date_ajout'],
             $data['niveau_difficulte']
         ]);
+
+        if ($success) {
+            return $this->db->lastInsertId(); // ←←← retourne l'ID !
+        }
+        return false;
     }
 
     public function update($id, $data) {
-        $stmt = $this->db->prepare('UPDATE matiere SET nom_matiere = ?, titre = ?, description = ?, date_ajout = ?, niveau_difficulte = ? WHERE id = ?');
+        $stmt = $this->db->prepare('
+            UPDATE matiere 
+            SET nom_matiere = ?, titre = ?, description = ?, date_ajout = ?, niveau_difficulte = ? 
+            WHERE id = ?
+        ');
         return $stmt->execute([
             $data['nom_matiere'],
             $data['titre'],
