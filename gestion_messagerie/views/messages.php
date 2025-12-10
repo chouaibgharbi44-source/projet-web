@@ -1,5 +1,5 @@
 <?php
-// views/messages.php - VERSION CORRIGÉE
+// views/messages.php - VERSION CORRIGÉE POUR L'ÉDITION
 session_start();
 
 // Pour la démo
@@ -56,10 +56,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         exit();
     }
     
-    // ÉDITION DE MESSAGE
+    // ÉDITION DE MESSAGE - VERSION CORRIGÉE
     if ($action === 'edit_message') {
         $message_id = $_POST['message_id'] ?? '';
         $new_content = $_POST['content'] ?? '';
+        
+        error_log("=== TENTATIVE D'ÉDITION ===");
+        error_log("Message ID reçu: " . $message_id);
+        error_log("Type: " . gettype($message_id));
+        error_log("Nouveau contenu: " . $new_content);
         
         if (!$message_id || !$new_content) {
             echo json_encode(['success' => false, 'message' => 'Données manquantes']);
@@ -72,62 +77,102 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             exit();
         }
         
-        // Vérifier si c'est un temp ID (commence par 'temp-')
-        if (strpos($message_id, 'temp-') === 0) {
-            // Pour les temp IDs, chercher dans les messages envoyés
-            if (isset($_SESSION['sent_messages'][$message_id])) {
-                $_SESSION['sent_messages'][$message_id]['content'] = $new_content;
-                $_SESSION['sent_messages'][$message_id]['is_edited'] = true;
-                
-                echo json_encode([
-                    'success' => true, 
-                    'message' => 'Message modifié avec succès',
-                    'temp_id' => $message_id,
-                    'content' => $new_content
-                ]);
-                exit();
+        // Vérifier si c'est un ID numérique (messages de base)
+        if (is_numeric($message_id)) {
+            $message_id = (int)$message_id;
+            
+            error_log("C'est un ID numérique: " . $message_id);
+            
+            // Messages de base
+            $base_messages = [
+                1 => ['id' => 1, 'sender_id' => 1, 'receiver_id' => 2, 'content' => 'Salut Marie! Ça va?'],
+                2 => ['id' => 2, 'sender_id' => 2, 'receiver_id' => 1, 'content' => 'Oui et toi? La réunion est à 14h demain.'],
+                3 => ['id' => 3, 'sender_id' => 1, 'receiver_id' => 2, 'content' => 'Parfait! Je serai présent.'],
+                4 => ['id' => 4, 'sender_id' => 1, 'receiver_id' => 3, 'content' => 'Salut Pierre!'],
+            ];
+            
+            // Vérifier si le message existe dans les messages de base
+            if (isset($base_messages[$message_id])) {
+                // Vérifier les permissions
+                if ($base_messages[$message_id]['sender_id'] == $user_id) {
+                    $_SESSION['edited_messages'][$message_id] = $new_content;
+                    
+                    error_log("Message de base édité avec succès: " . $message_id);
+                    
+                    echo json_encode([
+                        'success' => true, 
+                        'message' => 'Message modifié avec succès',
+                        'message_id' => $message_id,
+                        'content' => $new_content
+                    ]);
+                    exit();
+                } else {
+                    error_log("Pas l'auteur du message: " . $message_id);
+                    echo json_encode(['success' => false, 'message' => 'Vous n\'êtes pas l\'auteur de ce message']);
+                    exit();
+                }
             }
             
-            echo json_encode(['success' => false, 'message' => 'Message temporaire non trouvé']);
-            exit();
-        }
-        
-        // Pour les IDs normaux
-        $message_id = (int)$message_id;
-        
-        // Messages de base
-        $base_messages = [
-            1 => ['id' => 1, 'sender_id' => 1, 'receiver_id' => 2, 'content' => 'Salut Marie! Ça va?'],
-            2 => ['id' => 2, 'sender_id' => 2, 'receiver_id' => 1, 'content' => 'Oui et toi? La réunion est à 14h demain.'],
-            3 => ['id' => 3, 'sender_id' => 1, 'receiver_id' => 2, 'content' => 'Parfait! Je serai présent.'],
-            4 => ['id' => 4, 'sender_id' => 1, 'receiver_id' => 3, 'content' => 'Salut Pierre!'],
-        ];
-        
-        // Vérifier dans les messages de base
-        if (isset($base_messages[$message_id])) {
-            // Vérifier les permissions
-            if ($base_messages[$message_id]['sender_id'] == $user_id) {
-                $_SESSION['edited_messages'][$message_id] = $new_content;
-                
-                echo json_encode([
-                    'success' => true, 
-                    'message' => 'Message modifié avec succès',
-                    'message_id' => $message_id,
-                    'content' => $new_content
-                ]);
-                exit();
-            } else {
-                echo json_encode(['success' => false, 'message' => 'Vous n\'êtes pas l\'auteur de ce message']);
-                exit();
+            // Vérifier dans les messages envoyés
+            foreach ($_SESSION['sent_messages'] as $key => $msg) {
+                if ($msg['id'] == $message_id) {
+                    // Vérifier les permissions
+                    if ($msg['sender_id'] == $user_id) {
+                        $_SESSION['sent_messages'][$key]['content'] = $new_content;
+                        $_SESSION['sent_messages'][$key]['is_edited'] = true;
+                        
+                        error_log("Message envoyé édité avec succès: " . $message_id);
+                        
+                        echo json_encode([
+                            'success' => true, 
+                            'message' => 'Message modifié avec succès',
+                            'message_id' => $message_id,
+                            'content' => $new_content
+                        ]);
+                        exit();
+                    } else {
+                        error_log("Pas l'auteur du message envoyé: " . $message_id);
+                        echo json_encode(['success' => false, 'message' => 'Vous n\'êtes pas l\'auteur de ce message']);
+                        exit();
+                    }
+                }
+            }
+        } else {
+            // C'est probablement un temp ID (chaîne)
+            error_log("C'est un temp ID: " . $message_id);
+            
+            // Chercher dans les messages envoyés
+            foreach ($_SESSION['sent_messages'] as $key => $msg) {
+                if ($key == $message_id || $msg['id'] == $message_id) {
+                    // Vérifier les permissions
+                    if ($msg['sender_id'] == $user_id) {
+                        $_SESSION['sent_messages'][$key]['content'] = $new_content;
+                        $_SESSION['sent_messages'][$key]['is_edited'] = true;
+                        
+                        error_log("Temp ID édité avec succès: " . $message_id);
+                        
+                        echo json_encode([
+                            'success' => true, 
+                            'message' => 'Message modifié avec succès',
+                            'temp_id' => $message_id,
+                            'content' => $new_content
+                        ]);
+                        exit();
+                    } else {
+                        error_log("Pas l'auteur du temp ID: " . $message_id);
+                        echo json_encode(['success' => false, 'message' => 'Vous n\'êtes pas l\'auteur de ce message']);
+                        exit();
+                    }
+                }
             }
         }
         
-        // Si non trouvé
-        echo json_encode(['success' => false, 'message' => 'Message non trouvé']);
+        error_log("Message non trouvé nulle part: " . $message_id);
+        echo json_encode(['success' => false, 'message' => 'Message non trouvé (ID: ' . $message_id . ')']);
         exit();
     }
     
-    // ENVOI DE MESSAGE - VERSION SIMPLIFIÉE
+    // ENVOI DE MESSAGE
     if ($action === 'send_message') {
         $receiver_id = (int)($_POST['receiver_id'] ?? 0);
         $content = $_POST['content'] ?? '';
@@ -163,9 +208,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         exit();
     }
     
-    // OBTENIR UN MESSAGE POUR ÉDITION
+    // OBTENIR UN MESSAGE POUR ÉDITION - VERSION CORRIGÉE
     if ($action === 'get_message') {
-        $message_id = $_POST['message_id'] ?? 0;
+        $message_id = $_POST['message_id'] ?? '';
+        
+        error_log("=== DEMANDE DE MESSAGE POUR ÉDITION ===");
+        error_log("Message ID demandé: " . $message_id);
+        error_log("Type: " . gettype($message_id));
         
         // Chercher dans les messages de base
         $base_messages = [
@@ -177,49 +226,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         
         $message = null;
         
-        // Vérifier si c'est un temp ID
-        if (strpos($message_id, 'temp-') === 0) {
+        // Essayer d'abord comme ID numérique
+        if (is_numeric($message_id)) {
+            $numeric_id = (int)$message_id;
+            error_log("Recherche comme ID numérique: " . $numeric_id);
+            
+            // Chercher dans les messages de base
+            if (isset($base_messages[$numeric_id])) {
+                $message = $base_messages[$numeric_id];
+                error_log("Trouvé dans messages de base: " . $numeric_id);
+                
+                // Appliquer les éditions si existantes
+                if (isset($_SESSION['edited_messages'][$numeric_id])) {
+                    $message['content'] = $_SESSION['edited_messages'][$numeric_id];
+                }
+            } else {
+                // Chercher dans les messages envoyés
+                foreach ($_SESSION['sent_messages'] as $msg) {
+                    if ($msg['id'] == $numeric_id) {
+                        $message = $msg;
+                        error_log("Trouvé dans messages envoyés: " . $numeric_id);
+                        break;
+                    }
+                }
+            }
+        } else {
+            // C'est probablement un temp ID (chaîne)
+            error_log("Recherche comme temp ID: " . $message_id);
+            
             // Chercher dans les messages envoyés
             if (isset($_SESSION['sent_messages'][$message_id])) {
                 $message = $_SESSION['sent_messages'][$message_id];
-            }
-        } else {
-            // Chercher dans les messages de base
-            $message_id = (int)$message_id;
-            if (isset($base_messages[$message_id])) {
-                $message = $base_messages[$message_id];
-            }
-            
-            // Chercher dans les messages envoyés
-            foreach ($_SESSION['sent_messages'] as $msg) {
-                if ($msg['id'] == $message_id) {
-                    $message = $msg;
-                    break;
+                error_log("Trouvé comme temp ID: " . $message_id);
+            } else {
+                // Essayer de chercher par ID dans les messages envoyés
+                foreach ($_SESSION['sent_messages'] as $msg) {
+                    if ($msg['id'] == $message_id) {
+                        $message = $msg;
+                        error_log("Trouvé par ID dans messages envoyés: " . $message_id);
+                        break;
+                    }
                 }
             }
         }
         
-        // Vérifier si le message a été édité
         if ($message) {
-            // Pour les messages de base
-            if (is_numeric($message_id) && isset($_SESSION['edited_messages'][(int)$message_id])) {
-                $message['content'] = $_SESSION['edited_messages'][(int)$message_id];
-            }
-            
+            error_log("Message trouvé, envoi réponse...");
             echo json_encode([
                 'success' => true,
                 'message' => $message
             ]);
         } else {
+            error_log("Message non trouvé: " . $message_id);
             echo json_encode([
                 'success' => false,
-                'message' => 'Message non trouvé'
+                'message' => 'Message non trouvé (ID: ' . $message_id . ')',
+                'debug_info' => [
+                    'requested_id' => $message_id,
+                    'type' => gettype($message_id),
+                    'sent_messages_keys' => array_keys($_SESSION['sent_messages']),
+                    'edited_messages' => array_keys($_SESSION['edited_messages'])
+                ]
             ]);
         }
         exit();
     }
 }
 
+// ... (le reste du code PHP reste inchangé jusqu'au HTML)
 // DONNÉES DE DÉMO
 $demo_users = [
     1 => ['id' => 1, 'username' => 'Vous', 'email' => 'vous@campus.com', 'avatar' => 'V', 'is_online' => true],
@@ -339,6 +413,11 @@ if (isset($_GET['receiver_id'])) {
                             $msg['is_edited'] = true;
                         }
                         
+                        // Pour les messages envoyés
+                        if (isset($msg['is_edited']) && $msg['is_edited']) {
+                            // Le contenu est déjà correct
+                        }
+                        
                         $messages[] = $msg;
                     }
                 }
@@ -360,6 +439,7 @@ if (isset($_GET['receiver_id'])) {
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ... (tous les styles CSS restent inchangés) ... */
         :root {
             --primary-blue: #4361ee;
             --primary-dark: #3a56d4;
@@ -1308,10 +1388,13 @@ if (isset($_GET['receiver_id'])) {
                                     $is_edited = isset($msg['is_edited']) || 
                                                 (isset($_SESSION['edited_messages'][$msg['id']]) && 
                                                  $_SESSION['edited_messages'][$msg['id']] !== ($msg['original_content'] ?? $msg['content']));
+                                    
+                                    // S'assurer que l'ID est correctement formaté
+                                    $msg_id = $msg['id'];
                                 ?>
                                     <div class="message <?= $is_sent ? 'sent' : 'received' ?>" 
-                                         id="message-<?= $msg['id'] ?>"
-                                         data-message-id="<?= $msg['id'] ?>"
+                                         id="message-<?= $msg_id ?>"
+                                         data-message-id="<?= $msg_id ?>"
                                          data-original-content="<?= htmlspecialchars($msg['original_content'] ?? $msg['content']) ?>">
                                         <div class="message-content <?= $is_edited ? 'edited' : '' ?>">
                                             <?= nl2br(htmlspecialchars($msg['content'])) ?>
@@ -1320,10 +1403,10 @@ if (isset($_GET['receiver_id'])) {
                                             <span><?= date('H:i', strtotime($msg['created_at'])) ?></span>
                                             <?php if ($is_sent): ?>
                                                 <div class="message-actions">
-                                                    <button class="edit-message-btn" onclick="openEditModal(<?= $msg['id'] ?>)">
+                                                    <button class="edit-message-btn" onclick="openEditModal('<?= $msg_id ?>')">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
-                                                    <button class="delete-message-btn" onclick="showDeleteModal(<?= $msg['id'] ?>, this)">
+                                                    <button class="delete-message-btn" onclick="showDeleteModal('<?= $msg_id ?>', this)">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </div>
@@ -1466,9 +1549,10 @@ if (isset($_GET['receiver_id'])) {
         }
     }
     
-    // Ouvrir le modal d'édition
+    // Ouvrir le modal d'édition - VERSION CORRIGÉE
     async function openEditModal(messageId) {
-        console.log('Ouverture édition message:', messageId);
+        console.log('Ouverture édition message ID:', messageId);
+        console.log('Type ID:', typeof messageId);
         
         currentEditingMessageId = messageId;
         
@@ -1478,12 +1562,15 @@ if (isset($_GET['receiver_id'])) {
             formData.append('action', 'get_message');
             formData.append('message_id', messageId);
             
+            console.log('Envoi requête pour message ID:', messageId);
+            
             const response = await fetch('messages.php', {
                 method: 'POST',
                 body: formData
             });
             
             const data = await response.json();
+            console.log('Réponse reçue:', data);
             
             if (data.success) {
                 document.getElementById('editModalTextarea').value = data.message.content;
@@ -1491,13 +1578,21 @@ if (isset($_GET['receiver_id'])) {
                 
                 // Focus sur le textarea
                 setTimeout(() => {
-                    document.getElementById('editModalTextarea').focus();
+                    const textarea = document.getElementById('editModalTextarea');
+                    textarea.focus();
+                    textarea.select();
                 }, 100);
             } else {
-                showNotification('❌ Impossible de charger le message', 'error');
+                console.error('Erreur chargement message:', data.message);
+                showNotification('❌ Erreur: ' + data.message, 'error');
+                
+                // Afficher les infos de débogage si disponibles
+                if (data.debug_info) {
+                    console.error('Infos débogage:', data.debug_info);
+                }
             }
         } catch (error) {
-            console.error('Erreur:', error);
+            console.error('Erreur fetch:', error);
             showNotification('❌ Erreur de connexion', 'error');
         }
     }
@@ -1509,9 +1604,12 @@ if (isset($_GET['receiver_id'])) {
         document.getElementById('editModalTextarea').value = '';
     }
     
-    // Enregistrer les modifications
+    // Enregistrer les modifications - VERSION CORRIGÉE
     async function saveEditedMessage() {
-        if (!currentEditingMessageId) return;
+        if (!currentEditingMessageId) {
+            console.error('Aucun message ID en cours d\'édition');
+            return;
+        }
         
         const newContent = document.getElementById('editModalTextarea').value.trim();
         
@@ -1519,6 +1617,9 @@ if (isset($_GET['receiver_id'])) {
             showNotification('❌ Le message ne peut pas être vide', 'error');
             return;
         }
+        
+        console.log('Enregistrement édition pour message ID:', currentEditingMessageId);
+        console.log('Nouveau contenu:', newContent);
         
         // Désactiver le bouton
         const saveBtn = document.querySelector('.edit-modal-save');
@@ -1538,6 +1639,7 @@ if (isset($_GET['receiver_id'])) {
             });
             
             const data = await response.json();
+            console.log('Réponse édition:', data);
             
             if (data.success) {
                 // Mettre à jour l'affichage
@@ -1556,6 +1658,7 @@ if (isset($_GET['receiver_id'])) {
                     window.location.reload();
                 }, 1000);
             } else {
+                console.error('Erreur édition:', data.message);
                 showNotification('❌ ' + data.message, 'error');
                 saveBtn.disabled = false;
                 saveBtn.innerHTML = originalText;
@@ -1568,7 +1671,7 @@ if (isset($_GET['receiver_id'])) {
         }
     }
     
-    // Envoyer un message - VERSION SIMPLIFIÉE ET FONCTIONNELLE
+    // Envoyer un message
     async function sendPrivateMessage(event) {
         event.preventDefault();
         
@@ -1816,6 +1919,14 @@ if (isset($_GET['receiver_id'])) {
                     closeDeleteModal();
                 }
             }
+        });
+        
+        // Debug: Afficher tous les messages dans la console
+        console.log('Messages chargés:');
+        const messageElements = document.querySelectorAll('.message');
+        messageElements.forEach(msg => {
+            const msgId = msg.getAttribute('data-message-id');
+            console.log('ID:', msg.id, 'Data ID:', msgId, 'Type:', typeof msgId);
         });
     });
     </script>
