@@ -435,7 +435,8 @@ if (isset($_GET['receiver_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Messagerie - Campus Connect</title>
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <!-- Use your existing header's CSS -->
+    <link rel="stylesheet" href="/campus connect/assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Modern pink theme using Poppins and 3-color gradient */
@@ -472,10 +473,17 @@ if (isset($_GET['receiver_id'])) {
             min-height: 100vh;
         }
 
+        /* Override main-content from header to remove extra padding */
         .main-content {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .messages-page-container {
             padding: 28px;
             max-width: 1400px;
             margin: 0 auto;
+            min-height: calc(100vh - 80px); /* Adjust based on header height */
         }
 
         .messages-container {
@@ -1392,7 +1400,7 @@ if (isset($_GET['receiver_id'])) {
                 max-height: 350px;
             }
             
-            .main-content {
+            .messages-page-container {
                 padding: 20px;
             }
         }
@@ -1559,10 +1567,29 @@ if (isset($_GET['receiver_id'])) {
         .message.received .message-read-status {
             color: rgba(123, 45, 168, 0.6);
         }
+        
+        /* Ensure active nav item styling for messages page */
+        .nav-item[href*="messages.php"] {
+            color: #7b2da8 !important;
+            font-weight: 700 !important;
+            position: relative !important;
+        }
+        
+        .nav-item[href*="messages.php"]::after {
+            content: '' !important;
+            position: absolute !important;
+            bottom: -2px !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 2px !important;
+            background: linear-gradient(90deg, #7b2da8, #ff6fb1) !important;
+            border-radius: 2px !important;
+        }
     </style>
 </head>
 <body>
-    <?php include '../../header.php'; ?>
+<!-- Your existing header will be here -->
+<?php include '../../header.php'; ?>
     
     <!-- Modal d'édition -->
     <div id="editModal" class="edit-modal">
@@ -1605,7 +1632,8 @@ if (isset($_GET['receiver_id'])) {
         </div>
     </div>
     
-    <div class="main-content">
+    <!-- Main Content Container -->
+    <div class="messages-page-container">
         <div class="messages-container">
             <!-- Sidebar des conversations -->
             <div class="conversations-sidebar">
