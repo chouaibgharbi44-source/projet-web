@@ -7,12 +7,11 @@ if (!isset($_SESSION['user_id'])) {
     $_SESSION['username'] = 'Vous';
 }
 
-// Inclure les fonctions des groupes - CORRECTION DU CHEMIN
+// Inclure les fonctions des groupes
 $groupFile = __DIR__ . '/../../model/group.php';
 if (file_exists($groupFile)) {
     require_once $groupFile;
 } else {
-    // Essayer un autre chemin possible
     $groupFile = __DIR__ . '/../../../model/group.php';
     if (file_exists($groupFile)) {
         require_once $groupFile;
@@ -43,351 +42,360 @@ if ($current_group_id) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Messages de Groupe - Campus Connect</title>
     
-    <!-- Include your existing styles -->
-    <link rel="stylesheet" href="/campus connect/assets/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Import Poppins font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* Your custom styles for the groups page */
+        /* Modern pink theme using Poppins and 3-color gradient */
         :root {
-            --primary-blue: #4361ee;
-            --primary-dark: #3a56d4;
-            --secondary-purple: #7209b7;
-            --accent-pink: #f72585;
-            --light-bg: #f8f9fa;
-            --dark-text: #2d3748;
-            --gray-text: #718096;
-            --light-gray: #e2e8f0;
-            --white: #ffffff;
-            --success-green: #2ecc71;
-            --danger-red: #e63946;
-            --border-radius: 12px;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --purple-1: #7b2da8;    /* deep purple */
+            --rose-1: #ff6fb1;      /* vivid rose */
+            --dark-blue: #0b2545;   /* deep navy/blue */
+            --muted: #3a2a3a;
+            --surface: rgba(255, 255, 255, 0.9);
+            --glass: rgba(255, 255, 255, 0.6);
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: var(--light-bg);
-            color: var(--dark-text);
+            font-family: 'Poppins', Arial, sans-serif;
+            color: var(--muted);
+            background: radial-gradient(1200px 600px at 10% 10%, rgba(123, 45, 168, 0.08), transparent 12%),
+                radial-gradient(1000px 500px at 90% 90%, rgba(255, 111, 177, 0.06), transparent 12%),
+                linear-gradient(135deg, #fffafc 0%, #fff 100%);
+            -webkit-font-smoothing: antialiased;
             min-height: 100vh;
         }
 
-        /* Main content area */
-        .main-content {
-            padding: 20px;
-            max-width: 1400px;
-            margin: 20px auto;
-        }
-
-        .content-section {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            box-shadow: var(--shadow);
-            margin-top: 20px;
-        }
-
-        /* Page title */
-        .page-header {
+        /* Top Header (Matches your existing theme) */
+        .topbar {
+            background: linear-gradient(90deg, var(--purple-1), var(--rose-1), var(--dark-blue));
+            padding: 14px 22px;
+            color: #fff;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--light-gray);
+            box-shadow: 0 8px 30px rgba(255, 77, 140, 0.12);
+            position: relative;
         }
 
-        .page-title {
+        .topbar::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 6px;
+            background: linear-gradient(90deg, rgba(123, 45, 168, 0.6), rgba(255, 111, 177, 0.5), rgba(11, 37, 69, 0.4));
+            opacity: 0.8;
+            transform-origin: left center;
+            animation: slideGradient 6s linear infinite;
+        }
+
+        @keyframes slideGradient {
+            0% { transform: translateX(-100%); }
+            50% { transform: translateX(0%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .topbar h1 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        .admin-button a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.12);
+            transition: background 220ms ease, transform 120ms ease;
+        }
+
+        .admin-button a:hover {
+            background: rgba(255, 255, 255, 0.18);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .container {
+            padding: 28px;
+            display: flex;
+            gap: 28px;
+            height: calc(100vh - 70px);
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Groups Sidebar */
+        .groups-list {
+            width: 360px;
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 24px;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(123, 45, 168, 0.08);
+            border: 1px solid rgba(255, 111, 177, 0.1);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .groups-header {
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(123, 45, 168, 0.1);
+        }
+
+        .groups-title {
+            color: var(--dark-blue);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
-        .page-title h1 {
-            color: var(--dark-text);
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-
-        .page-icon {
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-purple));
-            width: 50px;
-            height: 50px;
+        .title-icon {
+            background: linear-gradient(135deg, var(--purple-1), var(--rose-1));
+            width: 40px;
+            height: 40px;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
-            font-size: 1.5rem;
+            color: white;
+            font-size: 1.2rem;
         }
 
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            background: var(--light-gray);
-            color: var(--gray-text);
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-
-        .back-button:hover {
-            background: var(--primary-blue);
-            color: var(--white);
-            transform: translateX(-5px);
-        }
-
-        .group-messages-container {
-            display: flex;
-            height: calc(100vh - 220px);
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        /* Sidebar des groupes */
-        .groups-list {
-            width: 320px;
-            background: var(--white);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            overflow-y: auto;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--light-gray);
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .groups-header {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--light-gray);
-        }
-        
-        .groups-title {
-            color: var(--dark-text);
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .title-icon {
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-purple));
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-        }
-        
         .groups-subtitle {
-            color: var(--gray-text);
+            color: var(--muted);
             font-size: 0.9rem;
             line-height: 1.5;
+            opacity: 0.8;
         }
-        
-        .groups-scroll {
-            flex: 1;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-        
-        /* Items de groupe */
+
+        /* Group Items */
         .group-item {
             display: flex;
-            padding: 15px;
-            border-radius: var(--border-radius);
+            padding: 18px;
+            border-radius: 16px;
             cursor: pointer;
-            transition: var(--transition);
-            margin-bottom: 10px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 12px;
             align-items: center;
             border: 2px solid transparent;
-            background: var(--white);
+            background: white;
+            position: relative;
+            overflow: hidden;
         }
-        
+
+        .group-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--purple-1), var(--rose-1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
         .group-item:hover {
-            background: var(--light-bg);
-            border-color: var(--light-gray);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(123, 45, 168, 0.15);
+            border-color: rgba(255, 111, 177, 0.2);
         }
-        
+
+        .group-item:hover::before {
+            opacity: 1;
+        }
+
         .group-item.active {
-            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
-            border-color: rgba(67, 97, 238, 0.2);
+            background: linear-gradient(135deg, rgba(123, 45, 168, 0.08), rgba(255, 111, 177, 0.06));
+            border-color: rgba(255, 111, 177, 0.3);
         }
-        
+
+        .group-item.active::before {
+            opacity: 1;
+        }
+
         .group-avatar {
             width: 50px;
             height: 50px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-purple));
-            border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple-1), var(--rose-1));
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
+            color: white;
             font-weight: 700;
             font-size: 18px;
-            margin-right: 15px;
+            margin-right: 16px;
             flex-shrink: 0;
+            box-shadow: 0 6px 20px rgba(123, 45, 168, 0.2);
         }
-        
+
         .group-info {
             flex: 1;
             min-width: 0;
         }
-        
+
         .group-name {
             font-weight: 600;
             font-size: 15px;
-            color: var(--dark-text);
-            margin-bottom: 5px;
+            color: var(--dark-blue);
+            margin-bottom: 6px;
         }
-        
+
         .group-description {
             font-size: 0.85rem;
-            color: var(--gray-text);
+            color: var(--muted);
             line-height: 1.4;
             overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
-        
+
         .group-stats {
             display: flex;
-            gap: 12px;
+            gap: 16px;
             font-size: 0.8rem;
-            color: var(--gray-text);
+            color: var(--muted);
         }
-        
+
         .group-stat {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
+            font-weight: 500;
         }
-        
+
         .group-stat i {
-            font-size: 0.7rem;
+            color: var(--rose-1);
+            font-size: 0.8rem;
         }
-        
-        /* Zone de chat */
-        .group-chat-area {
+
+        /* Chat Area */
+        .chat-area {
             flex: 1;
-            background: var(--white);
-            border-radius: var(--border-radius);
+            background: var(--surface);
+            border-radius: 20px;
             display: flex;
             flex-direction: column;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--light-gray);
+            box-shadow: 0 10px 30px rgba(123, 45, 168, 0.08);
+            border: 1px solid rgba(255, 111, 177, 0.1);
             overflow: hidden;
         }
-        
-        /* En-tête du chat */
-        .group-chat-header {
-            padding: 20px 25px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-purple));
-            color: var(--white);
+
+        /* Chat Header */
+        .chat-header {
+            padding: 20px 28px;
+            background: linear-gradient(90deg, var(--purple-1), var(--rose-1));
+            color: white;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
-        
-        .group-info-header {
+
+        .chat-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 16px;
         }
-        
-        .group-chat-avatar {
+
+        .chat-avatar {
             width: 50px;
             height: 50px;
             background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
+            color: white;
             font-weight: 700;
             font-size: 20px;
+            backdrop-filter: blur(10px);
         }
-        
-        .group-details h3 {
-            margin: 0 0 5px 0;
+
+        .chat-details h3 {
+            margin: 0 0 6px 0;
             font-size: 1.2rem;
             font-weight: 700;
         }
-        
-        .group-members {
+
+        .chat-members {
             font-size: 0.9rem;
             opacity: 0.9;
         }
-        
-        /* Liste des messages */
-        .group-messages-list {
+
+        /* Messages List */
+        .messages-list {
             flex: 1;
-            padding: 20px;
+            padding: 24px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            background: linear-gradient(180deg, var(--light-bg) 0%, var(--white) 100%);
+            gap: 16px;
+            background: linear-gradient(180deg, #fdfbfd 0%, #f9f5ff 100%);
         }
-        
-        .group-message {
-            max-width: 75%;
-            padding: 15px 18px;
-            border-radius: 18px;
+
+        .message {
+            max-width: 70%;
+            padding: 16px 20px;
+            border-radius: 20px;
             position: relative;
-            animation: messageSlideIn 0.3s ease;
+            animation: messageSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             line-height: 1.5;
             word-wrap: break-word;
+            backdrop-filter: blur(10px);
         }
-        
+
         @keyframes messageSlideIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(20px) scale(0.95);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
-        
-        .group-message.sent {
+
+        .message.sent {
             align-self: flex-end;
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
-            color: var(--white);
-            border-bottom-right-radius: 5px;
+            background: linear-gradient(135deg, var(--rose-1), var(--purple-1));
+            color: white;
+            border-bottom-right-radius: 8px;
+            box-shadow: 0 8px 25px rgba(255, 111, 177, 0.2);
         }
-        
-        .group-message.received {
+
+        .message.received {
             align-self: flex-start;
-            background: var(--white);
-            color: var(--dark-text);
-            border: 1px solid var(--light-gray);
-            border-bottom-left-radius: 5px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            background: white;
+            color: var(--dark-blue);
+            border: 1px solid rgba(123, 45, 168, 0.1);
+            border-bottom-left-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
         }
-        
+
         .message-user {
             font-size: 0.85rem;
             margin-bottom: 8px;
@@ -396,35 +404,35 @@ if ($current_group_id) {
             align-items: center;
             gap: 8px;
         }
-        
-        .group-message.sent .message-user {
+
+        .message.sent .message-user {
             color: rgba(255, 255, 255, 0.9);
         }
-        
-        .group-message.received .message-user {
-            color: var(--gray-text);
+
+        .message.received .message-user {
+            color: var(--muted);
         }
-        
-        .message-user-avatar {
-            width: 24px;
-            height: 24px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-purple));
+
+        .user-avatar {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--purple-1), var(--rose-1));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
+            color: white;
             font-weight: 700;
             font-size: 12px;
         }
-        
-        .group-message-content {
+
+        .message-content {
             font-size: 0.95rem;
             line-height: 1.5;
             word-break: break-word;
         }
-        
-        .group-message-time {
+
+        .message-time {
             font-size: 0.75rem;
             opacity: 0.8;
             margin-top: 8px;
@@ -435,103 +443,111 @@ if ($current_group_id) {
             gap: 8px;
             flex-wrap: wrap;
         }
-        
-        .group-message-actions {
+
+        .message-actions {
             display: flex;
             gap: 6px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
         }
-        
-        .edit-group-message-btn,
-        .delete-group-message-btn {
+
+        .message:hover .message-actions {
+            opacity: 1;
+        }
+
+        .edit-btn, .delete-btn {
             background: rgba(255, 255, 255, 0.2);
             border: none;
             color: rgba(255, 255, 255, 0.9);
             cursor: pointer;
             font-size: 11px;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 4px 10px;
+            border-radius: 6px;
             transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
             gap: 4px;
+            backdrop-filter: blur(10px);
         }
-        
-        .group-message.sent .edit-group-message-btn:hover,
-        .group-message.sent .delete-group-message-btn:hover {
+
+        .message.sent .edit-btn:hover,
+        .message.sent .delete-btn:hover {
             background: rgba(255, 255, 255, 0.3);
             color: white;
+            transform: translateY(-2px);
         }
-        
-        .group-message.received .edit-group-message-btn,
-        .group-message.received .delete-group-message-btn {
+
+        .message.received .edit-btn,
+        .message.received .delete-btn {
             background: rgba(0, 0, 0, 0.05);
-            color: var(--gray-text);
+            color: var(--muted);
         }
-        
-        .group-message.received .edit-group-message-btn:hover {
-            background: rgba(67, 97, 238, 0.1);
-            color: var(--primary-blue);
+
+        .message.received .edit-btn:hover {
+            background: rgba(123, 45, 168, 0.1);
+            color: var(--purple-1);
         }
-        
-        .group-message.received .delete-group-message-btn:hover {
-            background: rgba(230, 57, 70, 0.1);
-            color: var(--danger-red);
+
+        .message.received .delete-btn:hover {
+            background: rgba(220, 20, 60, 0.1);
+            color: #dc143c;
         }
-        
-        /* Formulaire d'envoi */
-        .group-message-form-container {
-            padding: 20px;
-            background: var(--white);
-            border-top: 1px solid var(--light-gray);
+
+        /* Message Form */
+        .message-form-container {
+            padding: 20px 24px;
+            background: white;
+            border-top: 1px solid rgba(123, 45, 168, 0.1);
         }
-        
-        .group-message-form {
+
+        .message-form {
             display: flex;
-            gap: 12px;
+            gap: 16px;
             align-items: flex-end;
         }
-        
-        .group-message-input-container {
+
+        .message-input-container {
             flex: 1;
             position: relative;
         }
-        
-        .group-message-input {
+
+        .message-input {
             width: 100%;
-            padding: 15px 20px;
-            padding-right: 60px;
-            border: 2px solid var(--light-gray);
-            border-radius: 25px;
+            padding: 16px 24px;
+            padding-right: 80px;
+            border: 2px solid rgba(123, 45, 168, 0.1);
+            border-radius: 16px;
             font-size: 0.95rem;
             outline: none;
-            transition: var(--transition);
-            background: var(--light-bg);
+            transition: all 0.3s ease;
+            background: #fdfaff;
             resize: none;
-            min-height: 50px;
+            min-height: 60px;
             max-height: 120px;
-            font-family: inherit;
+            font-family: 'Poppins', sans-serif;
             line-height: 1.5;
         }
-        
-        .group-message-input:focus {
-            border-color: var(--primary-blue);
-            background: var(--white);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+
+        .message-input:focus {
+            border-color: var(--rose-1);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(255, 111, 177, 0.15);
+            transform: translateY(-2px);
         }
-        
-        .group-input-actions {
+
+        .input-actions {
             position: absolute;
-            right: 10px;
+            right: 12px;
             top: 50%;
             transform: translateY(-50%);
             display: flex;
             gap: 8px;
         }
-        
-        .group-input-action-btn {
+
+        .action-btn {
             background: none;
             border: none;
-            color: var(--gray-text);
+            color: var(--muted);
             cursor: pointer;
             width: 36px;
             height: 36px;
@@ -539,130 +555,321 @@ if ($current_group_id) {
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: var(--transition);
+            transition: all 0.3s ease;
         }
-        
-        .group-input-action-btn:hover {
-            background: var(--light-gray);
-            color: var(--primary-blue);
+
+        .action-btn:hover {
+            background: rgba(123, 45, 168, 0.1);
+            color: var(--purple-1);
+            transform: translateY(-2px);
         }
-        
-        .group-send-button {
-            padding: 15px 25px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-purple));
-            color: var(--white);
+
+        /* Send Button */
+        .send-button {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--purple-1), var(--rose-1));
+            color: white;
             border: none;
-            border-radius: 25px;
+            padding: 16px 28px;
+            border-radius: 16px;
             cursor: pointer;
             font-size: 0.95rem;
-            font-weight: 600;
-            transition: var(--transition);
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             white-space: nowrap;
+            box-shadow: 0 10px 30px rgba(123, 45, 168, 0.2);
         }
-        
-        .group-send-button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.25);
+
+        .send-button:hover:not(:disabled) {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 40px rgba(123, 45, 168, 0.25);
         }
-        
-        .group-send-button:disabled {
+
+        .send-button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1) !important;
         }
-        
-        /* Aucun groupe sélectionné */
-        .no-group-selected {
+
+        /* Button ripple effect */
+        .send-button:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 420ms ease, height 420ms ease, opacity 420ms ease;
+            opacity: 0;
+        }
+
+        .send-button:active:after {
+            width: 300px;
+            height: 300px;
+            opacity: 1;
+            transition: 0s;
+        }
+
+        /* No Group Selected */
+        .no-group {
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100%;
-            color: var(--gray-text);
+            color: var(--muted);
             text-align: center;
             flex-direction: column;
-            gap: 20px;
-            padding: 40px;
+            gap: 24px;
+            padding: 60px;
         }
-        
+
         .no-group-icon {
-            font-size: 60px;
-            color: var(--light-gray);
-            margin-bottom: 10px;
+            font-size: 80px;
+            color: rgba(123, 45, 168, 0.1);
+            margin-bottom: 16px;
         }
-        
-        .no-group-selected h3 {
-            color: var(--dark-text);
-            font-size: 1.5rem;
-            margin-bottom: 10px;
+
+        .no-group h3 {
+            color: var(--dark-blue);
+            font-size: 1.8rem;
+            margin-bottom: 12px;
             font-weight: 700;
         }
-        
-        .no-group-selected p {
+
+        .no-group p {
             max-width: 400px;
             line-height: 1.5;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             font-size: 1rem;
+            opacity: 0.8;
         }
-        
-        /* Style pour la suppression */
+
+        .no-group-tip {
+            padding: 16px 24px;
+            background: linear-gradient(135deg, rgba(123, 45, 168, 0.08), rgba(255, 111, 177, 0.06));
+            border-radius: 16px;
+            color: var(--purple-1);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(123, 45, 168, 0.1);
+        }
+
+        /* Empty Messages */
+        .no-messages {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+        }
+
+        .no-messages-icon {
+            font-size: 60px;
+            color: rgba(123, 45, 168, 0.1);
+            margin-bottom: 16px;
+        }
+
+        .no-messages h4 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+
+        .no-messages p {
+            opacity: 0.8;
+        }
+
+        /* Scrollbar Styling */
+        .groups-list::-webkit-scrollbar,
+        .messages-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .groups-list::-webkit-scrollbar-track,
+        .messages-list::-webkit-scrollbar-track {
+            background: rgba(123, 45, 168, 0.05);
+            border-radius: 3px;
+        }
+
+        .groups-list::-webkit-scrollbar-thumb,
+        .messages-list::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--purple-1), var(--rose-1));
+            border-radius: 3px;
+        }
+
+        .groups-list::-webkit-scrollbar-thumb:hover,
+        .messages-list::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--rose-1), var(--purple-1));
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .groups-list {
+                width: 100%;
+                max-height: 350px;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 16px;
+                gap: 16px;
+            }
+            
+            .message {
+                max-width: 85%;
+            }
+            
+            .message-form {
+                flex-direction: column;
+            }
+            
+            .send-button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .chat-header,
+            .message-form-container {
+                padding: 16px;
+            }
+            
+            .messages-list {
+                padding: 16px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Notification Toast */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            z-index: 10000;
+            animation: slideInRight 0.3s ease, slideOutRight 0.3s ease 2.7s forwards;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOutRight {
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .notification.info {
+            background: linear-gradient(135deg, var(--purple-1), var(--rose-1));
+        }
+
+        /* Message Deleting Animation */
         .message-deleting {
             opacity: 0.5;
             transform: scale(0.95);
             transition: all 0.3s ease;
         }
-        
-        /* Modal d'édition */
+
+        /* Edit Modal */
         .edit-modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            animation: fadeIn 0.3s ease forwards;
+            z-index: 2000;
+            backdrop-filter: blur(4px);
+            animation: fadeIn 200ms ease;
         }
-        
+
         @keyframes fadeIn {
+            from { opacity: 0; }
             to { opacity: 1; }
         }
-        
+
         .edit-modal {
-            background: white;
-            border-radius: var(--border-radius);
+            background: linear-gradient(145deg, #ffffff, #fdfaff);
+            border-radius: 24px;
             width: 90%;
             max-width: 500px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 50px -12px rgba(123, 45, 168, 0.25);
             overflow: hidden;
-            transform: translateY(-20px);
-            animation: slideUp 0.3s ease forwards;
+            animation: slideUp 300ms cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
-        
+
         @keyframes slideUp {
-            to { transform: translateY(0); }
+            from {
+                transform: translateY(40px) scale(0.95);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
         }
-        
+
         .edit-modal-header {
-            padding: 20px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-purple));
+            padding: 24px;
+            background: linear-gradient(90deg, var(--purple-1), var(--rose-1));
             color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .edit-modal-header h3 {
             margin: 0;
             font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        
-        .edit-modal-close {
+
+        .modal-close {
             background: none;
             border: none;
             color: white;
@@ -670,335 +877,262 @@ if ($current_group_id) {
             cursor: pointer;
             padding: 0;
             line-height: 1;
+            transition: transform 0.2s ease;
         }
-        
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+        }
+
         .edit-modal-body {
-            padding: 20px;
+            padding: 24px;
         }
-        
-        .edit-modal-textarea {
+
+        .edit-textarea {
             width: 100%;
-            padding: 15px;
-            border: 2px solid var(--light-gray);
-            border-radius: 8px;
+            padding: 16px;
+            border: 2px solid rgba(123, 45, 168, 0.15);
+            border-radius: 12px;
             font-size: 1rem;
-            font-family: inherit;
+            font-family: 'Poppins', sans-serif;
             resize: vertical;
-            min-height: 100px;
+            min-height: 120px;
             outline: none;
-            transition: border-color 0.3s;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.95);
         }
-        
-        .edit-modal-textarea:focus {
-            border-color: var(--primary-blue);
+
+        .edit-textarea:focus {
+            border-color: var(--rose-1);
+            box-shadow: 0 0 0 4px rgba(255, 111, 177, 0.15);
+            background: white;
         }
-        
+
         .edit-modal-footer {
-            padding: 15px 20px;
-            background: var(--light-bg);
+            padding: 20px 24px;
+            background: #f9f5ff;
             display: flex;
             justify-content: flex-end;
-            gap: 10px;
+            gap: 12px;
         }
-        
-        .edit-modal-btn {
-            padding: 10px 20px;
-            border-radius: 6px;
+
+        .modal-btn {
+            padding: 12px 24px;
+            border-radius: 12px;
             border: none;
             cursor: pointer;
             font-weight: 600;
             font-size: 0.9rem;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
         }
-        
-        .edit-modal-cancel {
-            background: var(--light-gray);
-            color: var(--gray-text);
+
+        .modal-btn.cancel {
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid rgba(123, 45, 168, 0.1);
         }
-        
-        .edit-modal-save {
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+
+        .modal-btn.cancel:hover {
+            background: rgba(123, 45, 168, 0.05);
+            border-color: rgba(123, 45, 168, 0.2);
+        }
+
+        .modal-btn.save {
+            background: linear-gradient(135deg, var(--purple-1), var(--rose-1));
             color: white;
+            box-shadow: 0 8px 20px rgba(123, 45, 168, 0.2);
         }
-        
-        /* Responsive */
-        @media (max-width: 992px) {
-            .group-messages-container {
-                flex-direction: column;
-                height: auto;
-            }
-            
-            .groups-list {
-                width: 100%;
-                max-height: 300px;
-            }
+
+        .modal-btn.save:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(123, 45, 168, 0.25);
         }
-        
-        @media (max-width: 768px) {
-            .group-message {
-                max-width: 85%;
-            }
-            
-            .group-chat-header {
-                padding: 15px;
-            }
-            
-            .group-messages-list {
-                padding: 15px;
-            }
-            
-            .group-message-form-container {
-                padding: 15px;
-            }
-            
-            .group-message-form {
-                flex-direction: column;
-            }
-            
-            .group-send-button {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-        
-        /* Scrollbar */
-        .groups-scroll::-webkit-scrollbar,
-        .group-messages-list::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .groups-scroll::-webkit-scrollbar-track,
-        .group-messages-list::-webkit-scrollbar-track {
-            background: var(--light-gray);
-            border-radius: 3px;
-        }
-        
-        .groups-scroll::-webkit-scrollbar-thumb,
-        .group-messages-list::-webkit-scrollbar-thumb {
-            background: var(--primary-blue);
-            border-radius: 3px;
-        }
-        
-        .groups-scroll::-webkit-scrollbar-thumb:hover,
-        .group-messages-list::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-dark);
+
+        .modal-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
         }
     </style>
 </head>
 <body>
-    <?php
-    // Try multiple paths for header.php
-    $headerPaths = [
-        __DIR__ . '/../../../header.php', // Go up 3 levels to root
-        $_SERVER['DOCUMENT_ROOT'] . '/campus connect/header.php', // Absolute path
-        '/campus connect/header.php' // Web path
-    ];
-    
-    $headerIncluded = false;
-    foreach ($headerPaths as $headerPath) {
-        if (file_exists($headerPath)) {
-            include $headerPath;
-            $headerIncluded = true;
-            break;
-        }
-    }
-    
-    // If header not found, show a simple one
-    if (!$headerIncluded) {
-        echo '
-        <div style="background: #4361ee; padding: 15px 20px; color: white;">
-            <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-size: 1.5rem; font-weight: bold;">CAMPUS CONNECT</div>
-                <div>
-                    <a href="/campus connect/index.php" style="color: white; margin-left: 20px; text-decoration: none;">Accueil</a>
-                    <a href="/campus connect/view/Front-office/group_messages.php" style="color: white; margin-left: 20px; text-decoration: none; background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 4px;">Groupes</a>
-                </div>
-            </div>
-        </div>';
-    }
-    ?>
-    
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Page Header with Back Button -->
-        <div class="page-header">
-            <div class="page-title">
-                <div class="page-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <h1>Messages de Groupe</h1>
-            </div>
-            <a href="/campus connect/index.php" class="back-button">
-                <i class="fas fa-arrow-left"></i>
-                Retour à l'accueil
-            </a>
+    <!-- Top Header -->
+    <div class="topbar">
+        <h1>📚 Messages de Groupe - Campus Connect</h1>
+        <div class="admin-button">
+            <a href="/campus connect/index.php">🏠 Retour à l'accueil</a>
         </div>
-        
-        <div class="content-section">
-            <div class="group-messages-container">
-                <!-- Sidebar des groupes -->
-                <div class="groups-list">
-                    <div class="groups-header">
-                        <h2 class="groups-title">
-                            <div class="title-icon">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            Groupes de Discussion
-                            <span style="background: var(--accent-pink); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; margin-left: 8px;">
-                                <?= count($groups) ?>
-                            </span>
-                        </h2>
-                        <p class="groups-subtitle">
-                            Rejoignez des groupes thématiques et échangez avec la communauté
-                        </p>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Groups Sidebar -->
+        <div class="groups-list">
+            <div class="groups-header">
+                <h2 class="groups-title">
+                    <div class="title-icon">
+                        <i class="fas fa-users"></i>
                     </div>
-                    
-                    <div class="groups-scroll">
-                        <?php if (empty($groups)): ?>
-                            <div style="text-align: center; padding: 30px 15px; color: var(--gray-text);">
-                                <i class="fas fa-users-slash" style="font-size: 2.5rem; margin-bottom: 15px; opacity: 0.3;"></i>
-                                <p style="font-size: 1rem; margin-bottom: 8px; font-weight: 600;">Aucun groupe disponible</p>
-                                <small>Créez un nouveau groupe pour commencer</small>
+                    Groupes de Discussion
+                    <span style="background: var(--rose-1); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin-left: 8px;">
+                        <?= count($groups) ?>
+                    </span>
+                </h2>
+                <p class="groups-subtitle">
+                    Rejoignez des groupes thématiques et échangez avec la communauté
+                </p>
+            </div>
+            
+            <div class="groups-scroll">
+                <?php if (empty($groups)): ?>
+                    <div class="no-group" style="padding: 30px 15px;">
+                        <div class="no-group-icon">
+                            <i class="fas fa-users-slash"></i>
+                        </div>
+                        <h4>Aucun groupe disponible</h4>
+                        <small>Créez un nouveau groupe pour commencer</small>
+                    </div>
+                <?php else: ?>
+                    <?php foreach ($groups as $group): ?>
+                        <div class="group-item <?= $current_group_id == $group['id'] ? 'active' : '' ?>" 
+                             onclick="openGroupChat(<?= $group['id'] ?>)">
+                            <div class="group-avatar">
+                                <?= htmlspecialchars(substr($group['name'], 0, 1)) ?>
                             </div>
-                        <?php else: ?>
-                            <?php foreach ($groups as $group): ?>
-                                <div class="group-item <?= $current_group_id == $group['id'] ? 'active' : '' ?>" 
-                                     onclick="openGroupChat(<?= $group['id'] ?>)">
-                                    <div class="group-avatar">
-                                        <?= htmlspecialchars(substr($group['name'], 0, 1)) ?>
+                            <div class="group-info">
+                                <div class="group-name">
+                                    <?= htmlspecialchars($group['name']) ?>
+                                </div>
+                                <div class="group-description">
+                                    <?= htmlspecialchars($group['description'] ?? 'Description du groupe') ?>
+                                </div>
+                                <div class="group-stats">
+                                    <div class="group-stat">
+                                        <i class="fas fa-users"></i>
+                                        <span><?= $group['member_count'] ?? 0 ?> membres</span>
                                     </div>
-                                    <div class="group-info">
-                                        <div class="group-name">
-                                            <?= htmlspecialchars($group['name']) ?>
-                                        </div>
-                                        <div class="group-description">
-                                            <?= htmlspecialchars($group['description'] ?? 'Description du groupe') ?>
-                                        </div>
-                                        <div class="group-stats">
-                                            <div class="group-stat">
-                                                <i class="fas fa-users"></i>
-                                                <span><?= $group['member_count'] ?? 0 ?> membres</span>
-                                            </div>
-                                            <div class="group-stat">
-                                                <i class="fas fa-comment"></i>
-                                                <span><?= $group['message_count'] ?? 0 ?> messages</span>
-                                            </div>
-                                        </div>
+                                    <div class="group-stat">
+                                        <i class="fas fa-comment"></i>
+                                        <span><?= $group['message_count'] ?? 0 ?> messages</span>
                                     </div>
                                 </div>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+        
+        <!-- Chat Area -->
+        <div class="chat-area">
+            <?php if ($current_group): ?>
+                <!-- Chat Header -->
+                <div class="chat-header">
+                    <div class="chat-info">
+                        <div class="chat-avatar">
+                            <?= htmlspecialchars(substr($current_group['name'], 0, 1)) ?>
+                        </div>
+                        <div class="chat-details">
+                            <h3><?= htmlspecialchars($current_group['name']) ?></h3>
+                            <div class="chat-members">
+                                <i class="fas fa-users"></i>
+                                <?= $current_group['member_count'] ?? 0 ?> membres
+                                • <?= $current_group['message_count'] ?? 0 ?> messages
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Zone de chat -->
-                <div class="group-chat-area">
-                    <?php if ($current_group): ?>
-                        <!-- En-tête du chat -->
-                        <div class="group-chat-header">
-                            <div class="group-info-header">
-                                <div class="group-chat-avatar">
-                                    <?= htmlspecialchars(substr($current_group['name'], 0, 1)) ?>
-                                </div>
-                                <div class="group-details">
-                                    <h3><?= htmlspecialchars($current_group['name']) ?></h3>
-                                    <div class="group-members">
-                                        <i class="fas fa-users"></i>
-                                        <?= $current_group['member_count'] ?? 0 ?> membres
-                                    </div>
-                                </div>
+                <!-- Messages List -->
+                <div class="messages-list" id="messagesList">
+                    <?php if (empty($group_messages)): ?>
+                        <div class="no-messages">
+                            <div class="no-messages-icon">
+                                <i class="far fa-comments"></i>
                             </div>
-                        </div>
-                        
-                        <!-- Liste des messages -->
-                        <div class="group-messages-list" id="groupMessagesList">
-                            <?php if (empty($group_messages)): ?>
-                                <div style="text-align: center; padding: 40px 20px; color: var(--gray-text);">
-                                    <i class="far fa-comments" style="font-size: 2.5rem; margin-bottom: 15px; opacity: 0.3;"></i>
-                                    <p style="font-size: 1rem; margin-bottom: 8px; font-weight: 600;">Aucun message dans ce groupe</p>
-                                    <small>Soyez le premier à envoyer un message !</small>
-                                </div>
-                            <?php else: ?>
-                                <?php foreach ($group_messages as $msg): 
-                                    $is_sent = $msg['user_id'] == $_SESSION['user_id'];
-                                ?>
-                                    <div class="group-message <?= $is_sent ? 'sent' : 'received' ?>" 
-                                         id="group-message-<?= $msg['id'] ?>"
-                                         data-id="<?= $msg['id'] ?>">
-                                        <div class="message-user">
-                                            <div class="message-user-avatar">
-                                                <?= htmlspecialchars(substr($msg['username'] ?? '?', 0, 1)) ?>
-                                            </div>
-                                            <span><?= htmlspecialchars($msg['username'] ?? 'Utilisateur') ?></span>
-                                            <?php if ($is_sent): ?>
-                                                <span style="font-size: 10px; opacity: 0.8;">(vous)</span>
-                                            <?php endif; ?>
-                                        </div>
-                                        <div class="group-message-content" id="group-message-content-<?= $msg['id'] ?>">
-                                            <?= nl2br(htmlspecialchars($msg['content'])) ?>
-                                        </div>
-                                        <div class="group-message-time">
-                                            <span><?= date('H:i', strtotime($msg['created_at'])) ?></span>
-                                            <?php if ($is_sent): ?>
-                                                <div class="group-message-actions">
-                                                    <button class="edit-group-message-btn" onclick="editGroupMessage(<?= $msg['id'] ?>)">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                    <button class="delete-group-message-btn" onclick="deleteGroupMessage(<?= $msg['id'] ?>, this)">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </div>
-                                            <?php endif; ?>
-                                        </div>
-                                    </div>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </div>
-                        
-                        <!-- Formulaire d'envoi -->
-                        <div class="group-message-form-container">
-                            <form id="groupMessageForm" class="group-message-form" onsubmit="return sendGroupMessage(event)">
-                                <input type="hidden" id="group_id" value="<?= $current_group['id'] ?>">
-                                <div class="group-message-input-container">
-                                    <textarea id="groupMessageInput" class="group-message-input" 
-                                              placeholder="Écrivez votre message au groupe..." 
-                                              required rows="1"></textarea>
-                                    <div class="group-input-actions">
-                                        <button type="button" class="group-input-action-btn" title="Émojis">
-                                            <i class="far fa-smile"></i>
-                                        </button>
-                                        <button type="button" class="group-input-action-btn" title="Pièce jointe">
-                                            <i class="fas fa-paperclip"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <button type="submit" id="groupSendButton" class="group-send-button">
-                                    <i class="fas fa-paper-plane"></i>
-                                    <span>Envoyer</span>
-                                </button>
-                            </form>
+                            <h4>Aucun message dans ce groupe</h4>
+                            <p>Soyez le premier à envoyer un message !</p>
                         </div>
                     <?php else: ?>
-                        <!-- Aucun groupe sélectionné -->
-                        <div class="no-group-selected">
-                            <div>
-                                <div class="no-group-icon">
-                                    <i class="fas fa-users"></i>
+                        <?php foreach ($group_messages as $msg): 
+                            $is_sent = $msg['user_id'] == $_SESSION['user_id'];
+                        ?>
+                            <div class="message <?= $is_sent ? 'sent' : 'received' ?>" 
+                                 id="message-<?= $msg['id'] ?>"
+                                 data-id="<?= $msg['id'] ?>">
+                                <div class="message-user">
+                                    <div class="user-avatar">
+                                        <?= htmlspecialchars(substr($msg['username'] ?? '?', 0, 1)) ?>
+                                    </div>
+                                    <span><?= htmlspecialchars($msg['username'] ?? 'Utilisateur') ?></span>
+                                    <?php if ($is_sent): ?>
+                                        <span style="font-size: 10px; opacity: 0.8;">(vous)</span>
+                                    <?php endif; ?>
                                 </div>
-                                <h3>Sélectionnez un groupe</h3>
-                                <p>
-                                    Choisissez un groupe dans la liste<br>
-                                    pour commencer à discuter avec ses membres
-                                </p>
+                                <div class="message-content" id="message-content-<?= $msg['id'] ?>">
+                                    <?= nl2br(htmlspecialchars($msg['content'])) ?>
+                                </div>
+                                <div class="message-time">
+                                    <span><?= date('H:i', strtotime($msg['created_at'])) ?></span>
+                                    <?php if ($is_sent): ?>
+                                        <div class="message-actions">
+                                            <button class="edit-btn" onclick="editMessage(<?= $msg['id'] ?>)">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="delete-btn" onclick="deleteMessage(<?= $msg['id'] ?>, this)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
                             </div>
-                            <div style="padding: 15px; background: rgba(67, 97, 238, 0.1); border-radius: var(--border-radius); color: var(--primary-blue);">
-                                <i class="fas fa-lightbulb"></i>
-                                Cliquez sur un groupe pour commencer
-                            </div>
-                        </div>
+                        <?php endforeach; ?>
                     <?php endif; ?>
                 </div>
-            </div>
+                
+                <!-- Message Form -->
+                <div class="message-form-container">
+                    <form id="messageForm" class="message-form" onsubmit="return sendMessage(event)">
+                        <input type="hidden" id="group_id" value="<?= $current_group['id'] ?>">
+                        <div class="message-input-container">
+                            <textarea id="messageInput" class="message-input" 
+                                      placeholder="Écrivez votre message au groupe..." 
+                                      required rows="1"></textarea>
+                            <div class="input-actions">
+                                <button type="button" class="action-btn" title="Émojis">
+                                    <i class="far fa-smile"></i>
+                                </button>
+                                <button type="button" class="action-btn" title="Pièce jointe">
+                                    <i class="fas fa-paperclip"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="submit" id="sendButton" class="send-button">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Envoyer</span>
+                        </button>
+                    </form>
+                </div>
+            <?php else: ?>
+                <!-- No Group Selected -->
+                <div class="no-group">
+                    <div>
+                        <div class="no-group-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Sélectionnez un groupe</h3>
+                        <p>
+                            Choisissez un groupe dans la liste<br>
+                            pour commencer à discuter avec ses membres
+                        </p>
+                    </div>
+                    <div class="no-group-tip">
+                        <i class="fas fa-lightbulb"></i>
+                        Cliquez sur un groupe pour commencer
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -1018,7 +1152,7 @@ if ($current_group_id) {
         textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + 'px';
         
         // Activer/désactiver le bouton d'envoi
-        const sendButton = document.getElementById('groupSendButton');
+        const sendButton = document.getElementById('sendButton');
         if (sendButton) {
             sendButton.disabled = textarea.value.trim() === '';
         }
@@ -1026,17 +1160,17 @@ if ($current_group_id) {
     
     // Scroll vers le bas
     function scrollToBottom() {
-        const messagesList = document.getElementById('groupMessagesList');
+        const messagesList = document.getElementById('messagesList');
         if (messagesList) {
             messagesList.scrollTop = messagesList.scrollHeight;
         }
     }
     
-    // Envoyer un message de groupe
-    async function sendGroupMessage(event) {
+    // Envoyer un message
+    async function sendMessage(event) {
         event.preventDefault();
         
-        const messageInput = document.getElementById('groupMessageInput');
+        const messageInput = document.getElementById('messageInput');
         const groupId = document.getElementById('group_id').value;
         const message = messageInput.value.trim();
         
@@ -1046,35 +1180,35 @@ if ($current_group_id) {
         }
         
         // Désactiver le bouton d'envoi
-        const sendButton = document.getElementById('groupSendButton');
+        const sendButton = document.getElementById('sendButton');
         const originalText = sendButton.innerHTML;
-        sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        sendButton.innerHTML = '<i class="fas fa-spinner fa-spin loading"></i>';
         sendButton.disabled = true;
         
         // Ajout optimiste du message
-        const messagesList = document.getElementById('groupMessagesList');
+        const messagesList = document.getElementById('messagesList');
         const tempId = 'temp-' + Date.now();
         
         const newMessage = document.createElement('div');
-        newMessage.className = 'group-message sent';
-        newMessage.id = 'group-message-' + tempId;
+        newMessage.className = 'message sent';
+        newMessage.id = 'message-' + tempId;
         newMessage.dataset.id = tempId;
         newMessage.innerHTML = `
             <div class="message-user">
-                <div class="message-user-avatar"><?= substr($_SESSION['username'] ?? 'Y', 0, 1) ?></div>
+                <div class="user-avatar"><?= substr($_SESSION['username'] ?? 'Y', 0, 1) ?></div>
                 <span><?= htmlspecialchars($_SESSION['username'] ?? 'Vous') ?></span>
                 <span style="font-size: 10px; opacity: 0.8;">(vous)</span>
             </div>
-            <div class="group-message-content" id="group-message-content-${tempId}">
+            <div class="message-content" id="message-content-${tempId}">
                 ${message.replace(/\n/g, '<br>')}
             </div>
-            <div class="group-message-time">
+            <div class="message-time">
                 <span>${new Date().toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})}</span>
-                <div class="group-message-actions">
-                    <button class="edit-group-message-btn" onclick="editGroupMessage('${tempId}')">
+                <div class="message-actions">
+                    <button class="edit-btn" onclick="editMessage('${tempId}')">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="delete-group-message-btn" onclick="deleteGroupMessage('${tempId}', this)">
+                    <button class="delete-btn" onclick="deleteMessage('${tempId}', this)">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -1082,7 +1216,7 @@ if ($current_group_id) {
         `;
         
         // Supprimer le message "aucun message" s'il existe
-        const noMessagesDiv = messagesList.querySelector('div[style*="text-align: center"]');
+        const noMessagesDiv = messagesList.querySelector('.no-messages');
         if (noMessagesDiv) {
             noMessagesDiv.remove();
         }
@@ -1108,23 +1242,23 @@ if ($current_group_id) {
             if (data.success) {
                 // Mettre à jour avec l'ID réel
                 if (data.message_id) {
-                    newMessage.id = 'group-message-' + data.message_id;
+                    newMessage.id = 'message-' + data.message_id;
                     newMessage.dataset.id = data.message_id;
                     
-                    const contentDiv = newMessage.querySelector('.group-message-content');
+                    const contentDiv = newMessage.querySelector('.message-content');
                     if (contentDiv) {
-                        contentDiv.id = 'group-message-content-' + data.message_id;
+                        contentDiv.id = 'message-content-' + data.message_id;
                     }
                     
                     // Mettre à jour les boutons
-                    const editBtn = newMessage.querySelector('.edit-group-message-btn');
+                    const editBtn = newMessage.querySelector('.edit-btn');
                     if (editBtn) {
-                        editBtn.setAttribute('onclick', `editGroupMessage(${data.message_id})`);
+                        editBtn.setAttribute('onclick', `editMessage(${data.message_id})`);
                     }
                     
-                    const deleteBtn = newMessage.querySelector('.delete-group-message-btn');
+                    const deleteBtn = newMessage.querySelector('.delete-btn');
                     if (deleteBtn) {
-                        deleteBtn.setAttribute('onclick', `deleteGroupMessage(${data.message_id}, this)`);
+                        deleteBtn.setAttribute('onclick', `deleteMessage(${data.message_id}, this)`);
                     }
                 }
                 
@@ -1147,14 +1281,14 @@ if ($current_group_id) {
         return false;
     }
     
-    // Supprimer un message de groupe
-    async function deleteGroupMessage(messageId, button) {
+    // Supprimer un message
+    async function deleteMessage(messageId, button) {
         // Confirmation
         if (!confirm('Voulez-vous vraiment supprimer ce message ?')) {
             return;
         }
         
-        const messageElement = document.getElementById('group-message-' + messageId);
+        const messageElement = document.getElementById('message-' + messageId);
         if (!messageElement) {
             showNotification('Message non trouvé', 'error');
             return;
@@ -1163,7 +1297,7 @@ if ($current_group_id) {
         // Désactiver le bouton
         if (button) {
             button.disabled = true;
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            button.innerHTML = '<i class="fas fa-spinner fa-spin loading"></i>';
         }
         
         // Animation de suppression
@@ -1227,27 +1361,29 @@ if ($current_group_id) {
     
     // Vérifier s'il n'y a plus de messages
     function checkIfNoMessages() {
-        const messagesList = document.getElementById('groupMessagesList');
+        const messagesList = document.getElementById('messagesList');
         if (messagesList && messagesList.children.length === 0) {
             messagesList.innerHTML = `
-                <div style="text-align: center; padding: 40px 20px; color: var(--gray-text);">
-                    <i class="far fa-comments" style="font-size: 2.5rem; margin-bottom: 15px; opacity: 0.3;"></i>
-                    <p style="font-size: 1rem; margin-bottom: 8px; font-weight: 600;">Aucun message dans ce groupe</p>
-                    <small>Soyez le premier à envoyer un message !</small>
+                <div class="no-messages">
+                    <div class="no-messages-icon">
+                        <i class="far fa-comments"></i>
+                    </div>
+                    <h4>Aucun message dans ce groupe</h4>
+                    <p>Soyez le premier à envoyer un message !</p>
                 </div>
             `;
         }
     }
     
-    // Modifier un message de groupe
-    function editGroupMessage(messageId) {
-        const messageElement = document.getElementById('group-message-' + messageId);
+    // Modifier un message
+    function editMessage(messageId) {
+        const messageElement = document.getElementById('message-' + messageId);
         if (!messageElement) {
             showNotification('Message non trouvé', 'error');
             return;
         }
         
-        const contentElement = messageElement.querySelector('.group-message-content');
+        const contentElement = messageElement.querySelector('.message-content');
         const currentContent = contentElement.textContent;
         
         currentEditingMessageId = messageId;
@@ -1259,14 +1395,14 @@ if ($current_group_id) {
             <div class="edit-modal">
                 <div class="edit-modal-header">
                     <h3><i class="fas fa-edit"></i> Modifier le message</h3>
-                    <button class="edit-modal-close" onclick="closeEditModal()">&times;</button>
+                    <button class="modal-close" onclick="closeEditModal()">&times;</button>
                 </div>
                 <div class="edit-modal-body">
-                    <textarea class="edit-modal-textarea" placeholder="Modifiez votre message...">${currentContent}</textarea>
+                    <textarea class="edit-textarea" placeholder="Modifiez votre message...">${currentContent}</textarea>
                 </div>
                 <div class="edit-modal-footer">
-                    <button class="edit-modal-btn edit-modal-cancel" onclick="closeEditModal()">Annuler</button>
-                    <button class="edit-modal-btn edit-modal-save" onclick="saveEditedMessage()">Enregistrer</button>
+                    <button class="modal-btn cancel" onclick="closeEditModal()">Annuler</button>
+                    <button class="modal-btn save" onclick="saveEditedMessage()">Enregistrer</button>
                 </div>
             </div>
         `;
@@ -1276,7 +1412,7 @@ if ($current_group_id) {
         
         // Focus sur le textarea
         setTimeout(() => {
-            const textarea = modal.querySelector('.edit-modal-textarea');
+            const textarea = modal.querySelector('.edit-textarea');
             textarea.focus();
             textarea.select();
         }, 100);
@@ -1299,7 +1435,7 @@ if ($current_group_id) {
         const modal = document.querySelector('.edit-modal-overlay');
         if (!modal) return;
         
-        const textarea = modal.querySelector('.edit-modal-textarea');
+        const textarea = modal.querySelector('.edit-textarea');
         const newContent = textarea.value.trim();
         
         if (!newContent) {
@@ -1313,16 +1449,16 @@ if ($current_group_id) {
         }
         
         // Désactiver le bouton
-        const saveButton = modal.querySelector('.edit-modal-save');
+        const saveButton = modal.querySelector('.modal-btn.save');
         const originalText = saveButton.innerHTML;
-        saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        saveButton.innerHTML = '<i class="fas fa-spinner fa-spin loading"></i>';
         saveButton.disabled = true;
         
         try {
             // Mise à jour optimiste
-            const messageElement = document.getElementById('group-message-' + currentEditingMessageId);
+            const messageElement = document.getElementById('message-' + currentEditingMessageId);
             if (messageElement) {
-                const contentElement = messageElement.querySelector('.group-message-content');
+                const contentElement = messageElement.querySelector('.message-content');
                 contentElement.textContent = newContent;
             }
             
@@ -1351,7 +1487,7 @@ if ($current_group_id) {
             } else {
                 // Revenir à l'ancien contenu
                 if (messageElement) {
-                    const contentElement = messageElement.querySelector('.group-message-content');
+                    const contentElement = messageElement.querySelector('.message-content');
                     const oldContent = contentElement.dataset.originalContent || '';
                     contentElement.textContent = oldContent;
                 }
@@ -1375,45 +1511,16 @@ if ($current_group_id) {
         
         // Créer la notification
         const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
+        notification.className = `notification ${type}`;
         notification.innerHTML = `
-            <div class="notification-content">
-                ${type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ'} ${message}
-            </div>
+            <div>${message}</div>
         `;
-        
-        // Style de la notification
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
-            padding: 12px 20px;
-            border-radius: 6px;
-            color: white;
-            font-weight: 500;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            animation: slideIn 0.3s ease;
-        `;
-        
-        if (type === 'success') {
-            notification.style.background = 'linear-gradient(135deg, #2ecc71, #27ae60)';
-        } else if (type === 'error') {
-            notification.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
-        } else {
-            notification.style.background = 'linear-gradient(135deg, #4361ee, #3a56d4)';
-        }
         
         document.body.appendChild(notification);
         
         // Supprimer après 3 secondes
         setTimeout(() => {
-            notification.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.remove();
-                }
-            }, 300);
+            notification.remove();
         }, 3000);
     }
     
@@ -1423,7 +1530,7 @@ if ($current_group_id) {
         scrollToBottom();
         
         // Configurer le textarea
-        const messageInput = document.getElementById('groupMessageInput');
+        const messageInput = document.getElementById('messageInput');
         if (messageInput) {
             // Auto-resize
             messageInput.addEventListener('input', function() {
@@ -1434,35 +1541,23 @@ if ($current_group_id) {
             messageInput.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
-                    const sendButton = document.getElementById('groupSendButton');
+                    const sendButton = document.getElementById('sendButton');
                     if (sendButton && !sendButton.disabled) {
-                        sendGroupMessage(e);
+                        sendMessage(e);
                     }
                 }
             });
         }
         
         // Initialiser le bouton d'envoi
-        const sendButton = document.getElementById('groupSendButton');
+        const sendButton = document.getElementById('sendButton');
         if (sendButton && messageInput) {
             sendButton.disabled = messageInput.value.trim() === '';
         }
     });
-    
-    // Ajouter les animations CSS
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-    `;
-    document.head.appendChild(style);
     </script>
+    
+    <!-- Font Awesome Icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 </body>
 </html>
