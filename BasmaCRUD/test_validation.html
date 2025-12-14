@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Validation - Contrôle de Saisie</title>
+    <link rel="stylesheet" type="text/css" href="View/assets/style.css" />
+    <script type="text/javascript" src="View/assets/controle_saisie.js"></script>
+</head>
+
+<body>
+    <div class="topbar admin">
+        <h1>Test de Validation JavaScript</h1>
+        <div class="admin-button"><a href="index.php">Retour</a></div>
+    </div>
+
+    <div class="container">
+        <!-- Formulaire Événement -->
+        <div class="form-card">
+            <h2>Test - Formulaire Événement</h2>
+            <form method="post" action="#" onsubmit="return validateForm(this);" novalidate>
+                <label>Titre:<br /><input type="text" name="title" id="title" /></label><br />
+                <label>Description:<br /><textarea name="description" id="description" rows="6"
+                        cols="50"></textarea></label><br />
+                <label>Date & Heure (format: YYYY-MM-DD HH:MM):<br /><input type="text" name="date" id="date"
+                        placeholder="2025-12-15 14:00" /></label><br />
+                <label>Lieu:<br /><input type="text" name="location" id="location" /></label><br />
+                <label>Capacité:<br /><input type="text" name="capacity" id="capacity" /></label><br />
+                <input class="btn" type="submit" value="Tester la validation" />
+            </form>
+        </div>
+
+        <!-- Formulaire Réservation -->
+        <div class="form-card">
+            <h2>Test - Formulaire Réservation</h2>
+            <form method="post" action="#" onsubmit="return validateForm(this);" novalidate>
+                <label>Événement:<br />
+                    <select name="event_id" id="event_id2">
+                        <option value="">-- Sélectionner --</option>
+                        <option value="1">Événement Test 1</option>
+                        <option value="2">Événement Test 2</option>
+                    </select>
+                </label><br />
+                <label>Nom:<br /><input type="text" name="name" id="name2" /></label><br />
+                <label>Email:<br /><input type="text" name="email" id="email2" /></label><br />
+                <label>Places:<br /><input type="text" name="seats" id="seats2" value="1" /></label><br />
+                <input class="btn" type="submit" value="Tester la validation" />
+            </form>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="list-card full">
+            <h2>Instructions de test</h2>
+            <ul>
+                <li><strong>Formulaire Événement :</strong>
+                    <ul>
+                        <li>Laissez le titre vide → erreur "Le titre est obligatoire"</li>
+                        <li>Entrez un titre d'1 caractère → erreur sur la longueur</li>
+                        <li>Laissez la description vide → erreur "La description est obligatoire"</li>
+                        <li>Entrez moins de 10 caractères → erreur sur la longueur minimale</li>
+                        <li>Laissez la date vide → erreur "La date est obligatoire"</li>
+                        <li>Entrez un mauvais format de date → erreur de format</li>
+                        <li>Laissez le lieu vide → erreur "Le lieu est obligatoire"</li>
+                        <li>Entrez une capacité non numérique → erreur de format</li>
+                    </ul>
+                </li>
+                <li><strong>Formulaire Réservation :</strong>
+                    <ul>
+                        <li>Ne sélectionnez pas d'événement → erreur "Vous devez sélectionner un événement"</li>
+                        <li>Laissez le nom vide → erreur "Le nom est obligatoire"</li>
+                        <li>Entrez un email invalide → erreur "L'adresse email n'est pas valide"</li>
+                        <li>Entrez un nombre de places non numérique → erreur de format</li>
+                        <li>Entrez 0 ou un nombre négatif → erreur "doit être au moins 1"</li>
+                    </ul>
+                </li>
+                <li><strong>Comportement attendu :</strong>
+                    <ul>
+                        <li>Les erreurs s'affichent en rouge sous chaque champ invalide</li>
+                        <li>Le champ invalide a une bordure rouge et une animation de secousse</li>
+                        <li>Le focus est placé sur le premier champ invalide</li>
+                        <li>Les erreurs disparaissent quand vous commencez à taper dans le champ</li>
+                        <li>Aucune alerte JavaScript n'apparaît (contrairement à l'ancien système)</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>
