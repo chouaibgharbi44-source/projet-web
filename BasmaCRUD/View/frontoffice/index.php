@@ -29,12 +29,12 @@ header("Expires: 0");
         <div class="header-inner">
             <div class="logo">CAMPUS CONNECT</div>
             <nav class="navbar">
-                <a href="#" class="nav-link">Accueil</a>
+                <a href="../view/FrontOffice/homepage.php" class="nav-link">Accueil</a>
                 <a href="#" class="nav-link active">Événements</a>
                 <a href="#" class="nav-link">Messages</a>
                 <a href="index.php?entity=reservation" class="nav-link">Réservations</a>
                 <a href="#" class="nav-link">Groupes</a>
-                <a href="#" class="nav-link">Profil</a>
+                <a href="../view/FrontOffice/profile.php" class="nav-link">Profil</a>
             </nav>
 
         </div>

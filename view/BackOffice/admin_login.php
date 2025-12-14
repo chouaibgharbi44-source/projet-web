@@ -1,8 +1,8 @@
 <?php
  
 session_start();
-require_once __DIR__ . '../../config.php';
-require_once __DIR__ . '../../model/User.php';
+require_once __DIR__ . '../../../config.php';
+require_once __DIR__ . '../../../model/User.php';
 
 $userModel = new User();
 $error = '';
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['role']      = 'admin';
 
                 
-                header('Location: ../public/index.php');
+                header('Location: index1.php');
                 exit;
             } else {
                 $error = "Accès refusé. Ce compte n'a pas les droits d'administrateur.";
@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </form>
 
                 <div class="extra-links">
-                    <p>Pas administrateur ? <a href="login.php">Retour à CampusConnect</a></p>
+                    <p>Pas administrateur ? <a href="../view/FrontOffice/login.php">Retour à CampusConnect</a></p>
                 </div>
             </div>
         </div>

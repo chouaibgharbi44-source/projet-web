@@ -198,6 +198,11 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
+         <li class="nav-item">
+                <a href="../view/BackOffice/index1.php">
+                    <i class="fas fa-ticket-alt"></i> Acceuil
+                </a>
+            </li>
         <div class="brand">
             <i class="fas fa-layer-group"></i> Campus Connect
         </div>

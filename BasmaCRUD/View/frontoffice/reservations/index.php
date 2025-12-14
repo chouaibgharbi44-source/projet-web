@@ -28,7 +28,7 @@ header("Expires: 0");
                 <a href="index.php?entity=reservation" class="nav-link active">Réservations</a>
                 <a href="#" class="nav-link">Messages</a>
                 <a href="#" class="nav-link">Groupes</a>
-                <a href="#" class="nav-link">Profil</a>
+                <a href="../view/FrontOffice/profile.php" class="nav-link">Profil</a>
             </nav>
             <div class="admin-button">
                 <a href="index.php?area=admin" class="pulse">Admin</a>

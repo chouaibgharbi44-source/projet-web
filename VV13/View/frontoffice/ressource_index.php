@@ -336,7 +336,8 @@ if (isset($selectedMatiere) && isset($selectedMatiere['id'])) {
     <div class="header-inner">
         <div class="logo">CAMPUS CONNECT</div>
         <nav class="navbar">
-            <a href="index.php" class="nav-link">Accueil</a>
+            <a href="../view/FrontOffice/homepage.php" class="nav-link">Accueil</a>
+            <a href="index.php" class="nav-link">matiéres</a>
             <a href="index.php?entity=ressource" class="nav-link active">Ressources</a>
             <a href="index.php?entity=ressource&action=favoris" class="nav-link">Mes favoris</a>
             <a href="index.php?entity=ressource&action=telechargements" class="nav-link">Mes téléchargements</a>

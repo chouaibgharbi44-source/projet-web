@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion des Utilisateurs - CampusConnect</title>
-    <link rel="stylesheet" href="../public/css/style-gestion.css">
+    <link rel="stylesheet" href="css/style-gestion.css">
 </head>
 <body>
     <div class="app-container">
@@ -15,12 +15,13 @@
          
         <aside class="sidebar">
             <div class="logo">
-                <img src="../public/images/logo.png" alt="Logo" class="logo-img">
+                <img src="images/logo.png" alt="Logo" class="logo-img">
                 <span class="logo-text">Campus Connect Logo</span>
             </div>
             <h1 class="brand-title">CAMPUS CONNECT</h1>
             <p class="brand-subtitle">Your University United</p>
-            <a href="../public/logout.php" class="logout-btn">Déconnexion</a>
+            <a href="index1.php" class="logout-btn">acceuil</a>
+            <a href="logout.php" class="logout-btn">Déconnexion</a>
             <p class="nav-title">SUJETS</p>
             <ul class="subjects-list">
                 <li class="subject-item">Mathématiques</li>

@@ -190,6 +190,7 @@
 <div class="sidebar">
     <div class="logo">CAMPUS CONNECT</div>
     <ul class="sidebar-nav">
+        <li><a href="../view/BackOffice/index1.php"> Acceuil</a></li>
         <li><a href="index.php?area=admin">📊 Tableau de Bord</a></li>
         <li><a href="index.php?entity=matiere&area=admin">📚 Matières</a></li>
         <li><a href="index.php?entity=ressource&area=admin">📄 Ressources</a></li>

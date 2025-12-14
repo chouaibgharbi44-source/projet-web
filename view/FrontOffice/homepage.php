@@ -451,8 +451,8 @@
 
       <ul class="nav-links" id="navLinks">
         <li><a href="#accueil"><i class="fas fa-home"></i> Accueil</a></li>
-        <li><a href="../../ressources/index.php"><i class="fas fa-book"></i> Matériel</a></li>
-        <li><a href="../../event/view/frontoffice/index.php"><i class="fas fa-calendar"></i> Événements</a></li>
+        <li><a href="../../VV13/index.php"><i class="fas fa-book"></i> Matériel</a></li>
+        <li><a href="../../BasmaCRUD/index.php"><i class="fas fa-calendar"></i> Événements</a></li>
         <li><a href="#quiz"><i class="fas fa-award"></i> Quiz</a></li>
         <li><a href="#forums"><i class="fas fa-comments"></i> Forums</a></li>
         <li><a href="profile.php" class="button">Your Profile</a></li>
@@ -533,12 +533,12 @@
         <div class="feature-box">
           <h3>Matériel Pédagogique</h3>
           <p>Gestion complète des matières et des ressources pédagogiques. CRUD matières, organisation et partage des documents.</p>
-          <a href="../ressources/index.php">Voir les matériaux →</a>
+          <a href="../../VV13/index.php">Voir les matériaux →</a>
         </div>
         <div class="feature-box">
           <h3>Événements Campus</h3>
           <p>Créez, gérez et suivez tous les événements du campus avec inscriptions et détails complets.</p>
-          <a href="../../event/view/frontoffice/index.php">Voir les événements →</a>
+          <a href="../../BasmaCRUD/index.php">Voir les événements →</a>
         </div>
         <div class="feature-box">
           <h3>Quiz Étudiants</h3>
@@ -572,8 +572,8 @@
           <h3>Liens Rapides</h3>
           <ul>
             <li><a href="#accueil">Accueil</a></li>
-            <li><a href="../../ressources/index.php">Matériel</a></li>
-            <li><a href="../../event/view/frontoffice/index.php">Événements</a></li>
+            <li><a href="../../VV13/index.php">Matériel</a></li>
+            <li><a href="../../BasmaCRUD/index.php">Événements</a></li>
             <li><a href="#quiz">Quiz</a></li>
             <li><a href="#forums">Forums</a></li>
             <li><a href="profile.php">Profile</a></li>

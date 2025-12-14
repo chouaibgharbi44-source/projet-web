@@ -319,6 +319,11 @@
             <i class="fas fa-layer-group"></i> Campus Connect
         </div>
         <ul class="nav-menu">
+             <li class="nav-item">
+                <a href="../view/BackOffice/index1.php">
+                    <i class="fas fa-ticket-alt"></i> Acceuil
+                </a>
+            </li>
             <li class="nav-item">
                 <a href="index.php?area=admin">
                     <i class="fas fa-calendar-alt"></i> Événements

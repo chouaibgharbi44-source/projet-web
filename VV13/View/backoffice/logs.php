@@ -280,6 +280,7 @@ if (!isset($logs_matieres, $logs_ressources)) {
         <span>Campus Connect</span>
     </div>
     <ul class="sidebar-nav">
+        <li><a href="../view/BackOffice/index1.php"> Acceuil</a></li>
         <li><a href="index.php?area=admin" class="<?= !isset($_GET['action']) ? 'active' : '' ?>" data-icon="📊">📊 Tableau de Bord</a></li>
         <li><a href="index.php?entity=matiere&area=admin&action=list" data-icon="📚">📚 Matières</a></li>
         <li><a href="index.php?entity=ressource&area=admin&action=list" data-icon="📄">📄 Ressources</a></li>

@@ -15,12 +15,13 @@
     <div class="header-inner">
         <div class="logo">CAMPUS CONNECT</div>
         <nav class="navbar">
+            <a href="../view/FrontOffice/homepage.php" class="nav-link active">acceuil</a>
             <a href="index.php" class="nav-link active">Matières</a>
             <a href="index.php?entity=ressource" class="nav-link">Ressources</a>
-            <a href="#" class="nav-link">Événements</a>
+            <a href="../../VV1BasmaCRUD/frontoffice/index.php" class="nav-link">Événements</a>
             <a href="#" class="nav-link">Messages</a>
             <a href="#" class="nav-link">Groupes</a>
-            <a href="#" class="nav-link">Profil</a>
+            <a href="../view/FrontOffice/profile.php" class="nav-link">Profile</a>
         </nav>
     </div>
 </header>
@@ -98,7 +99,7 @@
         </div>
         <div class="footer-col">
             <h4>Pages</h4>
-            <a href="#">Accueil</a><br />
+            <a href="../view/FrontOffice/profile.php">Accueil</a><br />
             <a href="#">Matériel</a><br />
             <a href="#">Événements</a>
         </div>
@@ -106,7 +107,7 @@
             <h4>Pages</h4>
             <a href="#">Messages</a><br />
             <a href="#">Groupes</a><br />
-            <a href="#">Profil</a>
+            <a href="../view/FrontOffice/profile.php">Profile</a>
         </div>
     </div>
     <div class="footer-copy">© 2025 - Campus Connect. Tous droits réservés.</div>
