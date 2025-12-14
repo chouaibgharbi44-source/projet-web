@@ -438,191 +438,255 @@ if (isset($_GET['receiver_id'])) {
     <link rel="stylesheet" href="../../assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Modern pink theme using Poppins and 3-color gradient */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
         :root {
-            --primary-blue: #4361ee;
-            --primary-dark: #3a56d4;
-            --secondary-purple: #7209b7;
-            --accent-pink: #f72585;
-            --light-bg: #f8f9fa;
-            --dark-text: #2d3748;
-            --gray-text: #718096;
-            --light-gray: #e2e8f0;
-            --white: #ffffff;
+            --purple-1: #7b2da8;
+            --rose-1: #ff6fb1;
+            --dark-blue: #0b2545;
+            --muted: #3a2a3a;
+            --surface: rgba(255, 255, 255, 0.9);
+            --glass: rgba(255, 255, 255, 0.6);
             --success-green: #2ecc71;
             --danger-red: #e63946;
-            --border-radius: 12px;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --border-radius: 14px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 20px 50px rgba(123, 45, 168, 0.12);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--muted);
+            background: radial-gradient(1200px 600px at 10% 10%, rgba(123, 45, 168, 0.08), transparent 12%),
+                radial-gradient(1000px 500px at 90% 90%, rgba(255, 111, 177, 0.06), transparent 12%),
+                linear-gradient(135deg, #fffafc 0%, #fff 100%);
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            padding: 28px;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .messages-container {
             display: flex;
-            height: calc(100vh - 120px);
-            gap: 20px;
+            height: calc(100vh - 160px);
+            gap: 28px;
             margin-top: 20px;
+            animation: fadeIn 0.5s ease;
         }
-        
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .conversations-sidebar {
             width: 350px;
-            background: var(--white);
+            background: var(--surface);
             border-radius: var(--border-radius);
-            padding: 20px;
+            padding: 24px;
             overflow-y: auto;
             box-shadow: var(--shadow);
-            border: 1px solid var(--light-gray);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
-        
+
+        .conversations-sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--purple-1), var(--rose-1), var(--dark-blue));
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
         .conversations-header {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--light-gray);
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(123, 45, 168, 0.08);
         }
-        
+
         .conversations-title {
-            color: var(--dark-text);
-            font-size: 1.5rem;
+            color: var(--dark-blue);
+            font-size: 1.8rem;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
-        
+
         .title-icon {
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-purple));
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
+            background: linear-gradient(135deg, var(--purple-1), var(--rose-1));
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
+            color: white;
+            font-size: 18px;
+            box-shadow: 0 8px 20px rgba(123, 45, 168, 0.2);
         }
-        
+
         .search-users {
             position: relative;
             margin-bottom: 20px;
         }
-        
+
         .search-input {
             width: 100%;
-            padding: 12px 45px 12px 15px;
-            border: 2px solid var(--light-gray);
-            border-radius: 25px;
-            font-size: 0.9rem;
+            padding: 14px 50px 14px 18px;
+            border: 1px solid rgba(123, 45, 168, 0.15);
+            border-radius: 12px;
+            font-size: 0.95rem;
             outline: none;
             transition: var(--transition);
+            background: rgba(255, 255, 255, 0.9);
+            font-family: 'Poppins', sans-serif;
         }
-        
+
         .search-input:focus {
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            border-color: var(--rose-1);
+            box-shadow: 0 0 0 3px rgba(255, 111, 177, 0.1);
+            background: white;
         }
-        
+
         .search-icon {
             position: absolute;
-            right: 15px;
+            right: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--gray-text);
+            color: var(--rose-1);
+            font-size: 16px;
         }
-        
+
         .search-results {
             position: absolute;
             top: 100%;
             left: 0;
             right: 0;
-            background: var(--white);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--light-gray);
-            z-index: 100;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-hover);
+            border: 1px solid rgba(123, 45, 168, 0.1);
+            z-index: 1000;
             display: none;
             max-height: 300px;
             overflow-y: auto;
+            margin-top: 8px;
+            backdrop-filter: blur(10px);
         }
-        
+
         .search-result-item {
-            padding: 12px 15px;
-            border-bottom: 1px solid var(--light-gray);
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(123, 45, 168, 0.05);
             cursor: pointer;
             transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        
+
         .search-result-item:hover {
-            background: var(--light-bg);
+            background: linear-gradient(90deg, rgba(123, 45, 168, 0.06), rgba(255, 111, 177, 0.04));
+            transform: translateX(4px);
         }
-        
+
         .conversations-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
-        
+
         .conversation-item {
             display: flex;
-            padding: 15px;
-            border-radius: var(--border-radius);
+            padding: 16px;
+            border-radius: 12px;
             cursor: pointer;
             transition: var(--transition);
             align-items: center;
-            border: 2px solid transparent;
+            border: 1px solid transparent;
+            background: white;
+            position: relative;
+            overflow: hidden;
         }
-        
+
         .conversation-item:hover {
-            background: var(--light-bg);
-            border-color: var(--light-gray);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(123, 45, 168, 0.1);
+            border-color: rgba(255, 111, 177, 0.2);
+            background: linear-gradient(90deg, rgba(255, 250, 253, 0.8), rgba(255, 240, 250, 0.8));
         }
-        
+
         .conversation-item.active {
-            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
-            border-color: rgba(67, 97, 238, 0.2);
+            background: linear-gradient(90deg, rgba(123, 45, 168, 0.1), rgba(255, 111, 177, 0.08));
+            border-color: rgba(123, 45, 168, 0.2);
+            box-shadow: 0 10px 30px rgba(123, 45, 168, 0.08);
         }
-        
+
         .user-avatar {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-purple));
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--purple-1), var(--rose-1));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
+            color: white;
             font-weight: 700;
-            font-size: 16px;
-            margin-right: 15px;
+            font-size: 18px;
+            margin-right: 16px;
             flex-shrink: 0;
             position: relative;
+            box-shadow: 0 8px 20px rgba(123, 45, 168, 0.2);
         }
-        
+
         .user-avatar.online::after {
             content: '';
             position: absolute;
-            bottom: 0;
-            right: 0;
+            bottom: 4px;
+            right: 4px;
             width: 12px;
             height: 12px;
             background: var(--success-green);
             border-radius: 50%;
-            border: 2px solid var(--white);
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
-        
+
         .conversation-info {
             flex: 1;
             min-width: 0;
         }
-        
+
         .conversation-info h4 {
-            margin: 0 0 5px 0;
+            margin: 0 0 6px 0;
             font-size: 15px;
             font-weight: 600;
-            color: var(--dark-text);
+            color: var(--dark-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        
+
         .conversation-preview {
             font-size: 0.85rem;
-            color: var(--gray-text);
+            color: var(--muted);
             line-height: 1.4;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -630,233 +694,211 @@ if (isset($_GET['receiver_id'])) {
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
         }
-        
+
         .conversation-time {
             font-size: 0.75rem;
-            color: var(--gray-text);
-            white-space: nowrap;
-        }
-        
-        .unread-badge {
-            background: var(--accent-pink);
-            color: var(--white);
-            font-size: 0.7rem;
+            color: var(--rose-1);
             font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 10px;
-            margin-top: 5px;
+            white-space: nowrap;
+            margin-top: 4px;
         }
-        
+
+        .unread-badge {
+            background: linear-gradient(135deg, var(--rose-1), #ff3d9e);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-top: 6px;
+            display: inline-block;
+            box-shadow: 0 4px 12px rgba(255, 111, 177, 0.2);
+        }
+
         .chat-area {
             flex: 1;
-            background: var(--white);
+            background: var(--surface);
             border-radius: var(--border-radius);
             display: flex;
             flex-direction: column;
             box-shadow: var(--shadow);
-            border: 1px solid var(--light-gray);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             overflow: hidden;
         }
-        
+
+        .chat-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--purple-1), var(--rose-1), var(--dark-blue));
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
         .chat-header {
-            padding: 20px 25px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-purple));
-            color: var(--white);
+            padding: 24px;
+            background: linear-gradient(90deg, rgba(123, 45, 168, 0.1), rgba(255, 111, 177, 0.08));
             display: flex;
             align-items: center;
             justify-content: space-between;
+            border-bottom: 1px solid rgba(123, 45, 168, 0.08);
+            position: relative;
         }
-        
+
         .chat-user-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 16px;
         }
-        
+
         .chat-user-avatar {
-            width: 45px;
-            height: 45px;
-            background: rgba(255, 255, 255, 0.2);
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--purple-1), var(--rose-1));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
+            color: white;
             font-weight: 700;
-            font-size: 18px;
+            font-size: 20px;
             position: relative;
+            box-shadow: 0 8px 20px rgba(123, 45, 168, 0.2);
         }
-        
+
         .chat-user-avatar.online::after {
             content: '';
             position: absolute;
-            bottom: 0;
-            right: 0;
+            bottom: 4px;
+            right: 4px;
             width: 12px;
             height: 12px;
             background: var(--success-green);
             border-radius: 50%;
-            border: 2px solid var(--white);
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
-        
+
         .chat-user-details h3 {
-            margin: 0 0 5px 0;
-            font-size: 1.2rem;
+            margin: 0 0 6px 0;
+            font-size: 1.3rem;
             font-weight: 700;
+            color: var(--dark-blue);
         }
-        
+
         .chat-user-status {
             font-size: 0.9rem;
-            opacity: 0.9;
+            color: var(--rose-1);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        
+
+        .chat-user-status span {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
         .messages-list {
             flex: 1;
-            padding: 20px;
+            padding: 24px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            background: linear-gradient(180deg, var(--light-bg) 0%, var(--white) 100%);
+            gap: 20px;
+            background: linear-gradient(180deg, rgba(255, 250, 253, 0.8) 0%, rgba(255, 245, 250, 0.6) 100%);
         }
-        
+
         .message {
-            max-width: 70%;
-            padding: 15px 18px;
-            border-radius: 18px;
+            max-width: 75%;
+            padding: 18px 22px;
+            border-radius: 20px;
             position: relative;
-            animation: messageSlideIn 0.3s ease;
+            animation: messageSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             line-height: 1.5;
             word-wrap: break-word;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
-        
+
         @keyframes messageSlideIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(20px) scale(0.95);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
-        
+
         .message.sent {
             align-self: flex-end;
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
-            color: var(--white);
-            border-bottom-right-radius: 5px;
+            background: linear-gradient(135deg, var(--purple-1), var(--rose-1));
+            color: white;
+            border-bottom-right-radius: 8px;
+            box-shadow: 0 10px 30px rgba(123, 45, 168, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
-        
+
         .message.received {
             align-self: flex-start;
-            background: var(--white);
+            background: white;
             color: var(--dark-text);
-            border: 1px solid var(--light-gray);
-            border-bottom-left-radius: 5px;
+            border: 1px solid rgba(123, 45, 168, 0.1);
+            border-bottom-left-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.03);
         }
-        
+
         .message-content {
             font-size: 0.95rem;
             line-height: 1.5;
             word-break: break-word;
             position: relative;
         }
-        
+
         .message-content.edited::after {
             content: ' (modifié)';
             font-size: 0.8rem;
-            opacity: 0.7;
-            font-style: italic;
-        }
-        
-        .edit-mode {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px dashed rgba(255, 255, 255, 0.3);
-        }
-        
-        .message.received .edit-mode {
-            background: rgba(248, 249, 250, 0.8);
-            border: 2px dashed var(--light-gray);
-        }
-        
-        .edit-textarea {
-            width: 100%;
-            background: transparent;
-            border: none;
-            color: inherit;
-            font-size: 0.95rem;
-            font-family: inherit;
-            line-height: 1.5;
-            resize: none;
-            outline: none;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .message.sent .edit-textarea {
-            color: var(--white);
-        }
-        
-        .message.received .edit-textarea {
-            color: var(--dark-text);
-        }
-        
-        .edit-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-            justify-content: flex-end;
-        }
-        
-        .save-edit-btn, .cancel-edit-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .save-edit-btn {
-            background: var(--success-green);
-            color: white;
-        }
-        
-        .save-edit-btn:hover {
-            background: #27ae60;
-        }
-        
-        .cancel-edit-btn {
-            background: var(--light-gray);
-            color: var(--dark-text);
-        }
-        
-        .cancel-edit-btn:hover {
-            background: #d1d5db;
-        }
-        
-        .message-time {
-            font-size: 0.8rem;
             opacity: 0.8;
-            margin-top: 8px;
+            font-style: italic;
+            margin-left: 8px;
+        }
+
+        .message.sent .message-content.edited::after {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .message.received .message-content.edited::after {
+            color: rgba(123, 45, 168, 0.6);
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            margin-top: 10px;
             text-align: right;
             display: flex;
             align-items: center;
-            justify-content: flex-end;
-            gap: 8px;
+            justify-content: space-between;
             flex-wrap: wrap;
         }
-        
+
         .message-actions {
             display: flex;
             gap: 8px;
+            margin-left: auto;
         }
-        
+
         .edit-message-btn,
         .delete-message-btn {
             background: rgba(255, 255, 255, 0.2);
@@ -864,192 +906,221 @@ if (isset($_GET['receiver_id'])) {
             color: rgba(255, 255, 255, 0.9);
             cursor: pointer;
             font-size: 11px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: all 0.2s ease;
+            padding: 6px 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
         }
-        
+
         .message.sent .edit-message-btn:hover,
         .message.sent .delete-message-btn:hover {
             background: rgba(255, 255, 255, 0.3);
             color: white;
+            transform: translateY(-2px);
         }
-        
+
         .message.received .edit-message-btn,
         .message.received .delete-message-btn {
-            background: rgba(0, 0, 0, 0.05);
-            color: var(--gray-text);
+            background: rgba(123, 45, 168, 0.08);
+            color: var(--purple-1);
         }
-        
+
         .message.received .edit-message-btn:hover {
-            background: rgba(67, 97, 238, 0.1);
-            color: var(--primary-blue);
+            background: rgba(123, 45, 168, 0.15);
+            color: var(--purple-1);
+            transform: translateY(-2px);
         }
-        
+
         .message.received .delete-message-btn:hover {
-            background: rgba(230, 57, 70, 0.1);
+            background: rgba(230, 57, 70, 0.15);
             color: var(--danger-red);
+            transform: translateY(-2px);
         }
-        
+
         .message-form-container {
-            padding: 20px;
-            background: var(--white);
-            border-top: 1px solid var(--light-gray);
+            padding: 24px;
+            background: white;
+            border-top: 1px solid rgba(123, 45, 168, 0.08);
+            backdrop-filter: blur(10px);
         }
-        
+
         .message-form {
             display: flex;
-            gap: 12px;
+            gap: 16px;
             align-items: flex-end;
         }
-        
+
         .message-input-container {
             flex: 1;
             position: relative;
         }
-        
+
         .message-input {
             width: 100%;
-            padding: 15px 20px;
-            padding-right: 60px;
-            border: 2px solid var(--light-gray);
-            border-radius: 25px;
+            padding: 16px 24px;
+            padding-right: 80px;
+            border: 1px solid rgba(123, 45, 168, 0.15);
+            border-radius: 16px;
             font-size: 0.95rem;
             outline: none;
             transition: var(--transition);
-            background: var(--light-bg);
+            background: rgba(255, 250, 253, 0.9);
             resize: none;
-            min-height: 50px;
+            min-height: 60px;
             max-height: 120px;
-            font-family: inherit;
+            font-family: 'Poppins', sans-serif;
             line-height: 1.5;
         }
-        
+
         .message-input:focus {
-            border-color: var(--primary-blue);
-            background: var(--white);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            border-color: var(--rose-1);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(255, 111, 177, 0.1);
+            transform: translateY(-2px);
         }
-        
+
         .input-actions {
             position: absolute;
-            right: 10px;
+            right: 12px;
             top: 50%;
             transform: translateY(-50%);
             display: flex;
             gap: 8px;
         }
-        
+
         .input-action-btn {
             background: none;
             border: none;
-            color: var(--gray-text);
+            color: var(--rose-1);
             cursor: pointer;
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: var(--transition);
+            font-size: 18px;
         }
-        
+
         .input-action-btn:hover {
-            background: var(--light-gray);
-            color: var(--primary-blue);
+            background: rgba(255, 111, 177, 0.1);
+            color: var(--purple-1);
+            transform: translateY(-2px);
         }
-        
+
         .send-button {
-            padding: 15px 25px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-purple));
-            color: var(--white);
+            padding: 16px 28px;
+            background: linear-gradient(135deg, var(--purple-1), var(--rose-1));
+            color: white;
             border: none;
-            border-radius: 25px;
+            border-radius: 16px;
             cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 600;
+            font-size: 1rem;
+            font-weight: 700;
             transition: var(--transition);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            box-shadow: 0 12px 30px rgba(123, 45, 168, 0.2);
+            position: relative;
+            overflow: hidden;
         }
-        
+
         .send-button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.25);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(123, 45, 168, 0.3);
         }
-        
+
         .send-button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none !important;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
         }
-        
+
+        .send-button:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.14);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease, opacity 0.6s ease;
+            opacity: 0;
+        }
+
+        .send-button:active:after {
+            width: 300px;
+            height: 300px;
+            opacity: 1;
+            transition: 0s;
+        }
+
         .no-chat-selected {
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100%;
-            color: var(--gray-text);
+            color: var(--muted);
             text-align: center;
             flex-direction: column;
-            gap: 20px;
-            padding: 40px;
+            gap: 24px;
+            padding: 60px;
+            background: linear-gradient(180deg, rgba(255, 250, 253, 0.8) 0%, rgba(255, 245, 250, 0.6) 100%);
         }
-        
+
         .no-chat-icon {
-            font-size: 60px;
-            color: var(--light-gray);
-            margin-bottom: 10px;
+            font-size: 80px;
+            background: linear-gradient(135deg, var(--purple-1), var(--rose-1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            opacity: 0.8;
         }
-        
+
         .no-chat-selected h3 {
-            color: var(--dark-text);
-            font-size: 1.5rem;
-            margin-bottom: 10px;
+            color: var(--dark-blue);
+            font-size: 1.8rem;
+            margin-bottom: 12px;
             font-weight: 700;
         }
-        
+
         .no-chat-selected p {
-            max-width: 400px;
-            line-height: 1.5;
-            margin-bottom: 20px;
+            max-width: 500px;
+            line-height: 1.6;
+            margin-bottom: 24px;
             font-size: 1rem;
+            color: var(--muted);
         }
-        
-        @media (max-width: 992px) {
-            .messages-container {
-                flex-direction: column;
-                height: auto;
-            }
-            
-            .conversations-sidebar {
-                width: 100%;
-                max-height: 300px;
-            }
+
+        .tip-box {
+            padding: 20px;
+            background: linear-gradient(90deg, rgba(123, 45, 168, 0.1), rgba(255, 111, 177, 0.08));
+            border-radius: 16px;
+            color: var(--purple-1);
+            font-weight: 600;
+            border: 1px solid rgba(123, 45, 168, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(123, 45, 168, 0.08);
         }
-        
-        ::-webkit-scrollbar {
-            width: 6px;
+
+        .tip-box i {
+            font-size: 24px;
         }
-        
-        ::-webkit-scrollbar-track {
-            background: var(--light-gray);
-            border-radius: 3px;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary-blue);
-            border-radius: 3px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-dark);
-        }
-        
-        /* Modal d'édition */
+
+        /* Modal d'édition - Updated to match theme */
         .edit-modal {
             display: none;
             position: fixed;
@@ -1057,93 +1128,126 @@ if (isset($_GET['receiver_id'])) {
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.6);
             z-index: 10000;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(4px);
+            animation: fadeIn 200ms ease;
         }
-        
+
         .edit-modal-content {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            padding: 25px;
+            background: linear-gradient(145deg, #ffffff, #fdfaff);
+            border-radius: 20px;
+            padding: 40px;
             width: 90%;
             max-width: 500px;
-            box-shadow: var(--shadow-hover);
+            box-shadow: 0 25px 50px -12px rgba(123, 45, 168, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            animation: slideUp 300ms cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
         }
-        
+
         .edit-modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
-        
+
         .edit-modal-header h3 {
-            color: var(--dark-text);
+            color: var(--dark-blue);
             margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--purple-1), var(--rose-1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        
+
         .close-edit-modal {
             background: none;
             border: none;
-            font-size: 1.5rem;
-            color: var(--gray-text);
+            font-size: 1.8rem;
+            color: var(--rose-1);
             cursor: pointer;
-            padding: 5px;
+            padding: 8px;
+            transition: var(--transition);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        
+
+        .close-edit-modal:hover {
+            background: rgba(255, 111, 177, 0.1);
+            transform: rotate(90deg);
+        }
+
         .edit-modal-textarea {
             width: 100%;
             min-height: 150px;
-            padding: 15px;
-            border: 2px solid var(--light-gray);
-            border-radius: var(--border-radius);
+            padding: 20px;
+            border: 1px solid rgba(123, 45, 168, 0.15);
+            border-radius: 12px;
             font-size: 1rem;
-            font-family: inherit;
+            font-family: 'Poppins', sans-serif;
             resize: vertical;
-            margin-bottom: 20px;
-        }
-        
-        .edit-modal-textarea:focus {
-            border-color: var(--primary-blue);
-            outline: none;
-        }
-        
-        .edit-modal-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-        }
-        
-        .edit-modal-save, .edit-modal-cancel {
-            padding: 10px 20px;
-            border: none;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            cursor: pointer;
+            margin-bottom: 24px;
+            background: rgba(255, 255, 255, 0.95);
             transition: var(--transition);
         }
-        
+
+        .edit-modal-textarea:focus {
+            border-color: var(--rose-1);
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(255, 111, 177, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .edit-modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .edit-modal-save, .edit-modal-cancel {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+        }
+
         .edit-modal-save {
-            background: var(--primary-blue);
+            background: linear-gradient(135deg, var(--purple-1), var(--rose-1));
             color: white;
+            box-shadow: 0 10px 25px rgba(123, 45, 168, 0.2);
         }
-        
+
         .edit-modal-save:hover {
-            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(123, 45, 168, 0.3);
         }
-        
+
         .edit-modal-cancel {
-            background: var(--light-gray);
-            color: var(--dark-text);
+            background: rgba(123, 45, 168, 0.08);
+            color: var(--purple-1);
         }
-        
+
         .edit-modal-cancel:hover {
-            background: #d1d5db;
+            background: rgba(123, 45, 168, 0.15);
+            transform: translateY(-3px);
         }
-        
-        /* Modal de suppression simple */
+
+        /* Modal de suppression - Updated to match theme */
         .delete-modal {
             display: none;
             position: fixed;
@@ -1151,96 +1255,309 @@ if (isset($_GET['receiver_id'])) {
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.6);
             z-index: 10001;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(4px);
+            animation: fadeIn 200ms ease;
         }
-        
+
         .delete-modal-content {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            padding: 25px;
+            background: linear-gradient(145deg, #ffffff, #fdfaff);
+            border-radius: 20px;
+            padding: 40px;
             width: 90%;
             max-width: 400px;
-            box-shadow: var(--shadow-hover);
+            box-shadow: 0 25px 50px -12px rgba(123, 45, 168, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            animation: slideUp 300ms cubic-bezier(0.16, 1, 0.3, 1);
+            text-align: center;
         }
-        
+
         .delete-modal-header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
-        
+
         .delete-modal-icon {
             font-size: 48px;
-            color: var(--danger-red);
-            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--danger-red), #ff3d4a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
         }
-        
+
         .delete-modal-title {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            color: var(--dark-text);
-            margin-bottom: 10px;
+            color: var(--dark-blue);
+            margin-bottom: 12px;
         }
-        
+
         .delete-modal-subtitle {
-            font-size: 0.95rem;
-            color: var(--gray-text);
+            font-size: 1rem;
+            color: var(--muted);
             line-height: 1.5;
         }
-        
+
         .delete-modal-body {
+            margin-bottom: 24px;
+        }
+
+        .delete-warning {
+            padding: 20px;
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.08), rgba(255, 193, 7, 0.06));
+            border: 1px solid rgba(255, 193, 7, 0.15);
+            border-radius: 12px;
             margin-bottom: 20px;
         }
-        
-        .delete-warning {
-            padding: 15px;
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: var(--border-radius);
-            margin-bottom: 15px;
-        }
-        
+
         .warning-text {
             color: #856404;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             line-height: 1.5;
+            font-weight: 500;
         }
-        
+
         .delete-modal-footer {
             display: flex;
             gap: 12px;
-            justify-content: flex-end;
+            justify-content: center;
         }
-        
+
         .delete-modal-cancel,
         .delete-modal-confirm {
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
-            border-radius: var(--border-radius);
-            font-weight: 600;
+            border-radius: 12px;
+            font-weight: 700;
             cursor: pointer;
             transition: var(--transition);
             font-size: 0.95rem;
+            font-family: 'Poppins', sans-serif;
         }
-        
+
         .delete-modal-cancel {
-            background: var(--light-gray);
-            color: var(--dark-text);
+            background: rgba(123, 45, 168, 0.08);
+            color: var(--purple-1);
         }
-        
+
         .delete-modal-cancel:hover {
-            background: #d1d5db;
+            background: rgba(123, 45, 168, 0.15);
+            transform: translateY(-3px);
         }
-        
+
         .delete-modal-confirm {
-            background: var(--danger-red);
+            background: linear-gradient(135deg, var(--danger-red), #ff3d4a);
             color: white;
+            box-shadow: 0 10px 25px rgba(230, 57, 70, 0.2);
         }
-        
+
         .delete-modal-confirm:hover {
-            background: #d32f2f;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(230, 57, 70, 0.3);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(123, 45, 168, 0.05);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--purple-1), var(--rose-1));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--rose-1), #ff3d9e);
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 992px) {
+            .messages-container {
+                flex-direction: column;
+                height: auto;
+                min-height: calc(100vh - 160px);
+            }
+            
+            .conversations-sidebar {
+                width: 100%;
+                max-height: 350px;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .message-form {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .send-button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .message {
+                max-width: 85%;
+            }
+            
+            .edit-modal-content,
+            .delete-modal-content {
+                padding: 30px 20px;
+                width: 95%;
+            }
+            
+            .edit-modal-actions,
+            .delete-modal-footer {
+                flex-direction: column;
+            }
+            
+            .edit-modal-save,
+            .edit-modal-cancel,
+            .delete-modal-cancel,
+            .delete-modal-confirm {
+                width: 100%;
+            }
+        }
+
+        /* Floating animation for messages */
+        .message.sent {
+            animation: floatMessage 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes floatMessage {
+            0% {
+                transform: translateX(100px) scale(0.8);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Notification styling */
+        .notification-success,
+        .notification-error,
+        .notification-info {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            animation: slideInNotification 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            backdrop-filter: blur(10px);
+            max-width: 400px;
+        }
+
+        .notification-success {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            border-left: 4px solid #27ae60;
+        }
+
+        .notification-error {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border-left: 4px solid #c0392b;
+        }
+
+        .notification-info {
+            background: linear-gradient(135deg, var(--purple-1), var(--rose-1));
+            border-left: 4px solid var(--rose-1);
+        }
+
+        @keyframes slideInNotification {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutNotification {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        /* Message typing indicator */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 20px;
+            border: 1px solid rgba(123, 45, 168, 0.1);
+            align-self: flex-start;
+            max-width: 80px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(135deg, var(--purple-1), var(--rose-1));
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* Message read status */
+        .message-read-status {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: 8px;
+        }
+
+        .message.received .message-read-status {
+            color: rgba(123, 45, 168, 0.6);
         }
     </style>
 </head>
@@ -1289,175 +1606,173 @@ if (isset($_GET['receiver_id'])) {
     </div>
     
     <div class="main-content">
-        <div class="content-section">
-            <div class="messages-container">
-                <!-- Sidebar des conversations -->
-                <div class="conversations-sidebar">
-                    <div class="conversations-header">
-                        <h2 class="conversations-title">
-                            <div class="title-icon">
-                                <i class="fas fa-comments"></i>
-                            </div>
-                            Messages
-                        </h2>
-                        
-                        <!-- Barre de recherche -->
-                        <div class="search-users">
-                            <input type="text" class="search-input" id="userSearch" 
-                                   placeholder="Rechercher un utilisateur...">
-                            <div class="search-icon">
-                                <i class="fas fa-search"></i>
-                            </div>
-                            <div class="search-results" id="searchResults"></div>
+        <div class="messages-container">
+            <!-- Sidebar des conversations -->
+            <div class="conversations-sidebar">
+                <div class="conversations-header">
+                    <h2 class="conversations-title">
+                        <div class="title-icon">
+                            <i class="fas fa-comments"></i>
                         </div>
-                    </div>
+                        Messages
+                    </h2>
                     
-                    <!-- Liste des conversations -->
-                    <div class="conversations-list" id="conversationsList">
-                        <?php if (empty($conversations)): ?>
-                            <div style="text-align: center; padding: 30px 15px; color: var(--gray-text);">
-                                <i class="fas fa-comment-slash" style="font-size: 2.5rem; margin-bottom: 15px; opacity: 0.3;"></i>
-                                <p style="font-size: 1rem; margin-bottom: 8px; font-weight: 600;">Aucune conversation</p>
-                                <small>Envoyez un message pour commencer</small>
-                            </div>
-                        <?php else: ?>
-                            <?php foreach ($conversations as $conv): ?>
-                                <div class="conversation-item <?= isset($_GET['receiver_id']) && $_GET['receiver_id'] == $conv['user_id'] ? 'active' : '' ?>" 
-                                     onclick="openChat(<?= $conv['user_id'] ?>, '<?= htmlspecialchars($conv['username']) ?>')">
-                                    <div class="user-avatar <?= ($conv['is_online'] ?? false) ? 'online' : '' ?>">
-                                        <?= htmlspecialchars(substr($conv['username'], 0, 1)) ?>
-                                    </div>
-                                    <div class="conversation-info">
-                                        <h4>
-                                            <?= htmlspecialchars($conv['username']) ?>
-                                            <?php if ($conv['is_online'] ?? false): ?>
-                                                <span style="color: var(--success-green); font-size: 0.7rem;">● En ligne</span>
-                                            <?php endif; ?>
-                                        </h4>
-                                        <div class="conversation-preview">
-                                            <?= htmlspecialchars($conv['last_message']) ?>
-                                            <?php if (strlen($conv['last_message']) > 50): ?>
-                                                ...
-                                            <?php endif; ?>
-                                        </div>
+                    <!-- Barre de recherche -->
+                    <div class="search-users">
+                        <input type="text" class="search-input" id="userSearch" 
+                               placeholder="Rechercher un utilisateur...">
+                        <div class="search-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="search-results" id="searchResults"></div>
+                    </div>
+                </div>
+                
+                <!-- Liste des conversations -->
+                <div class="conversations-list" id="conversationsList">
+                    <?php if (empty($conversations)): ?>
+                        <div style="text-align: center; padding: 30px 15px; color: var(--muted);">
+                            <i class="fas fa-comment-slash" style="font-size: 2.5rem; margin-bottom: 15px; opacity: 0.3;"></i>
+                            <p style="font-size: 1rem; margin-bottom: 8px; font-weight: 600;">Aucune conversation</p>
+                            <small>Envoyez un message pour commencer</small>
+                        </div>
+                    <?php else: ?>
+                        <?php foreach ($conversations as $conv): ?>
+                            <div class="conversation-item <?= isset($_GET['receiver_id']) && $_GET['receiver_id'] == $conv['user_id'] ? 'active' : '' ?>" 
+                                 onclick="openChat(<?= $conv['user_id'] ?>, '<?= htmlspecialchars($conv['username']) ?>')">
+                                <div class="user-avatar <?= ($conv['is_online'] ?? false) ? 'online' : '' ?>">
+                                    <?= htmlspecialchars(substr($conv['username'], 0, 1)) ?>
+                                </div>
+                                <div class="conversation-info">
+                                    <h4>
+                                        <?= htmlspecialchars($conv['username']) ?>
+                                        <?php if ($conv['is_online'] ?? false): ?>
+                                            <span style="color: var(--success-green); font-size: 0.7rem;">● En ligne</span>
+                                        <?php endif; ?>
+                                    </h4>
+                                    <div class="conversation-preview">
+                                        <?= htmlspecialchars($conv['last_message']) ?>
+                                        <?php if (strlen($conv['last_message']) > 50): ?>
+                                            ...
+                                        <?php endif; ?>
                                     </div>
                                     <div class="conversation-time">
                                         <?= date('H:i', strtotime($conv['last_message_time'])) ?>
                                     </div>
                                 </div>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
-                
-                <!-- Zone de chat -->
-                <div class="chat-area">
-                    <?php if ($current_receiver): ?>
-                        <!-- En-tête du chat -->
-                        <div class="chat-header">
-                            <div class="chat-user-info">
-                                <div class="chat-user-avatar <?= ($current_receiver['is_online'] ?? false) ? 'online' : '' ?>">
-                                    <?= htmlspecialchars(substr($current_receiver['username'], 0, 1)) ?>
+            </div>
+            
+            <!-- Zone de chat -->
+            <div class="chat-area">
+                <?php if ($current_receiver): ?>
+                    <!-- En-tête du chat -->
+                    <div class="chat-header">
+                        <div class="chat-user-info">
+                            <div class="chat-user-avatar <?= ($current_receiver['is_online'] ?? false) ? 'online' : '' ?>">
+                                <?= htmlspecialchars(substr($current_receiver['username'], 0, 1)) ?>
+                            </div>
+                            <div class="chat-user-details">
+                                <h3><?= htmlspecialchars($current_receiver['username']) ?></h3>
+                                <div class="chat-user-status">
+                                    <?php if ($current_receiver['is_online'] ?? false): ?>
+                                        <span style="color: var(--success-green);">● En ligne</span>
+                                    <?php else: ?>
+                                        <span>Hors ligne</span>
+                                    <?php endif; ?>
                                 </div>
-                                <div class="chat-user-details">
-                                    <h3><?= htmlspecialchars($current_receiver['username']) ?></h3>
-                                    <div class="chat-user-status">
-                                        <?php if ($current_receiver['is_online'] ?? false): ?>
-                                            <span style="color: var(--success-green);">● En ligne</span>
-                                        <?php else: ?>
-                                            <span>Hors ligne</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Liste des messages -->
+                    <div class="messages-list" id="messagesList">
+                        <?php if (empty($messages)): ?>
+                            <div style="text-align: center; padding: 40px 20px; color: var(--muted);">
+                                <i class="far fa-comment-dots" style="font-size: 2.5rem; margin-bottom: 15px; opacity: 0.3;"></i>
+                                <p style="font-size: 1rem; margin-bottom: 8px; font-weight: 600;">Aucun message</p>
+                                <small>Envoyez votre premier message !</small>
+                            </div>
+                        <?php else: ?>
+                            <?php foreach ($messages as $msg): 
+                                $is_sent = $msg['sender_id'] == $_SESSION['user_id'];
+                                $is_edited = isset($msg['is_edited']) || 
+                                            (isset($_SESSION['edited_messages'][$msg['id']]) && 
+                                             $_SESSION['edited_messages'][$msg['id']] !== ($msg['original_content'] ?? $msg['content']));
+                                
+                                // S'assurer que l'ID est correctement formaté
+                                $msg_id = $msg['id'];
+                            ?>
+                                <div class="message <?= $is_sent ? 'sent' : 'received' ?>" 
+                                     id="message-<?= $msg_id ?>"
+                                     data-message-id="<?= $msg_id ?>"
+                                     data-original-content="<?= htmlspecialchars($msg['original_content'] ?? $msg['content']) ?>">
+                                    <div class="message-content <?= $is_edited ? 'edited' : '' ?>">
+                                        <?= nl2br(htmlspecialchars($msg['content'])) ?>
+                                    </div>
+                                    <div class="message-time">
+                                        <span><?= date('H:i', strtotime($msg['created_at'])) ?></span>
+                                        <?php if ($is_sent): ?>
+                                            <div class="message-actions">
+                                                <button class="edit-message-btn" onclick="openEditModal('<?= $msg_id ?>')">
+                                                    <i class="fas fa-edit"></i> Modifier
+                                                </button>
+                                                <button class="delete-message-btn" onclick="showDeleteModal('<?= $msg_id ?>', this)">
+                                                    <i class="fas fa-trash"></i> Supprimer
+                                                </button>
+                                            </div>
                                         <?php endif; ?>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Liste des messages -->
-                        <div class="messages-list" id="messagesList">
-                            <?php if (empty($messages)): ?>
-                                <div style="text-align: center; padding: 40px 20px; color: var(--gray-text);">
-                                    <i class="far fa-comment-dots" style="font-size: 2.5rem; margin-bottom: 15px; opacity: 0.3;"></i>
-                                    <p style="font-size: 1rem; margin-bottom: 8px; font-weight: 600;">Aucun message</p>
-                                    <small>Envoyez votre premier message !</small>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                    
+                    <!-- Formulaire d'envoi -->
+                    <div class="message-form-container">
+                        <form id="messageForm" class="message-form" onsubmit="return sendPrivateMessage(event)">
+                            <input type="hidden" id="receiver_id" value="<?= $_GET['receiver_id'] ?? '' ?>">
+                            <div class="message-input-container">
+                                <textarea id="messageInput" class="message-input" 
+                                          placeholder="Écrivez votre message..." 
+                                          required rows="1"></textarea>
+                                <div class="input-actions">
+                                    <button type="button" class="input-action-btn" title="Émojis">
+                                        <i class="far fa-smile"></i>
+                                    </button>
+                                    <button type="button" class="input-action-btn" title="Pièce jointe">
+                                        <i class="fas fa-paperclip"></i>
+                                    </button>
                                 </div>
-                            <?php else: ?>
-                                <?php foreach ($messages as $msg): 
-                                    $is_sent = $msg['sender_id'] == $_SESSION['user_id'];
-                                    $is_edited = isset($msg['is_edited']) || 
-                                                (isset($_SESSION['edited_messages'][$msg['id']]) && 
-                                                 $_SESSION['edited_messages'][$msg['id']] !== ($msg['original_content'] ?? $msg['content']));
-                                    
-                                    // S'assurer que l'ID est correctement formaté
-                                    $msg_id = $msg['id'];
-                                ?>
-                                    <div class="message <?= $is_sent ? 'sent' : 'received' ?>" 
-                                         id="message-<?= $msg_id ?>"
-                                         data-message-id="<?= $msg_id ?>"
-                                         data-original-content="<?= htmlspecialchars($msg['original_content'] ?? $msg['content']) ?>">
-                                        <div class="message-content <?= $is_edited ? 'edited' : '' ?>">
-                                            <?= nl2br(htmlspecialchars($msg['content'])) ?>
-                                        </div>
-                                        <div class="message-time">
-                                            <span><?= date('H:i', strtotime($msg['created_at'])) ?></span>
-                                            <?php if ($is_sent): ?>
-                                                <div class="message-actions">
-                                                    <button class="edit-message-btn" onclick="openEditModal('<?= $msg_id ?>')">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                    <button class="delete-message-btn" onclick="showDeleteModal('<?= $msg_id ?>', this)">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </div>
-                                            <?php endif; ?>
-                                        </div>
-                                    </div>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </div>
-                        
-                        <!-- Formulaire d'envoi -->
-                        <div class="message-form-container">
-                            <form id="messageForm" class="message-form" onsubmit="return sendPrivateMessage(event)">
-                                <input type="hidden" id="receiver_id" value="<?= $_GET['receiver_id'] ?? '' ?>">
-                                <div class="message-input-container">
-                                    <textarea id="messageInput" class="message-input" 
-                                              placeholder="Écrivez votre message..." 
-                                              required rows="1"></textarea>
-                                    <div class="input-actions">
-                                        <button type="button" class="input-action-btn" title="Émojis">
-                                            <i class="far fa-smile"></i>
-                                        </button>
-                                        <button type="button" class="input-action-btn" title="Pièce jointe">
-                                            <i class="fas fa-paperclip"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <button type="submit" id="sendButton" class="send-button">
-                                    <i class="fas fa-paper-plane"></i>
-                                    <span>Envoyer</span>
-                                </button>
-                            </form>
-                        </div>
-                    <?php else: ?>
-                        <!-- Aucune conversation sélectionnée -->
-                        <div class="no-chat-selected">
-                            <div>
-                                <div class="no-chat-icon">
-                                    <i class="fas fa-comments"></i>
-                                </div>
-                                <h3>Sélectionnez une conversation</h3>
-                                <p>
-                                    Choisissez une conversation dans la liste<br>
-                                    ou recherchez un utilisateur pour commencer
-                                </p>
                             </div>
-                            <div style="padding: 15px; background: rgba(67, 97, 238, 0.1); border-radius: var(--border-radius); color: var(--primary-blue);">
-                                <i class="fas fa-lightbulb"></i>
-                                Cliquez sur "Marie" pour voir une conversation exemple
+                            <button type="submit" id="sendButton" class="send-button">
+                                <i class="fas fa-paper-plane"></i>
+                                <span>Envoyer</span>
+                            </button>
+                        </form>
+                    </div>
+                <?php else: ?>
+                    <!-- Aucune conversation sélectionnée -->
+                    <div class="no-chat-selected">
+                        <div>
+                            <div class="no-chat-icon">
+                                <i class="fas fa-comments"></i>
                             </div>
+                            <h3>Sélectionnez une conversation</h3>
+                            <p>
+                                Choisissez une conversation dans la liste<br>
+                                ou recherchez un utilisateur pour commencer
+                            </p>
                         </div>
-                    <?php endif; ?>
-                </div>
+                        <div class="tip-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Cliquez sur "Marie" pour voir une conversation exemple</span>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -1506,7 +1821,6 @@ if (isset($_GET['receiver_id'])) {
             formData.append('action', 'delete_message');
             formData.append('message_id', currentDeletingMessageId);
             
-            // CORRECTION : Utiliser le chemin relatif correct
             const response = await fetch('', {
                 method: 'POST',
                 body: formData
@@ -1563,7 +1877,6 @@ if (isset($_GET['receiver_id'])) {
             
             console.log('Envoi requête pour message ID:', messageId);
             
-            // CORRECTION : Utiliser le chemin relatif correct
             const response = await fetch('', {
                 method: 'POST',
                 body: formData
@@ -1633,7 +1946,6 @@ if (isset($_GET['receiver_id'])) {
             formData.append('message_id', currentEditingMessageId);
             formData.append('content', newContent);
             
-            // CORRECTION : Utiliser le chemin relatif correct
             const response = await fetch('', {
                 method: 'POST',
                 body: formData
@@ -1696,7 +2008,6 @@ if (isset($_GET['receiver_id'])) {
             formData.append('receiver_id', receiverId);
             formData.append('content', message);
             
-            // CORRECTION : Utiliser le chemin relatif correct
             const response = await fetch('', {
                 method: 'POST',
                 body: formData
@@ -1760,14 +2071,12 @@ if (isset($_GET['receiver_id'])) {
             const div = document.createElement('div');
             div.className = 'search-result-item';
             div.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="width: 35px; height: 35px; background: linear-gradient(135deg, #4361ee, #7209b7); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
-                        ${user.username.charAt(0)}
-                    </div>
-                    <div>
-                        <strong>${user.username}</strong><br>
-                        <small style="color: #718096;">${user.email}</small>
-                    </div>
+                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #7b2da8, #ff6fb1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px;">
+                    ${user.username.charAt(0)}
+                </div>
+                <div>
+                    <strong>${user.username}</strong><br>
+                    <small style="color: #718096;">${user.email}</small>
                 </div>
             `;
             div.onclick = () => {
@@ -1811,43 +2120,25 @@ if (isset($_GET['receiver_id'])) {
     
     // Notification
     function showNotification(message, type = 'info') {
+        // Remove existing notifications
+        document.querySelectorAll('.notification-success, .notification-error, .notification-info').forEach(n => n.remove());
+        
         const notification = document.createElement('div');
         notification.className = `notification-${type}`;
         notification.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 10px;">
-                ${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'} 
+            <div style="display: flex; align-items: center; gap: 12px;">
+                ${type === 'success' ? '<i class="fas fa-check-circle"></i>' : 
+                  type === 'error' ? '<i class="fas fa-exclamation-circle"></i>' : 
+                  '<i class="fas fa-info-circle"></i>'} 
                 <span>${message}</span>
             </div>
         `;
         
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
-            padding: 12px 20px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 500;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            animation: slideIn 0.3s ease;
-            display: flex;
-            align-items: center;
-            font-size: 0.9rem;
-        `;
-        
-        if (type === 'success') {
-            notification.style.background = 'linear-gradient(135deg, #2ecc71, #27ae60)';
-        } else if (type === 'error') {
-            notification.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
-        } else {
-            notification.style.background = 'linear-gradient(135deg, #4361ee, #3a56d4)';
-        }
-        
         document.body.appendChild(notification);
         
+        // Slide out animation after 3 seconds
         setTimeout(() => {
-            notification.style.animation = 'slideOut 0.3s ease';
+            notification.style.animation = 'slideOutNotification 0.3s ease';
             setTimeout(() => {
                 if (notification.parentNode) {
                     notification.remove();
@@ -1855,21 +2146,6 @@ if (isset($_GET['receiver_id'])) {
             }, 300);
         }, 3000);
     }
-    
-    // CSS animations
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-    `;
-    document.head.appendChild(style);
     
     // Initialisation
     document.addEventListener('DOMContentLoaded', function() {
