@@ -455,6 +455,8 @@
         <li><a href="../../BasmaCRUD/index.php"><i class="fas fa-calendar"></i> Événements</a></li>
         <li><a href="#quiz"><i class="fas fa-award"></i> Quiz</a></li>
         <li><a href="#forums"><i class="fas fa-comments"></i> Forums</a></li>
+        <li><a href="/campus connect/view/Front-office/messages.php" class="nav-item">Messages</a>
+        <li><a href="/campus connect/view/Front-office/group_messages.php" class="nav-item">Groupes</a>
         <li><a href="profile.php" class="button">Your Profile</a></li>
       </ul>
     </div>
@@ -628,4 +630,5 @@
     });
   </script>
 </body>
+
 </html>
