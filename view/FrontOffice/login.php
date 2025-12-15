@@ -291,7 +291,7 @@ if ($_POST['action'] ?? '' === 'login') {
                         </div>
                         
                         <button type="submit" class="btn-submit">Se connecter</button>
-                        <p class="signup-link">Pas de compte ? <a href="#" onclick="switchToSignup(); return false;">Créer un compte</a></p>
+                        <p class="signup-link">Pas de compte ? <a href="signup.php">Créer un compte</a></p>
                         <p class="signup-link"><a href="forgot-password.php">Mot de passe oublié ?</a></p>
                     </form>
                 </div>

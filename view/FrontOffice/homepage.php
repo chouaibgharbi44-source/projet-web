@@ -5,28 +5,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Campus Connect — Votre université, unie</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* ====== Couleurs plus foncées ====== */
     :root {
-      --primary: #7e22ce;    /* violet plus foncé */
-      --secondary: #be185d;  /* rose plus foncé */
-      --light: #f5f3ff;
-      --dark: #1e1b4b;
+      --rose-700: #ff2f78;
+      --rose-600: #ff4d8d;
+      --rose-500: #ff5d96;
+      --rose-400: #ff7cae;
+      --rose-200: #ffd9e8;
+      --rose-50: #fff5f9;
+      --ink-900: #131216;
+      --ink-700: #2f2b33;
+      --ink-500: #5a5563;
+      --ink-300: #a59fb0;
+      --ink-100: #efedf3;
       --white: #ffffff;
-      --gray: #9ca3af;
+      --shadow-soft: 0 10px 30px rgba(17, 12, 20, 0.08);
+      --shadow-strong: 0 15px 45px rgba(255, 77, 141, 0.25);
     }
 
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Poppins', Arial, sans-serif;
     }
 
     body {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: var(--white);
-      scroll-behavior: smooth;
+      background: radial-gradient(circle at 5% 0%, rgba(255,125,174,0.12), transparent 55%),
+                  radial-gradient(circle at 90% 10%, rgba(255,213,232,0.6), transparent 45%),
+                  var(--white);
+      color: var(--ink-700);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Animated background particles */
+    .bg-particle {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0.15;
+      animation: float 20s infinite ease-in-out;
+      z-index: 0;
+    }
+
+    .bg-particle:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, var(--rose-400), transparent);
+      top: 10%;
+      left: -100px;
+      animation-delay: 0s;
+    }
+
+    .bg-particle:nth-child(2) {
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, var(--rose-300), transparent);
+      top: 60%;
+      right: -50px;
+      animation-delay: 5s;
+    }
+
+    .bg-particle:nth-child(3) {
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, var(--rose-200), transparent);
+      bottom: 20%;
+      left: 20%;
+      animation-delay: 10s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(30px, -30px) scale(1.1); }
+      50% { transform: translate(-20px, 20px) scale(0.9); }
+      75% { transform: translate(40px, 10px) scale(1.05); }
     }
 
     a {
@@ -35,27 +92,49 @@
     }
 
     .container {
-      width: 90%;
       max-width: 1200px;
       margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
     }
 
     .btn {
-      display: inline-block;
-      padding: 12px 28px;
-      border-radius: 50px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(120deg, var(--rose-700), var(--rose-500));
+      color: var(--white);
+      padding: 14px 32px;
+      border-radius: 999px;
       font-weight: 600;
-      transition: all 0.3s ease;
-      text-align: center;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      color: white;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-strong);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
     }
 
     .btn:hover {
-      background: rgba(255, 255, 255, 0.3);
-      border-color: rgba(255, 255, 255, 0.45);
+      transform: translateY(-6px) scale(1.05);
+      box-shadow: 0 30px 50px rgba(255,77,141,0.35);
     }
 
     section {
@@ -63,27 +142,64 @@
     }
 
     h2 {
-      font-size: 2.5rem;
+      font-size: 2.8rem;
       margin-bottom: 1rem;
       text-align: center;
+      color: var(--ink-900);
+      font-weight: 700;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%) scaleX(0);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--rose-700), var(--rose-500));
+      border-radius: 2px;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+    }
+
+    h2.visible::after {
+      transform: translateX(-50%) scaleX(1);
     }
 
     p.subtitle {
       font-size: 1.2rem;
-      opacity: 0.9;
+      color: var(--ink-500);
       text-align: center;
       max-width: 700px;
       margin: 0 auto 3rem;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
     }
 
-    /* ====== Header & Navbar ====== */
+    .visible {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+
+    /* Header & Navbar */
     header {
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      border-bottom: 1px solid rgba(200,100,150,0.1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
       position: sticky;
       top: 0;
       z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    header.scrolled {
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
     }
 
     .navbar {
@@ -97,43 +213,79 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
     }
 
     .logo img {
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      background: white;
       object-fit: cover;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 77, 141, 0.2);
+    }
+
+    .logo:hover img {
+      box-shadow: 0 6px 25px rgba(255, 77, 141, 0.4);
+      transform: rotate(5deg);
     }
 
     .logo-text h1 {
       font-size: 1.4rem;
-      font-weight: 800;
+      font-weight: 700;
+      background: linear-gradient(90deg, #7b2da8, #ff6fb1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .logo-text p {
       font-size: 0.8rem;
-      opacity: 0.9;
+      color: var(--ink-500);
     }
 
     .nav-links {
       display: flex;
       gap: 24px;
       list-style: none;
+      align-items: center;
     }
 
     .nav-links a {
-      font-weight: 600;
-      opacity: 0.9;
+      font-weight: 500;
+      color: var(--ink-500);
       display: flex;
       align-items: center;
       gap: 6px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+
+    .nav-links a::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%) scaleX(0);
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--rose-700), var(--rose-500));
+      transition: transform 0.3s ease;
     }
 
     .nav-links a:hover {
-      opacity: 1;
-      color: white;
+      color: var(--rose-600);
+      background: var(--rose-50);
+    }
+
+    .nav-links a:hover::before {
+      transform: translateX(-50%) scaleX(1);
     }
 
     .mobile-toggle {
@@ -142,198 +294,270 @@
       border: none;
       font-size: 1.5rem;
       cursor: pointer;
-      color: white;
+      color: var(--ink-700);
+      transition: transform 0.3s ease;
     }
 
-    /* ====== Hero Section ====== */
+    .mobile-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    /* Hero Section */
     #accueil {
+      background: linear-gradient(135deg, #f0e6f6, #f5e8fa);
       text-align: center;
-      padding: 120px 0 80px;
+      padding: 140px 0 100px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #accueil::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(255,111,177,0.15), transparent 70%);
+      border-radius: 50%;
+      animation: pulse 8s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.15; }
+      50% { transform: scale(1.1); opacity: 0.25; }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
     }
 
     .hero-content h1 {
-      font-size: 3.5rem;
+      font-size: 4rem;
       margin-bottom: 1rem;
       line-height: 1.2;
+      color: var(--ink-900);
+      opacity: 0;
+      transform: translateY(50px) scale(0.95);
+      animation: heroFadeIn 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+      font-weight: 800;
+    }
+
+    @keyframes heroFadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .hero-content h1 span {
+      font-size: 2rem;
+      font-weight: 400;
+      display: block;
+      color: var(--ink-700);
+      margin-top: 8px;
     }
 
     .hero-content p {
-      font-size: 1.4rem;
-      max-width: 700px;
-      margin: 0 auto 2rem;
-      opacity: 0.95;
+      font-size: 1.3rem;
+      max-width: 750px;
+      margin: 0 auto 2.5rem;
+      color: var(--ink-500);
+      opacity: 0;
+      transform: translateY(40px);
+      animation: heroFadeIn 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.6s forwards;
     }
 
     .hero-buttons {
       display: flex;
       justify-content: center;
-      gap: 16px;
+      gap: 20px;
       flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: heroFadeIn 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.9s forwards;
     }
 
-    /* ====== Pour qui ? Section ====== */
-    .pour-qui {
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(12px);
-      border-radius: 24px;
-      margin: 0 20px;
-      padding: 60px;
-      color: var(--white);
-    }
-
-    .roles-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
-      margin-top: 40px;
-    }
-
-    .role-card {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 2rem;
-      border-radius: 20px;
-      text-align: center;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-    }
-
-    .role-icon {
-      width: 70px;
-      height: 70px;
+    /* Section Cards */
+    .section-card {
       background: var(--white);
+      border-radius: 32px;
+      padding: 70px;
+      margin: 0 20px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(255,77,141,0.08);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,111,177,0.03), transparent 70%);
+      transition: transform 0.8s ease;
+    }
+
+    .section-card:hover::before {
+      transform: scale(1.1);
+    }
+
+    .section-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px rgba(17, 12, 20, 0.12);
+    }
+
+    .roles-grid,
+    .cards,
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 35px;
+      margin-top: 50px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .role-card,
+    .card,
+    .feature-box {
+      background: linear-gradient(135deg, var(--rose-50), #fff);
+      padding: 2.5rem;
+      border-radius: 24px;
+      text-align: center;
+      border: 2px solid var(--rose-200);
+      box-shadow: var(--shadow-soft);
+      opacity: 0;
+      transform: translateY(40px) scale(0.95);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .role-card::before,
+    .card::before,
+    .feature-box::before {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: radial-gradient(circle, rgba(255,111,177,0.1), transparent 40%);
+      transition: all 0.8s ease;
+    }
+
+    .role-card:hover::before,
+    .card:hover::before,
+    .feature-box:hover::before {
+      top: -50%;
+      left: -50%;
+    }
+
+    .role-card:hover,
+    .card:hover,
+    .feature-box:hover {
+      transform: translateY(-15px) scale(1.02);
+      box-shadow: var(--shadow-strong);
+      border-color: var(--rose-400);
+    }
+
+    .role-icon,
+    .card-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--rose-700), var(--rose-500));
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       margin: 0 auto 1.5rem;
-      color: var(--primary);
-      font-size: 2rem;
-    }
-
-    .role-card h3 {
-      font-size: 1.6rem;
-      margin-bottom: 1rem;
-    }
-
-    .role-card p {
-      opacity: 0.9;
-      line-height: 1.6;
-    }
-
-    /* ====== Fonctionnement Section ====== */
-    .fonctionnement {
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(12px);
-      border-radius: 24px;
-      margin: 0 20px;
-      padding: 60px;
       color: var(--white);
+      font-size: 2.2rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 10px 30px rgba(255, 77, 141, 0.3);
+      position: relative;
+      z-index: 1;
     }
 
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
-      margin-top: 40px;
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.12);
-      padding: 2rem;
-      border-radius: 20px;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      text-align: center;
+    .role-card:hover .role-icon,
+    .card:hover .card-icon {
+      transform: scale(1.15) rotate(10deg);
+      box-shadow: 0 15px 40px rgba(255, 77, 141, 0.4);
     }
 
     .card-icon {
-      width: 60px;
-      height: 60px;
-      background: var(--white);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1.5rem;
-      color: var(--primary);
-      font-size: 1.5rem;
-      font-weight: bold;
+      width: 70px;
+      height: 70px;
+      font-size: 1.8rem;
     }
 
-    .card h3 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .card p {
-      opacity: 0.9;
-    }
-
-    /* ====== Aperçu des Pages ====== */
-    .aperçu {
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(12px);
-      border-radius: 24px;
-      margin: 0 20px;
-      padding: 60px;
-      color: var(--white);
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 24px;
-      margin-top: 40px;
-    }
-
-    .feature-box {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 1.8rem;
-      border-radius: 16px;
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-    }
-
+    .role-card h3,
+    .card h3,
     .feature-box h3 {
+      font-size: 1.7rem;
       margin-bottom: 1rem;
+      color: var(--ink-900);
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
     }
 
+    .role-card p,
+    .card p,
     .feature-box p {
-      opacity: 0.85;
-      margin-bottom: 1rem;
+      color: var(--ink-500);
+      line-height: 1.8;
+      position: relative;
+      z-index: 1;
     }
 
     .feature-box a {
-      color: var(--light);
+      color: var(--rose-600);
       font-weight: 600;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      opacity: 0.9;
+      gap: 8px;
+      margin-top: 12px;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+      padding: 8px 16px;
+      border-radius: 8px;
     }
 
     .feature-box a:hover {
-      opacity: 1;
+      color: var(--rose-700);
+      background: var(--rose-50);
+      gap: 12px;
     }
 
-    /* ====== Footer ====== */
+    /* Footer */
     footer {
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-      padding: 60px 0 30px;
-      margin-top: 40px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      background: linear-gradient(135deg, #f5f7fa, #ffffff);
+      border-top: 1px solid rgba(200,100,150,0.1);
+      padding: 70px 0 30px;
+      margin-top: 100px;
+      position: relative;
     }
 
     .footer-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 30px;
-      margin-bottom: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
     }
 
     .footer-col h3 {
-      font-size: 1.3rem;
-      margin-bottom: 1.2rem;
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+      color: var(--ink-900);
+      font-weight: 700;
     }
 
     .footer-col ul {
@@ -341,48 +565,56 @@
     }
 
     .footer-col ul li {
-      margin-bottom: 0.8rem;
-      opacity: 0.85;
+      margin-bottom: 1rem;
     }
 
     .footer-col ul li a {
-      transition: opacity 0.2s;
+      color: var(--ink-500);
+      transition: all 0.3s ease;
+      display: inline-block;
     }
 
     .footer-col ul li a:hover {
-      opacity: 1;
-      color: white;
+      color: var(--rose-600);
+      transform: translateX(5px);
     }
 
     .social-links {
       display: flex;
-      gap: 12px;
-      margin-top: 1rem;
+      gap: 15px;
+      margin-top: 1.5rem;
     }
 
     .social-links a {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 36px;
-      height: 36px;
-      background: rgba(255, 255, 255, 0.15);
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--rose-50), #fff);
+      border: 2px solid var(--rose-200);
       border-radius: 50%;
-      transition: background 0.3s;
+      color: var(--rose-600);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 1.1rem;
     }
 
     .social-links a:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, var(--rose-600), var(--rose-500));
+      color: var(--white);
+      transform: translateY(-8px) rotate(10deg) scale(1.15);
+      box-shadow: 0 10px 25px rgba(255, 77, 141, 0.3);
+      border-color: var(--rose-600);
     }
 
     .copyright {
       text-align: center;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.15);
-      opacity: 0.8;
+      padding-top: 30px;
+      border-top: 1px solid rgba(200,100,150,0.1);
+      color: var(--ink-500);
+      font-size: 0.95rem;
     }
 
-    /* ====== Responsive ====== */
     @media (max-width: 768px) {
       .mobile-toggle {
         display: block;
@@ -390,81 +622,99 @@
 
       .nav-links {
         position: absolute;
-        top: 80px;
+        top: 100%;
         left: 0;
         width: 100%;
-        background: rgba(30, 27, 75, 0.95);
+        background: rgba(255, 255, 255, 0.98);
         backdrop-filter: blur(10px);
         flex-direction: column;
         padding: 1.5rem 0;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
         display: none;
-        color: var(--white);
+        border-radius: 0 0 16px 16px;
       }
 
       .nav-links.active {
         display: flex;
+        animation: slideDown 0.3s ease;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       .nav-links a {
-        color: white;
-        padding: 0.8rem 2rem;
+        padding: 1rem 2rem;
+        color: var(--ink-700);
+        width: 100%;
       }
 
-      .fonctionnement,
-      .aperçu,
-      .pour-qui {
+      .section-card {
         margin: 0 10px;
-        padding: 40px 20px;
+        padding: 40px 25px;
+        border-radius: 24px;
       }
 
       .hero-content h1 {
-        font-size: 2.3rem;
+        font-size: 2.8rem;
       }
 
-      .hero-content p {
-        font-size: 1.1rem;
+      .hero-content h1 span {
+        font-size: 1.5rem;
       }
 
       h2 {
-        font-size: 2rem;
+        font-size: 2.2rem;
+      }
+
+      .roles-grid,
+      .cards,
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
       }
     }
   </style>
 </head>
 <body>
+  <div class="bg-particle"></div>
+  <div class="bg-particle"></div>
+  <div class="bg-particle"></div>
 
-  <!-- ====== Header ====== -->
-  <header>
+  <header id="header">
     <div class="container navbar">
       <div class="logo">
-        <img src="https://placehold.co/120x120/7e22ce/ffffff?text=CC" alt="Logo Campus Connect">
+        <img src="https://placehold.co/120x120/ff6fb1/ffffff?text=CC" alt="Logo Campus Connect">
         <div class="logo-text">
           <h1>CAMPUS CONNECT</h1>
           <p>Votre université, unie</p>
         </div>
       </div>
-
       <button class="mobile-toggle" id="menuToggle">
         <i class="fas fa-bars"></i>
       </button>
-
       <ul class="nav-links" id="navLinks">
         <li><a href="#accueil"><i class="fas fa-home"></i> Accueil</a></li>
         <li><a href="../../VV13/index.php"><i class="fas fa-book"></i> Matériel</a></li>
         <li><a href="../../BasmaCRUD/index.php"><i class="fas fa-calendar"></i> Événements</a></li>
-        <li><a href="#quiz"><i class="fas fa-award"></i> Quiz</a></li>
-        <li><a href="#forums"><i class="fas fa-comments"></i> Forums</a></li>
-        <li><a href="profile.php" class="button">Your Profile</a></li>
+        <li><a href="../../gestionquizz/index.php"><i class="fas fa-award"></i> Quiz</a></li>
+        <li><a href="../../gestion_messagerie2/index.php"><i class="fas fa-comments"></i> Forums</a></li>
+        <li><a href="profile.php" class="buttonn">Your Profile</a></li>
       </ul>
     </div>
   </header>
 
-  <!-- ====== Hero Section ====== -->
   <section id="accueil">
     <div class="container">
       <div class="hero-content">
-        <h1>Campus Connect<br><span style="font-size:1.8rem;font-weight:400;">Votre université, unie</span></h1>
+        <h1>Campus Connect<br><span>Votre université, unie</span></h1>
         <p>Une plateforme unique qui relie les étudiants, favorise le partage et la collaboration.<br>Remplacez Facebook, Google Drive et WhatsApp par une solution académique complète.</p>
         <div class="hero-buttons">
           <a href="#materiel" class="btn">Commencer Maintenant</a>
@@ -474,16 +724,16 @@
     </div>
   </section>
 
-  <!-- ====== Pour qui ? Section ====== -->
+  <!-- Pour qui ? Section -->
   <div class="container">
-    <div class="pour-qui">
+    <div class="pour-qui section-card">
       <h2>Pour qui est Campus Connect ?</h2>
       <p class="subtitle">Une plateforme pensée pour toute la communauté éducative.</p>
       <div class="roles-grid">
         <div class="role-card">
           <div class="role-icon"><i class="fas fa-user-graduate"></i></div>
           <h3>Étudiants</h3>
-          <p>Partagez vos cours, organisez des groupes d’étude, participez à des événements et restez connecté avec vos camarades — tout en un seul endroit.</p>
+          <p>Partagez vos cours, organisez des groupes d'étude, participez à des événements et restez connecté avec vos camarades — tout en un seul endroit.</p>
         </div>
         <div class="role-card">
           <div class="role-icon"><i class="fas fa-chalkboard-teacher"></i></div>
@@ -499,9 +749,9 @@
     </div>
   </div>
 
-  <!-- ====== Fonctionnement du Site ====== -->
+  <!-- Fonctionnement du Site -->
   <div class="container">
-    <div class="fonctionnement">
+    <div class="fonctionnement section-card">
       <h2>Comment ça marche ?</h2>
       <p class="subtitle">Campus Connect simplifie la vie étudiante en centralisant tout dans une seule plateforme.</p>
       <div class="cards">
@@ -524,9 +774,9 @@
     </div>
   </div>
 
-  <!-- ====== Aperçu des Pages ====== -->
+  <!-- Aperçu des Pages -->
   <div class="container">
-    <div class="aperçu">
+    <div class="aperçu section-card">
       <h2>Toutes les Fonctionnalités en Un Coup d’Œil</h2>
       <p class="subtitle">Découvrez toutes les fonctionnalités de Campus Connect et accédez directement aux différentes sections.</p>
       <div class="features-grid">
@@ -548,25 +798,24 @@
         <div class="feature-box">
           <h3>Forums de Discussion</h3>
           <p>Créez des posts, commentez, réagissez et engagez-vous dans des discussions avec vos camarades.</p>
-          <a href="#forums">Rejoindre les forums →</a>
+          <a href="../../gestion_messagerie2/index.php">Rejoindre les forums →</a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ====== Footer ====== -->
   <footer>
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col">
           <div class="logo" style="gap:10px;">
-            <img src="https://placehold.co/120x120/7e22ce/ffffff?text=CC" alt="Logo">
+            <img src="https://placehold.co/120x120/ff6fb1/ffffff?text=CC" alt="Logo">
             <div>
               <h3>CAMPUS CONNECT</h3>
               <p style="opacity:0.9;font-size:0.9rem;">Votre université, unie</p>
             </div>
           </div>
-          <p style="opacity:0.85;margin-top:1rem;">Une plateforme qui relie les étudiants, favorise le partage et la collaboration pour une éducation durable sans papier.</p>
+          <p style="color:var(--ink-500);margin-top:1rem;">Une plateforme qui relie les étudiants, favorise le partage et la collaboration pour une éducation durable sans papier.</p>
         </div>
         <div class="footer-col">
           <h3>Liens Rapides</h3>
@@ -574,8 +823,8 @@
             <li><a href="#accueil">Accueil</a></li>
             <li><a href="../../VV13/index.php">Matériel</a></li>
             <li><a href="../../BasmaCRUD/index.php">Événements</a></li>
-            <li><a href="#quiz">Quiz</a></li>
-            <li><a href="#forums">Forums</a></li>
+            <li><a href="../../gestionquizz/index.php">Quiz</a></li>
+            <li><a href="../../gestion_messagerie2/index.php">Forums</a></li>
             <li><a href="profile.php">Profile</a></li>
           </ul>
         </div>
@@ -606,25 +855,58 @@
   </footer>
 
   <script>
+    // Mobile menu toggle
     const menuToggle = document.getElementById('menuToggle');
     const navLinks = document.getElementById('navLinks');
-
     menuToggle.addEventListener('click', () => {
       navLinks.classList.toggle('active');
     });
 
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
           window.scrollTo({
-            top: target.offsetTop - 80,
+            top: target.offsetTop - 100,
             behavior: 'smooth'
           });
           navLinks.classList.remove('active');
         }
       });
+    });
+
+    // Intersection Observer for section animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelector('h2').classList.add('visible');
+          entry.target.querySelector('p.subtitle').classList.add('visible');
+
+          const cards = entry.target.querySelectorAll('.role-card, .card, .feature-box');
+          cards.forEach((card, index) => {
+            setTimeout(() => {
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0) scale(1)';
+            }, index * 150);
+          });
+
+          // Add underline animation after title is visible
+          setTimeout(() => {
+            entry.target.querySelector('h2').classList.add('visible');
+          }, 300);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.section-card').forEach(section => {
+      observer.observe(section);
     });
   </script>
 </body>

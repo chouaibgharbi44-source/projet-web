@@ -173,14 +173,14 @@ header("Expires: 0");
             <div class="footer-col">
                 <h4>Pages</h4>
                 <a href="#">Accueil</a><br />
-                <a href="#">Matériel</a><br />
-                <a href="#">Événements</a>
+                <a href="../VV13/index.php">Matériel</a><br />
+                <a href="index.php">Événements</a>
             </div>
             <div class="footer-col">
                 <h4>Pages</h4>
                 <a href="#">Messages</a><br />
                 <a href="#">Groupes</a><br />
-                <a href="#">Profil</a>
+                <a href="../View/FrontOffice/profile.php">Profil</a>
             </div>
         </div>
         <div class="footer-copy">© 2025 - Campus Connect. Tous droits réservés.</div>

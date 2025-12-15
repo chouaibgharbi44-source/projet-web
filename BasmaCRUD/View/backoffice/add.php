@@ -82,7 +82,7 @@
         .nav-item a:hover,
         .nav-item.active a {
             background: rgba(123, 45, 168, 0.08);
-            color: #7b2da8;
+            color: #ff6fb1;
             font-weight: 600;
         }
 
@@ -186,7 +186,7 @@
         }
 
         .back-link:hover {
-            color: #7b2da8;
+            color: #ff6fb1;
         }
 
         .error-msg {
@@ -225,11 +225,7 @@
                     <i class="fas fa-chart-pie"></i> Statistiques
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="index.php">
-                    <i class="fas fa-desktop"></i> Frontoffice
-                </a>
-            </li>
+
             <li class="nav-item" style="margin-top:auto">
                 <a href="index.php?admin=logout" style="color:#e14d5a;">
                     <i class="fas fa-sign-out-alt"></i> Déconnexion

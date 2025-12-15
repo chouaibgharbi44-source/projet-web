@@ -318,6 +318,64 @@
                 transform: translateX(50%) translateY(0);
             }
         }
+
+
+        /* ================= ANIMATIONS ================= */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .content-card {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .content-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== existing styles kept ===== */
+        .modal .error {
+            color: #d32f2f;
+            font-size: 0.85em;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .suggestions-section {
+            margin-top: 40px;
+            padding: 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+        .suggestions-title {
+            color: #3498db;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .suggestion-card {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 12px;
+            transition: transform 0.2s;
+        }
+        .suggestion-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
     </style>
 </head>
 <body>

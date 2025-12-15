@@ -223,11 +223,11 @@
     </div>
 
     <ul class="nav-links">
-      <li><a href="#accueil" class="active"><i class="fas fa-home"></i> <span>Accueil</span></a></li>
+      <li><a href="index1.php" class="active"><i class="fas fa-home"></i> <span>Accueil</span></a></li>
       <li><a href="../../VV13/index.php?area=admin"><i class="fas fa-book"></i> <span>Matériel</span></a></li>
       <li><a href="../../BasmaCRUD/index.php?area=admin"><i class="fas fa-book"></i> <span>events</span></a></li>
-      <li><a href="#quiz"><i class="fas fa-award"></i> <span>Quiz</span></a></li>
-      <li><a href="#forums"><i class="fas fa-comments"></i> <span>Forums</span></a></li>
+      <li><a href="../../gestionquizz/admin/"><i class="fas fa-award"></i> <span>Quiz</span></a></li>
+      <li><a href="../../gestion_messagerie2/view/Back-office/admin.php?key=admin123"><i class="fas fa-comments"></i> <span>Forums</span></a></li>
       <li><a href="index.php"><i class="fas fa-user"></i> <span>gestion utilisateurs</span></a></li>
     </ul>
   </aside>
